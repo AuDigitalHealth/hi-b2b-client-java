@@ -1,0 +1,267 @@
+<?xml version="1.0"?>
+<project name="GenerateInterfaces" default="build">
+  <!-- Metro library external reference -->
+  <property name="lib.dir" value="${basedir}/lib" />
+  <property name="stylesheet.dir" value="${basedir}/xsl" />
+  <property name="tmp.dir" value="${basedir}/tmp" />
+  <property name="common.classes.dir"
+  value="${tmp.dir}/commonClasses" />
+  <property name="common.src.dir" value="${tmp.dir}/CommonSrc" />
+  <property name="dist.dir" value="${basedir}/dist" />
+  <path id="jaxws.path">
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar" />
+    </fileset>
+  </path>
+  <path id="xjcclasspath">
+    <fileset dir="${lib.dir}"
+    includes="webservices-rt.jar, webservices-tools.jar" />
+  </path>
+  <taskdef name="xjc" classname="com.sun.tools.xjc.XJC2Task">
+    <classpath refid="xjcclasspath" />
+  </taskdef>
+  <taskdef name="wsimport"
+  classname="com.sun.tools.ws.ant.WsImport">
+    <classpath refid="jaxws.path" />
+  </taskdef>
+  <target name="clean"
+  description="Deletes generated directories and files">
+    <delete>
+      <fileset dir="${dist.dir}" />
+    </delete>
+    <delete>
+      <fileset dir="${tmp.dir}" />
+    </delete>
+  </target>
+  <target name="--prepare">
+    <mkdir dir="${dist.dir}" />
+    <mkdir dir="${tmp.dir}" />
+    <mkdir dir="${common.classes.dir}" />
+    <mkdir dir="${common.src.dir}" />
+  </target>
+  <target name="--generateCommonJars">
+    <lowercase value="${common.dist.file}"
+    output="common.dist.filename" />
+    <!--  Generate the common binary jar file -->
+    <echo message="${dist.dir}/${common.dist.filename}" />
+    <jar destfile="${dist.dir}/${common.dist.filename}">
+      <fileset dir="${common.classes.dir}">
+        <include name="**/*.class" />
+      </fileset>
+    </jar>
+    <lowercase value="${common.src.dist.file}"
+    output="common.src.dist.filename" />
+    <echo message="${dist.dir}/${common.src.dist.filename}" />
+    <!--  Generate the common src jar file for debugging-->
+    <jar destfile="${dist.dir}/${common.src.dist.filename}">
+      <fileset dir="${common.src.dir}">
+        <include name="**/*.java" />
+      </fileset>
+    </jar>
+  </target>
+  <!--********************************************************************-->
+  <!--                                Macro definitions                                   -->
+  <!--********************************************************************-->
+  <!-- Macro for generating the java and class files using JAXB-->
+  <macrodef name="compileSchemaWithJAXB">
+    <attribute name="schema.dir" />
+    <attribute name="schemafile" />
+    <attribute name="jaxbbinding" />
+    <attribute name="packageName" />
+    <sequential>
+      <property name="schemafile" value="@{schemafile}" />
+      <property name="packageName" value="@{packageName}" />
+      <property name="schema.dir" value="@{schema.dir}" />
+      <property name="jaxbbinding" value="@{jaxbbinding}" />
+      <echo message="The schema file is ${schema.dir}/${schemafile}" />
+      <echo message="The package name is /${packageName}" />
+      <xjc schema="${schema.dir}/${schemafile}"
+      destdir="${common.src.dir}">
+        <binding dir="${basedir}/extern/etp1.1/binding"
+        includes="${jaxbbinding}" />
+        <produces dir="${common.src.dir}/${packageName}"
+        includes="**/*.java" />
+      </xjc>
+      <javac destdir="${common.classes.dir}" debug="on">
+        <src path="${common.src.dir}" />
+        <classpath refid="xjcclasspath" />
+      </javac>
+    </sequential>
+  </macrodef>
+  <!--   Macro for generating artefact with custom binding -->
+  <macrodef name="generateWSDLArtifacts">
+    <attribute name="service" />
+    <attribute name="jarFilename" />
+    <attribute name="interface" />
+    <attribute name="schemas" default="" />
+    <attribute name="jaxbbinding" />
+    <attribute name="jaxwsbinding" />
+    <attribute name="version" />
+    <attribute name="versionSepChar" />
+    <attribute name="serviceDir" />
+    <attribute name="package.name" />
+    <attribute name="wsdlRelativePath" default="" />
+    <attribute name="original.wsdl.dir" />
+    <attribute name="original.xsd.dir" />
+    <attribute name="original.binding.dir" />
+    <sequential>
+      <property name="pacakge.name" value="@{package.name}" />
+      <property name="service" value="@{service}" />
+      <property name="service.xsd" value="@{service}.xsd" />
+      <pre-generate service="@{service}" interface="@{interface}"
+      schemas="@{schemas}" version="@{version}"
+      versionSepChar="@{versionSepChar}" serviceDir="@{serviceDir}"
+      package.name="@{package.name}"
+      wsdlRelativePath="@{wsdlRelativePath}"
+      original.wsdl.dir="@{original.wsdl.dir}"
+      original.xsd.dir="@{original.xsd.dir}"
+      original.binding.dir="@{original.binding.dir}" />
+      <!-- Generate using customization -->
+      <wsimport wsdl="${service.dir}/wsdl/@{wsdlRelativePath}${service.wsdl}"
+      wsdllocation="${service.wsdl}" extension="true"
+      destdir="${service.dir}/classes" keep="true" debug="true"
+      sourcedestdir="${service.dir}/src">
+        <binding dir="${service.dir}/wsdl"
+        includes="@{jaxwsbinding}" />
+        <binding dir="${service.dir}/wsdl"
+        includes="@{jaxbbinding}" />
+        <produces dir="${service.dir}/classes" />
+      </wsimport>
+      <!-- <packaging service="@{serviceDir}"  jarFilename="@{jarFilename}"/> -->
+      <echo message="The jar file name is @{jarFilename}" />
+      <packaging service="@{serviceDir}"
+      wsdlRelativePath="@{wsdlRelativePath}"
+      packageName="@{package.name}" jarFilename="@{jarFilename}" />
+    </sequential>
+  </macrodef>
+  <macrodef name="pre-generate">
+    <attribute name="service" />
+    <attribute name="interface" />
+    <attribute name="schemas" default="" />
+    <attribute name="version" default="1.0" />
+    <attribute name="versionSepChar" default="" />
+    <attribute name="serviceDIR" />
+    <attribute name="package.name" default="" />
+    <attribute name="wsdlRelativePath" default="" />
+    <attribute name="original.wsdl.dir" />
+    <attribute name="original.xsd.dir" />
+    <attribute name="original.binding.dir" />
+    <sequential>
+      <property name="service.wsdl"
+      value="@{service}@{versionSepChar}@{version}.wsdl" />
+      <echo message="The service wsdl is @{original.wsdl.dir}/${service.wsdl}" />
+      <property name="interface.wsdl"
+      value="@{interface}@{versionSepChar}@{version}.wsdl" />
+      <echo message="The interface wsdl is @{original.wsdl.dir}/${interface.wsdl}" />
+      <property name="service.dir"
+      value="${tmp.dir}/@{serviceDIR}" />
+      <!-- Create directories -->
+      <mkdir dir="${service.dir}" />
+      <mkdir dir="${service.dir}/classes" />
+      <mkdir dir="${service.dir}/src" />
+      <mkdir dir="${service.dir}/wsdl" />
+      <mkdir dir="${service.dir}/schema" />
+      <!-- Copy interface WSDL and supporting schemas -->
+      <echo message="@{original.wsdl.dir}" />
+      <copy todir="${service.dir}/wsdl">
+        <fileset dir="@{original.wsdl.dir}"
+        includes="**/*${interface.wsdl}, **/*${service.wsdl}" />
+      </copy>
+      <copy todir="${service.dir}/schema">
+        <fileset dir="@{original.xsd.dir}" includes="**/*.xsd" />
+      </copy>
+      <copy todir="${service.dir}/wsdl">
+        <fileset dir="@{original.binding.dir}" includes="*.xml" />
+        <filterset>
+          <filter token="package.name" value="@{package.name}" />
+          <filter token="service" value="@{service}" />
+          <filter token="interface" value="@{interface}" />
+          <filter token="version" value="@{version}" />
+          <filter token="versionSepChar"
+          value="@{versionSepChar}" />
+          <filter token="wsdlRelativePath"
+          value="@{wsdlRelativePath}" />
+        </filterset>
+      </copy>
+    </sequential>
+  </macrodef>
+  <!--  Include the JAR files for source and classes -->
+  <macrodef name="packaging">
+    <attribute name="service" />
+    <attribute name="wsdlRelativePath" default="" />
+    <attribute name="packageName" default="" />
+    <attribute name="jarFilename" />
+    <sequential>
+      <lowercase value="@{jarFilename}.jar" output="dist.file" />
+      <lowercase value="@{jarFilename}_src.jar"
+      output="src.dist.file" />
+      <replacePackageNameToDirectoryStructure value="@{packageName}"
+      output="service.dir.name" />
+      <echo message="The service directory name is ${service.dir.name}" />
+      <jar destfile="${dist.dir}/${dist.file}">
+        <fileset dir="${service.dir}/classes">
+          <include name="${service.dir.name}/**/*.class" />
+        </fileset>
+        <fileset dir="${service.dir}/wsdl/@{wsdlRelativePath}">
+          <include name="*.wsdl" />
+          <include name="xsd/*.xsd" />
+        </fileset>
+      </jar>
+      <!--  Generate the src jar file for debugging-->
+      <jar destfile="${dist.dir}/${src.dist.file}">
+        <fileset dir="${service.dir}/src">
+          <include name="${service.dir.name}/**/*.java" />
+        </fileset>
+        <fileset dir="${service.dir}/wsdl">
+          <include name="*.wsdl" />
+          <include name="*.xsd" />
+        </fileset>
+      </jar>
+      <!-- Copy to Common datatypes source directory -->
+      <copy todir="${common.src.dir}" overwrite="true">
+        <fileset dir="${service.dir}/src">
+          <include name="**/*.java" />
+          <exclude name="${service.dir.name}/**/*" />
+        </fileset>
+      </copy>
+      <!-- Copy to Common datatypes class directory -->
+      <copy todir="${common.classes.dir}" overwrite="true">
+        <fileset dir="${service.dir}/classes">
+          <include name="**/*.class" />
+          <exclude name="${service.dir.name}/**/*" />
+        </fileset>
+      </copy>
+    </sequential>
+  </macrodef>
+  <scriptdef name="lowercase" language="javascript">
+    <attribute name="value" />
+    <attribute name="output" />
+<![CDATA[
+      // Get original value
+      originalValue = attributes.get("value");
+
+      // Convert to lowercase
+      changedValue = originalValue.toLowerCase();
+
+      // Store the output value
+      changingAttribute = attributes.get("output");
+      project.setNewProperty(changingAttribute, changedValue);
+    ]]>
+</scriptdef>
+  <scriptdef name="replacePackageNameToDirectoryStructure"
+  language="javascript">
+    <attribute name="value" />
+    <attribute name="output" />
+<![CDATA[
+      // Get original value
+      originalValue = attributes.get("value");
+
+      // Convert to directory structure
+      changedValue = originalValue.replace(".", java.io.File.separator);
+
+      // Store the output value
+      changingAttribute = attributes.get("output");
+      project.setNewProperty(changingAttribute, changedValue);
+    ]]>
+</scriptdef>
+</project>

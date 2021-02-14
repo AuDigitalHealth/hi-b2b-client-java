@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jaxb:bindings jaxb:version="2.0" 
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    
+ 
+
+
+<!-- Messages -->
+<!-- Using the Schema namespace as it is for now. This binding is to prove that the class files can be redirected to custom defined package. 
+     Modify the package name if required-->
+ <jaxb:bindings schemaLocation="../schema/mca/consumer/messages/20100731/SearchIHIMessages.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+       <jaxb:package name="au.net.electronichealth.ns.hi.consumermessages.searchihi._3"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+
+  
+
+  
+</jaxb:bindings> 

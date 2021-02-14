@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright 2011 NEHTA
+ * 
+ * Licensed under the NEHTA Open Source (Apache) License; you may not use this 
+ * file except in compliance with the License. A copy of the License is in the
+ * 'license.txt' file, which should be provided with this work.
+ * 
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations 
+ * under the License.
+ -->
+<jaxb:bindings jaxb:version="2.0" 
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	
+ 
+ 	   
+    	<!-- If the code generator encounters a naming collision when generating the members of an enumeration or if it cannot create a valid Java identifier 
+	for a member of the enumeration, the code generator, by default, generates a warning and does not generate a Java enum type for the enumeration.
+    You can alter this behavior by adding the globalBinding element's typesafeEnumMemberName attribute. The typesafeEnumMemberName -->
+	<!-- <jaxb:globalBindings typesafeEnumMemberName="generateName" /> -->
+	  
+
+
+
+  
+  <!-- Provider core schema binding -->  
+  <jaxb:bindings schemaLocation="../schema/mca/provider/core/20100930/ProviderCoreElements.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.providercore.providercoreelements._3_2_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+  
+  <jaxb:bindings schemaLocation="../schema/mca/provider/core/20100930/OrganisationDetails.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.providercore.organisationdetails._3_2_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+
+  <jaxb:bindings schemaLocation="../schema/mca/provider/core/20100930/OrganisationService.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.providercore.organisationservice._3_2_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+
+  
+  <jaxb:bindings schemaLocation="../schema/mca/provider/core/20100930/Address.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.providercore.address._3_2_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+  
+     <jaxb:bindings schemaLocation="../schema/mca/provider/core/20100930/ElectronicCommunication.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.providercore.electroniccommunication._3_2_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+
+  <jaxb:bindings schemaLocation="../schema/mca/provider/core/20100930/IndividualName.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.providercore.individualname._3_2_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+  
+   <jaxb:bindings schemaLocation="../schema/mca/provider/core/20100930/LinkedType.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.providercore.linkedtype._3_2_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+  
+     <jaxb:bindings schemaLocation="../schema/mca/provider/core/20100930/OrganisationName.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.providercore.organisationname._3_2_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+
+  <jaxb:bindings schemaLocation="../schema/mca/provider/core/20100930/EndPoint.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.providercore.endpoint._3_2_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+  
+  <!--
+  <jaxb:bindings schemaLocation="../schema/mca/provider/core/20100930/ProviderType.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.providercore.providertype._3_2_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+  -->
+  
+ <!-- common schema binding --> 
+ <jaxb:bindings schemaLocation="../schema/mca/common/20100731/CommonCoreElements.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.common.commoncoreelements._3_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings> 
+ 
+ <jaxb:bindings schemaLocation="../schema/mca/common/20100731/IndividualNameCore.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.common.individualnamecore._3_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+
+ <jaxb:bindings schemaLocation="../schema/mca/common/20100731/AddressCore.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.common.addresscore._3_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+ 
+ <jaxb:bindings schemaLocation="../schema/mca/common/20100731/CommonCoreDatatypes.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.common.commoncoredatatypes._3_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+ 
+ <jaxb:bindings schemaLocation="../schema/mca/common/20100731/ElectronicCommunicationCore.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.common.electroniccommunicationcore._3_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+ 
+ <jaxb:bindings schemaLocation="../schema/mca/common/20100731/CommonQualifiedIdentifier.xsd" node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.common.qualifiedidentifier._3_0"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+  </jaxb:bindings> 
+  

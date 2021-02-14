@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<!--
+ * Copyright 2011 NEHTA
+ * 
+ * Licensed under the NEHTA Open Source (Apache) License; you may not use this 
+ * file except in compliance with the License. A copy of the License is in the
+ * 'license.txt' file, which should be provided with this work.
+ * 
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations 
+ * under the License.
+ -->
+<project name="MCAWsdlWSImport" default="dist">
+
+    <import file="${basedir}/buildInterface.xml"/>
+
+    <property file="${basedir}/build.properties"/>
+
+    <!-- The WSDL relative path is set because the WSDL requires the schema file/s
+                  relative path to understand import statements -->
+
+    <!-- Ant target to generate ConsumerIHISearch java artifacts -->
+    <target name="--IhiSearchConsumerTLS">
+        <generateWSDLArtifacts service="${ihisearch.consumer.tls}"
+                               jarFilename="${ihisearch.consumer.tls.jarFileName}"
+                               interface="${ihisearch.consumer.tls.interface}" schemas="../xsd/*.xsd,${ihisearch.jaxb.binding.prefix}.xml,${jaxws.binding.prefix}.xml,
+								${jaxwsInterface.binding.prefix}.xml" jaxbbinding="${ihisearch.jaxb.binding.prefix}.xml"
+                               jaxwsbinding="${jaxws.binding.prefix}.xml,${jaxwsInterface.binding.prefix}.xml"
+                               version="${ihisearch.wsdl.version}" versionSepChar="-"
+                               serviceDir="${ihisearch.consumer.tls}"
+                               package.name="${ihisearch.consumer.tls.packageName}"
+                               wsdlRelativePath="consumer/20100731/" original.wsdl.dir="${basedir}/wsdl"
+                               original.xsd.dir="${basedir}/schema"
+                               original.binding.dir="${basedir}/binding"/>
+    </target>
+
+
+    <target name="--HI_ConsumerSearchIHIBatchSync">
+        <generateWSDLArtifacts service="${ihisearchBatchSync.consumer.tls}"
+                               jarFilename="${ihisearchBatchSync.consumer.tls.jarFileName}"
+                               interface="${ihisearchBatchSync.consumer.tls.interface}" schemas="../xsd/*.xsd,${ihisearchBatchSync.jaxb.binding.prefix}.xml,${jaxws.binding.prefix}.xml,
+								${jaxwsInterface.binding.prefix}.xml"
+                               jaxbbinding="${ihisearchBatchSync.jaxb.binding.prefix}.xml"
+                               jaxwsbinding="${jaxws.binding.prefix}.xml,${jaxwsInterface.binding.prefix}.xml"
+                               version="${ihisearchBatchSync.wsdl.version}" versionSepChar="-"
+                               serviceDir="${ihisearchBatchSync.consumer.tls}"
+                               package.name="${ihisearchBatchSync.consumer.tls.packageName}"
+                               wsdlRelativePath="consumer/20100731/" original.wsdl.dir="${basedir}/wsdl"
+                               original.xsd.dir="${basedir}/schema"
+                               original.binding.dir="${basedir}/binding"/>
+    </target>
+
+    <!-- Ant target to generate ProviderSearchHIProviderDirectoryForIndividual java artifacts -->
+    <target name="--HI_ProviderSearchHIProviderDirectoryForIndividual">
+        <generateWSDLArtifacts service="${searchhpii.provider.tls}"
+                               jarFilename="${searchhpii.provider.tls.jarFileName}"
+                               interface="${searchhpii.provider.tls.interface}" schemas="../xsd/*.xsd,${searchhpii.jaxb.binding.prefix}.xml,${jaxws.binding.prefix}.xml,
+								   ${jaxwsInterface.binding.prefix}.xml"
+                               jaxbbinding="${searchhpii.jaxb.binding.prefix}.xml"
+                               jaxwsbinding="${jaxws.binding.prefix}.xml,${jaxwsInterface.binding.prefix}.xml"
+                               version="${searchhpii.wsdl.version}" versionSepChar="-"
+                               serviceDir="${searchhpii.provider.tls}"
+                               package.name="${searchhpii.provider.tls.packageName}"
+                               wsdlRelativePath="provider/20100930/" original.wsdl.dir="${basedir}/wsdl"
+                               original.xsd.dir="${basedir}/schema"
+                               original.binding.dir="${basedir}/binding"/>
+    </target>
+
+	<!-- Ant target to generate ConsumerSearchIHIBatchSync java artifacts -->
+	<target name="--ConsumerSearchIHIBatchSync">
+		<generateWSDLArtifacts service="${ihisearchBatchSync.consumer.tls}" interface="${ihisearchBatchSync.consumer.tls.interface}" schemas="../xsd/*.xsd,${ihisearchBatchSync.jaxb.binding.prefix}.xml,${jaxws.binding.prefix}.xml,
+								${jaxwsInterface.binding.prefix}.xml" jaxbbinding="${ihisearchBatchSync.jaxb.binding.prefix}.xml" jaxwsbinding="${jaxws.binding.prefix}.xml,${jaxwsInterface.binding.prefix}.xml" version="${ihisearchBatchSync.wsdl.version}" versionSepChar="-" serviceDir="${ihisearchBatchSync.consumer.tls}" package.name="${ihisearchBatchSync.consumer.tls.packageName}" wsdlRelativePath="consumer/20100731/" original.wsdl.dir="${basedir}/wsdl" original.xsd.dir="${basedir}/schema" original.binding.dir="${basedir}/binding" />
+	</target>
+    <!-- Ant target to generate ProviderSearchHIProviderDirectoryForIndividual java artifacts -->
+    <target name="--HI_ProviderSearchHIProviderDirectoryForOrganisation">
+        <generateWSDLArtifacts service="${searchhpio.provider.tls}"
+                               jarFilename="${searchhpio.provider.tls.jarFileName}"
+                               interface="${searchhpio.provider.tls.interface}" schemas="../xsd/*.xsd,${searchhpio.jaxb.binding.prefix}.xml,${jaxws.binding.prefix}.xml,
+									   ${jaxwsInterface.binding.prefix}.xml"
+                               jaxbbinding="${searchhpio.jaxb.binding.prefix}.xml"
+                               jaxwsbinding="${jaxws.binding.prefix}.xml,${jaxwsInterface.binding.prefix}.xml"
+                               version="${searchhpio.wsdl.version}" versionSepChar="-"
+                               serviceDir="${searchhpio.provider.tls}"
+                               package.name="${searchhpio.provider.tls.packageName}"
+                               wsdlRelativePath="provider/20100930/" original.wsdl.dir="${basedir}/wsdl"
+                               original.xsd.dir="${basedir}/schema"
+                               original.binding.dir="${basedir}/binding"/>
+    </target>
+
+    <!-- Ant target to generate ProviderSearchHIProviderDirectoryForIndividual java artifacts -->
+    <target name="--HI_ProviderReadReferenceData">
+        <generateWSDLArtifacts service="${readReferenceData.provider.tls}"
+                               jarFilename="${readReferenceData.provider.tls.jarFileName}"
+                               interface="${readReferenceData.provider.tls.interface}" schemas="../xsd/*.xsd,${readReferenceData.jaxb.binding.prefix}.xml,${jaxws.binding.prefix}.xml,
+                                           ${jaxwsInterface.binding.prefix}.xml"
+                               jaxbbinding="${readReferenceData.jaxb.binding.prefix}.xml"
+                               jaxwsbinding="${jaxws.binding.prefix}.xml,${jaxwsInterface.binding.prefix}.xml"
+                               version="${readReferenceData.wsdl.version}" versionSepChar="-"
+                               serviceDir="${readReferenceData.provider.tls}"
+                               package.name="${readReferenceData.provider.tls.packageName}"
+                               wsdlRelativePath="provider/20100930/" original.wsdl.dir="${basedir}/wsdl"
+                               original.xsd.dir="${basedir}/schema"
+                               original.binding.dir="${basedir}/binding"/>
+    </target>
+
+        <target name="buildJars" depends="dist">
+        <zip destfile="${dist.dir}/${dist.file}">
+            <zipfileset dir="${basedir}">
+                <include name="${license.file}"/>
+                <include name="${readme.file}"/>
+                <include name="${build.file}"/>
+                <include name="${buildInterface.file}"/>
+                <include name="${build.properties.file}"/>
+            </zipfileset>
+
+            <!--Include src and java files and metro.xml-->
+            <zipfileset dir="${binding.dir}" prefix="binding">
+                <include name="**/*.xml"/>
+            </zipfileset>
+            <zipfileset dir="${schema.dir}" prefix="schema">
+                <include name="**/*"/>
+            </zipfileset>
+            <zipfileset dir="${wsdl.dir}" prefix="wsdl">
+                <include name="**/*"/>
+            </zipfileset>
+
+            <!--Include compiled client library jar, source and javadoc jars.-->
+            <zipfileset dir="${dist.dir}" prefix="compiledJars">
+              <include name="**/*.jar" />
+            </zipfileset>
+
+        </zip>
+    </target>
+
+    <!-- Ant target for generating interface artefact files -->
+    <target name="dist" depends="--prepare"
+            description="Generates packaged jar files for all Interfaces">
+
+        <antcall target="--IhiSearchConsumerTLS"/>
+
+        <antcall target="--HI_ProviderSearchHIProviderDirectoryForIndividual"/>
+
+        <antcall target="--HI_ProviderSearchHIProviderDirectoryForOrganisation"/>
+
+        <antcall target="--HI_ProviderReadReferenceData"/>
+
+        <antcall target="--HI_ConsumerSearchIHIBatchSync"/>
+
+        <antcall target="--generateCommonJars"/>
+
+    </target>
+
+</project>

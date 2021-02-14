@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright 2011 NEHTA
+ * 
+ * Licensed under the NEHTA Open Source (Apache) License; you may not use this 
+ * file except in compliance with the License. A copy of the License is in the
+ * 'license.txt' file, which should be provided with this work.
+ * 
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations 
+ * under the License.
+ -->
+<jaxb:bindings jaxb:version="2.0" 
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	
+	<!-- If the code generator encounters a naming collision when generating the members of an enumeration or if it cannot create a valid Java identifier 
+	for a member of the enumeration, the code generator, by default, generates a warning and does not generate a Java enum type for the enumeration.
+    You can alter this behavior by adding the globalBinding element's typesafeEnumMemberName attribute. The typesafeEnumMemberName -->
+	<jaxb:globalBindings typesafeEnumMemberName="generateName" />
+
+ 	   
+</jaxb:bindings> 

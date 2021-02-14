@@ -1,0 +1,14 @@
+<jaxws:bindings wsdlLocation="../wsdl/provider/20130401/HI_ProviderSearchForProviderOrganisationInterface-5.0.0.wsdl" version="2.0" 
+    xmlns:jaxws="http://java.sun.com/xml/ns/jaxws" 
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb">    
+
+  <jaxws:bindings node="wsdl:definitions/wsdl:types/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="au.net.electronichealth.ns.hi.svc.hiprovidersearchorg._5_0_0"/>
+    </jaxb:schemaBindings>
+  </jaxws:bindings>
+
+</jaxws:bindings>
+

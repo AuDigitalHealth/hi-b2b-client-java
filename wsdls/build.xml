@@ -1,0 +1,252 @@
+<?xml version="1.0"?>
+<!--
+ * Copyright 2011 NEHTA
+ * 
+ * Licensed under the NEHTA Open Source (Apache) License; you may not use this 
+ * file except in compliance with the License. A copy of the License is in the
+ * 'license.txt' file, which should be provided with this work.
+ * 
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations 
+ * under the License.
+ <import file="buildInterface.xml"/>
+ -->
+<project name="HIWsdl" default="dist">
+
+
+
+	<property file="${basedir}/build.properties" />
+
+	<!--  task definitions -->
+	<path id="jaxws.path">
+		<fileset dir="local-lib/metro-2.3/">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	<path id="xjcclasspath">
+		<fileset dir="local-lib/metro-2.3/" includes="**/*.jar" />
+	</path>
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJC2Task">
+		<classpath refid="xjcclasspath" />
+	</taskdef>
+	<taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+		<classpath refid="jaxws.path" />
+	</taskdef>
+
+	<target name="prepare">
+		<mkdir dir="${dist.dir}" />
+
+
+		<mkdir dir="${classes}" />
+		<mkdir dir="${generated.src}" />
+	</target>
+
+	<!-- The WSDL relative path is set because the WSDL requires the schema file/s
+                  relative path to understand import statements -->
+
+	<!-- Ant target to generate ConsumerIHISearch java artifacts  -->
+	<target name="--IhiSearchConsumerTLS">
+		<wsimport wsdl="${ihi30.wsdl.file}" wsdllocation="${ihi30.wsdl}" extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
+			<binding dir="${binding.dir}" includes="ConsumerJaxb.xml,xmldsig-override.xml" />
+		</wsimport>
+	</target>
+
+
+	<target name="--HI_ConsumerSearchIHIBatchSync">
+		<wsimport wsdl="${ihiBatch30.wsdl.file}" wsdllocation="${ihiBatch30.wsdl}" extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
+
+			<binding dir="${binding.dir}" includes="ConsumerJaxb.xml,xmldsig-override.xml" />
+
+		</wsimport>
+	</target>
+
+	<target name="--HI_ProviderSearchHIProviderDirectoryForIndividual">
+		<wsimport wsdl="${hpii32.wsdl.file}" wsdllocation="${hpii32.wsdl}" extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
+			<binding dir="${binding.dir}" includes="xmldsig-override.xml" />
+		</wsimport>
+	</target>
+
+	<target name="--HI_ProviderSearchHIProviderDirectoryForOrganisation">
+		<wsimport wsdl="${hpio32.wsdl.file}" wsdllocation="${hpio32.wsdl}" extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
+			<binding dir="${binding.dir}" includes="xmldsig-override.xml" />
+		</wsimport>
+	</target>
+
+
+	<target name="--HI_ProviderReadReferenceData">
+		<wsimport wsdl="${ref32.wsdl.file}" wsdllocation="${ref32.wsdl}" extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
+			<binding dir="${binding.dir}" includes="xmldsig-override.xml" />
+		</wsimport>
+	</target>
+
+	<target name="--HI_ProviderSearchForIndividual">
+		<wsimport wsdl="${hpii5.wsdl.file}" wsdllocation="${hpii5.wsdl}"  extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
+			<binding dir="${binding.dir}" includes="xmldsig-override.xml" />
+
+
+		</wsimport>
+	</target>
+
+
+	<target name="--HI_ProviderSearchForOrganisation">
+		<wsimport wsdl="${hpio5.wsdl.file}" wsdllocation="${hpio5.wsdl}" extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
+			<binding dir="${binding.dir}" includes="xmldsig-override.xml" />
+		</wsimport>
+	</target>
+
+
+	<target name="--HI_ProviderBatchAsyncSearchForOrganisation">
+		<wsimport wsdl="${hpioAsync51.wsdl.file}" wsdllocation="${hpioAsync51.wsdl}" extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
+			<binding dir="${binding.dir}" includes="xmldsig-override.xml" />
+		</wsimport>
+	</target>
+	
+	<target name="--HI_ProviderBatchAsyncSearchForIndividual">
+			<wsimport fork="yes" wsdl="${hpiiAsync51.wsdl.file}" wsdllocation="${hpiiAsync51.wsdl}" extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
+				<binding dir="${binding.dir}" includes="xmldsig-override.xml" />
+			</wsimport>
+	</target>
+
+	<target name="--HI_ProviderReadProviderOrganisation">
+			<wsimport fork="yes" wsdl="${hpioRead32.wsdl.file}" wsdllocation="${hpioRead32.wsdl}" extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
+				<binding dir="${binding.dir}" includes="xmldsig-override.xml" />
+			</wsimport>
+	</target>
+	
+
+	<target name="--HI_ProviderReadProviderAdminInd">
+			<wsimport fork="yes" wsdl="${hpioAdmin32.wsdl.file}" wsdllocation="${hpioAdmin32.wsdl}" extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
+				<binding dir="${binding.dir}" includes="xmldsig-override.xml" />
+			</wsimport>
+	</target>
+	
+	<target name="--HI_ProvideManageProviderOrganisation">
+			<wsimport fork="yes" wsdl="${manageProviderOrg.wsdl.file}" wsdllocation="${manageProviderOrg.wsdl}" extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
+				<binding dir="${binding.dir}" includes="xmldsig-override.xml" />
+			</wsimport>
+	</target>
+ 
+	<target name="--HI_ProvideManageProviderDirectoryEntry">
+			<wsimport fork="yes" wsdl="${manageProviderEntry.wsdl.file}" wsdllocation="${manageProviderEntry.wsdl}" extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
+				<binding dir="${binding.dir}" includes="xmldsig-override.xml" />
+			</wsimport>
+	</target>
+	
+	<target name="--HI_ProvideManageProviderAdministrativeIndividual">
+			<wsimport fork="yes" wsdl="${manageAdminInd.wsdl.file}" wsdllocation="${manageAdminInd.wsdl}" extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
+				<binding dir="${binding.dir}" includes="xmldsig-override.xml" />
+			</wsimport>
+	</target>
+	
+
+	<target name="dist" depends="clean, jar">
+		<zip destfile="${dist.dir}/${dist.file}">
+			<zipfileset dir="${basedir}">
+				<include name="${license.file}" />
+				<include name="${readme.file}" />
+			</zipfileset>
+
+			<!--Include dependency jar file-->
+			<zipfileset dir="${resource.dir}">
+				<include name="${build.file}" />
+				<include name="${build.properties.file}" />
+				<include name="${buildInterface.file}" />
+			</zipfileset>
+
+			<!--Include src and java files and metro.xml  due to MCA direction we no longer include wsdls  
+            <zipfileset dir="${binding.dir}" prefix="binding">
+                <include name="**/*.xml"/>
+            </zipfileset>-->
+
+			<!--Include compiled client library jar, source and javadoc jars.-->
+			<zipfileset dir="${dist.dir}" prefix="compiled-wsdl">
+				<include name="**/*.jar" />
+			</zipfileset>
+
+			<zipfileset dir="${wsdl.dir}" prefix="wsdl">
+				<include name="**/*.*" />
+				<exclude name="**/*.wsdl" />
+				<!-- du to MCA direction we no longer include wsdls -->
+
+			</zipfileset>
+
+			<zipfileset dir="${schema.dir}" prefix="schema">
+				<include name="**/*.*" />
+				<exclude name="**/*.xsd" />
+				<!-- due to MCA direction we no longer include wsdls -->
+			</zipfileset>
+
+			<!--Include dependency jar file-->
+			<zipfileset dir="${metro.dir}" prefix="lib">
+				<include name="**/*.jar" />
+			</zipfileset>
+		</zip>
+	</target>
+
+	<target name="cleanLib">
+		<delete dir="${basedir}/lib" />
+	</target>
+
+	<target name="createLib">
+		<mkdir dir="${basedir}/lib" />
+		<mkdir dir="${basedir}/target" />
+		<copy todir="${basedir}/lib">
+			<fileset dir="${metro.dir}" includes="**/*" />
+		</copy>
+	</target>
+
+	<!-- Ant target for generating interface artefact files -->
+	<target name="compile-wsdl" depends="cleanLib, createLib, prepare" description="Generates java bindings for all wsdls">
+
+		<antcall target="--IhiSearchConsumerTLS" />
+		<antcall target="--HI_ConsumerSearchIHIBatchSync" />
+
+		<antcall target="--HI_ProviderSearchHIProviderDirectoryForOrganisation" />
+
+		<antcall target="--HI_ProviderSearchHIProviderDirectoryForIndividual" />
+
+		<antcall target="--HI_ProviderSearchForIndividual" />
+
+		<antcall target="--HI_ProviderSearchForOrganisation" />
+
+		<antcall target="--HI_ProviderReadReferenceData" />
+		
+		<antcall target="--HI_ProviderBatchAsyncSearchForOrganisation" />
+				
+		<antcall target="--HI_ProviderBatchAsyncSearchForIndividual" />
+		
+		<antcall target="--HI_ProviderReadProviderOrganisation" />
+		
+		<antcall target="--HI_ProviderReadProviderAdminInd" />
+
+		<antcall target="--HI_ProvideManageProviderOrganisation" />
+		
+		<antcall target="--HI_ProvideManageProviderDirectoryEntry" />
+		
+		<antcall target="--HI_ProvideManageProviderAdministrativeIndividual" />
+
+		
+	</target>
+
+	<target name="jar" depends="compile-wsdl">
+		<copy todir="${flat.wsdl}" flatten="true">
+			<fileset dir="${wsdl.dir}" includes="**/*.wsdl" />
+		</copy>
+
+		<jar  destfile="${dist.dir}/${jar.file}" basedir="${classes}" >
+			<fileset dir="${flat.wsdl}" includes="*.wsdl" />
+		</jar>
+
+		<jar destfile="${dist.dir}/${src.jar.file}" basedir="${generated.src}" >
+			<fileset dir="${flat.wsdl}" includes="*.wsdl" />
+		</jar>
+	</target>
+
+	<target name="clean" depends="">
+		<delete dir="target" />
+	</target>
+
+</project>
+

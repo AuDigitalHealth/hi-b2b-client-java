@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_43"/>
+	<classpathentry kind="lib" path="local-lib/metro-2.3/webservices-api.jar"/>
+	<classpathentry kind="lib" path="local-lib/metro-2.3/webservices-rt.jar"/>
+	<classpathentry kind="lib" path="local-lib/metro-2.3/webservices-tools.jar"/>
+	<classpathentry kind="output" path="tmp/HI_ConsumerSearchIHI/classes"/>
+</classpath>
