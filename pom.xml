@@ -38,7 +38,7 @@
             scm:git:https://github.com/AuDigitalHealth/hi-b2b-client-java.git
         </developerConnection>
         <url>https://github.com/AuDigitalHealth/hi-b2b-client-java.git</url>
-        <tag>hi-b2b-client-1.6.1</tag>
+        <tag>hi-b2b-client-1.6.2</tag>
     </scm>
 
     <distributionManagement>
@@ -62,11 +62,22 @@
             <groupId>au.gov.nehta</groupId>
             <artifactId>common-library</artifactId>
             <version>1.2.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.xml.ws</groupId>
+                    <artifactId>webservices-rt</artifactId>
+                </exclusion>
+            </exclusions>			
         </dependency>
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-rt</artifactId>
+            <version>2.3.5</version>
+        </dependency>		
         <dependency>
             <groupId>au.gov.nehta</groupId>
             <artifactId>hi-wsdl</artifactId>
-            <version>1.6.1</version>
+            <version>1.6.2</version>
         </dependency>
         <dependency>
             <groupId>au.gov.nehta</groupId>
