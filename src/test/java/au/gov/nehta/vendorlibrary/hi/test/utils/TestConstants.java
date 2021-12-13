@@ -65,7 +65,7 @@ public class TestConstants {
     public static final String PRIVATE_KEY_STORE_PASSWORD = "password";
     public static final String DRP_PRIVATE_KEY_ALIAS = "8003630000000004";
     // Using ZedMed HPIO instead of Tas. Need to include Tasmania HPIO in DRP.
-    public static final String MEDICARE_PRIVATE_KEY_ALIAS = "8003620000030192";
+    public static final String MEDICARE_PRIVATE_KEY_ALIAS = "8003629900035144";
     public static final String MEDICARE_CSP_PRIVATE_KEY_ALIAS = "8003630833334588";
     public static final String PRIVATE_KEY_PASSWORD = "password";
 
