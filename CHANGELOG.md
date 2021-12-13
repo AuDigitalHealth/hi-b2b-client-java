@@ -1,5 +1,9 @@
 # Change Log/Revision History
 
+= 1.6.2 =
+======
+- Fixed HI WSDL ref and updated WS library
+
 = 1.6.1 =
 ======
 - Converted to Maven build with Maven dependencies.
