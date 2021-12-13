@@ -4,7 +4,7 @@
 
     <groupId>au.gov.nehta</groupId>
     <artifactId>hi-b2b-client</artifactId>
-    <version>1.6.2</version>
+    <version>1.6.3-SNAPSHOT</version>
     <name>HI B2B client</name>
     <description>Example client implementations of Healthcare Identifiers (HI) service</description>
     <url>https://github.com/AuDigitalHealth/hi-b2b-client-java</url>
