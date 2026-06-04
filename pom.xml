@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2011 NEHTA
+  Copyright 2021-2026 ADHA (Australian Digital Health Agency)
+  SPDX: Apache-2.0; full text in LICENSE.txt at the repository root.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>au.gov.nehta</groupId>
     <artifactId>hi-b2b-client</artifactId>
-    <version>1.6.3-SNAPSHOT</version>
+    <version>1.7.0-SNAPSHOT</version>
     <name>HI B2B client</name>
     <description>Example client implementations of Healthcare Identifiers (HI) service</description>
     <url>https://github.com/AuDigitalHealth/hi-b2b-client-java</url>
@@ -38,7 +43,7 @@
             scm:git:https://github.com/AuDigitalHealth/hi-b2b-client-java.git
         </developerConnection>
         <url>https://github.com/AuDigitalHealth/hi-b2b-client-java.git</url>
-        <tag>hi-b2b-client-1.6.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
@@ -52,73 +57,122 @@
         </repository>
     </distributionManagement>
 
+    <properties>
+        <maven.compiler.release>11</maven.compiler.release>
+        <encoding>UTF-8</encoding>
+        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
+        <project.resources.sourceEncoding>${encoding}</project.resources.sourceEncoding>
+        <archetype.encoding>${encoding}</archetype.encoding>
+        <skipTests>false</skipTests>
+        <!-- Eclipse EE4J XML Web Services: align jaxws-rt / jaxws-tools. jaxws-maven-plugin 4.0.3+ requires JDK 17 to run wsimport - keep plugin at 4.0.2 on JDK 11. -->
+        <jaxws.rt.version>4.0.4</jaxws.rt.version>
+        <jaxws.maven.plugin.version>4.0.2</jaxws.maven.plugin.version>
+        <jaxb.xjc.version>4.0.7</jaxb.xjc.version>
+        <!-- GMavenPlus build scripts only (`groovy` + `groovy-ant` on the plugin classpath; not compile deps of the published JAR). -->
+        <groovy.version>4.0.32</groovy.version>
+        <!-- Default: in-repo wsimport (26 services, licensed tree under wsdls/xml). Alternative: -Phi-wsdl-artifact (hi-wsdl-java 1.7, skips wsimport). -->
+        <hi.wsdl.codegen.skip>false</hi.wsdl.codegen.skip>
+        <!-- Build-time WSDL root: override with -Dhi.wsdl.tree.root or env HI_WSDL_TREE_ROOT (GMavenPlus initialize resolves settings.xml too). -->
+        <hi.wsdl.tree.root>${project.basedir}/wsdls/xml</hi.wsdl.tree.root>
+        <!-- hi-wsdl-java 1.7 line (Java 11 / Jakarta); used by -Phi-wsdl-artifact -->
+        <hi.wsdl.version>${project.version}</hi.wsdl.version>
+        <maven.shade.plugin.version>3.6.2</maven.shade.plugin.version>
+    </properties>
+
+    <!-- Compile/runtime for the published JAR: smi-xsp (HI utilities + XML-DSig via xmlsec) and jaxws-rt (Jakarta XML-WS RI and JAXB runtime). JUnit is test-scoped only. -->
     <dependencies>
         <dependency>
             <groupId>au.gov.nehta</groupId>
             <artifactId>smi-xsp</artifactId>
             <version>1.2.1</version>
         </dependency>
-        <dependency>
-            <groupId>au.gov.nehta</groupId>
-            <artifactId>common-library</artifactId>
-            <version>1.2.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.sun.xml.ws</groupId>
-                    <artifactId>webservices-rt</artifactId>
-                </exclusion>
-            </exclusions>			
-        </dependency>
+        <!-- Eclipse EE4J XML Web Services reference implementation (Jakarta XML Web Services). -->
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
-            <version>2.3.5</version>
-        </dependency>		
-        <dependency>
-            <groupId>au.gov.nehta</groupId>
-            <artifactId>hi-wsdl</artifactId>
-            <version>1.6.2</version>
+            <version>${jaxws.rt.version}</version>
         </dependency>
-        <dependency>
-            <groupId>au.gov.nehta</groupId>
-            <artifactId>smi-common-utils</artifactId>
-            <version>1.2.1</version>
-        </dependency>
-        <!-- For test scope -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.1</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>5.3.3</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.2.224</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <encoding>UTF-8</encoding>
-        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
-        <project.resources.sourceEncoding>${encoding}</project.resources.sourceEncoding>
-        <archetype.encoding>${encoding}</archetype.encoding>
-        <skipTests>true</skipTests> <!-- Need to neutralize out-of-date tests for deployment -->
-    </properties>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <retryOnError>true</retryOnError>
+                    <fast>false</fast>
+                    <force>true</force>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.6.2</version>
                 <executions>
                     <execution>
-                        <id>sign-artifacts</id>
+                        <id>enforce-build-tooling</id>
+                        <phase>validate</phase>
+                        <goals><goal>enforce</goal></goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>[3.6.3,)</version>
+                                </requireMavenVersion>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>com.sun.xml.ws:webservices-rt</exclude>
+                                        <exclude>com.sun.xml.ws:webservices-api</exclude>
+                                        <exclude>javax.xml.ws:*</exclude>
+                                        <exclude>javax.xml.bind:*</exclude>
+                                    </excludes>
+                                    <message>Use Eclipse EE4J jaxws-rt, not legacy Metro / javax JAX-WS.</message>
+                                </bannedDependencies>
+                            </rules>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>require-licensed-wsdl-tree</id>
+                        <phase>initialize</phase>
+                        <goals><goal>enforce</goal></goals>
+                        <configuration>
+                            <skip>${hi.wsdl.codegen.skip}</skip>
+                            <rules>
+                                <requireFilesExist>
+                                    <files>
+                                        <file>${hi.wsdl.tree.root}/wsdl/consumer/20100731/HI_ConsumerSearchIHI-3.0.wsdl</file>
+                                    </files>
+                                    <message>This build requires the licensed HI WSDL/XSD tree under hi.wsdl.tree.root (directory containing wsdl/ and schema/). Resolution order: -Dhi.wsdl.tree.root, env HI_WSDL_TREE_ROOT, hi.wsdl.tree.root from an active Maven user-settings profile, else default ${project.basedir}/wsdls/xml. (HI_WSDL_ARTIFACT_ROOT is runtime-only.) Use -Phi-wsdl-artifact to skip wsimport and use hi-wsdl-java instead.</message>
+                                </requireFilesExist>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.8</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>sign-artefacts</id>
                         <phase>verify</phase>
                         <goals>
                             <goal>sign</goal>
@@ -129,11 +183,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.12.0</version>
                 <configuration>
-                    <verbose>true</verbose>
-                    <!--<skip>true</skip>-->
                     <doclint>none</doclint>
+                    <detectOfflineLinks>false</detectOfflineLinks>
                     <encoding>${encoding}</encoding>
                 </configuration>
                 <executions>
@@ -148,12 +201,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>jar-no-fork</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -161,7 +214,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.0.0-M1</version>
+                <version>3.1.4</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>
@@ -169,7 +222,7 @@
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
+                <version>1.7.0</version>
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>nexus-releases</serverId>
@@ -178,33 +231,29 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M4</version>
-                <configuration>
-                    <showSuccess>false</showSuccess>
-                    <title>CDA Schema Java Tests Output</title>
-                    <outputDirectory>${basedir}/target/surefire-reports</outputDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.5.5</version>
                 <configuration>
                     <skipTests>${skipTests}</skipTests>
                     <encoding>UTF-8</encoding>
                     <enableAssertions>true</enableAssertions>
-                    <forkCount>3</forkCount>
-                    <reuseForks>true</reuseForks>
                     <argLine>-Xmx1024m</argLine>
+                    <!-- Default Surefire includes: offline-safe unit tests only. Full HI mutual-TLS suite: mvn -Pintegration test -->
+                    <includes>
+                        <include>**/TimeUtilityTest.java</include>
+                        <include>**/TestConfigurationTest.java</include>
+                        <include>**/JdbcTransactionTestRuleTest.java</include>
+                        <include>**/HiWsdlArtifactRootTest.java</include>
+                        <include>**/HiWsdlArtifactSmokeTest.java</include>
+                        <include>**/ConsumerSearchIHIClientArgumentValidatorTest.java</include>
+                    </includes>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>3.0.0-M1</version>
+                <version>3.3.1</version>
                 <configuration>
-                    <branchName>mavenization</branchName>
                     <useReleaseProfile>false</useReleaseProfile>
                     <releaseProfiles>release</releaseProfiles>
                     <localCheckout>true</localCheckout>
@@ -214,23 +263,730 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.15.0</version>
                 <configuration>
-                    <compilerArgs>
-                        <arg>-Xlint:unchecked</arg>
-                        <arg>-verbose</arg>
-                    </compilerArgs>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
+                    <release>${maven.compiler.release}</release>
                     <encoding>${project.build.sourceEncoding}</encoding>
-                    <debug>true</debug><!--By default it is set to true-->
+                    <proc>none</proc>
+                    <debug>true</debug>
                     <debuglevel>lines,vars,source</debuglevel>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
-                    <verbose>true</verbose>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <!-- Licensed HI WSDL must not be packaged in this artifact (vendor terms). -->
+                    <excludes>
+                        <exclude>**/*.wsdl</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>4.3.1</version>
+                <executions>
+                    <execution>
+                        <id>purge-wsimport-when-artifact</id>
+                        <phase>initialize</phase>
+                        <goals><goal>execute</goal></goals>
+                        <configuration>
+                            <scripts>
+                                <script><![CDATA[
+                                    if (!'true'.equalsIgnoreCase(project.properties.getProperty('hi.wsdl.codegen.skip', 'false').trim())) {
+                                        return
+                                    }
+                                    def bd = project.build.directory as File
+                                    ['generated-sources/wsimport', 'generated-sources/wsimport-parts', 'jaxws'].each { rel ->
+                                        def d = new File(bd, rel)
+                                        if (d.exists()) d.deleteDir()
+                                    }
+                                ]]></script>
+                            </scripts>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>configure-hi-wsdl-tree-root</id>
+                        <phase>initialize</phase>
+                        <goals><goal>execute</goal></goals>
+                        <configuration>
+                            <skipScriptExecution>${hi.wsdl.codegen.skip}</skipScriptExecution>
+                            <scripts>
+                                <script><![CDATA[
+                                    import java.nio.file.Files
+                                    import java.nio.file.Path
+                                    import java.nio.file.Paths
+                                    String resolveTreePath(String raw, Path baseDir) {
+                                        if (raw == null || raw.trim().isEmpty()) return null
+                                        Path p = Paths.get(raw.trim())
+                                        if (!p.isAbsolute()) {
+                                            p = baseDir.resolve(raw.trim()).normalize()
+                                        } else {
+                                            p = p.normalize()
+                                        }
+                                        return p.toString()
+                                    }
+
+                                    Path baseDir = Paths.get(project.basedir as String)
+                                    String userCli = session.userProperties.getProperty('hi.wsdl.tree.root')
+                                    if (userCli != null && !userCli.trim().isEmpty()) {
+                                        project.properties.setProperty('hi.wsdl.tree.root', resolveTreePath(userCli, baseDir))
+                                        return
+                                    }
+                                    String envTree = System.getenv('HI_WSDL_TREE_ROOT')
+                                    if (envTree != null && !envTree.trim().isEmpty()) {
+                                        project.properties.setProperty('hi.wsdl.tree.root', resolveTreePath(envTree, baseDir))
+                                        return
+                                    }
+                                    String fromSettings = null
+                                    def settings = session.getSettings()
+                                    if (settings != null) {
+                                        def activeIds = settings.getActiveProfiles()
+                                        if (activeIds != null && !activeIds.isEmpty()) {
+                                            try {
+                                                def pmap = settings.getProfilesAsMap()
+                                                if (pmap != null) {
+                                                    for (def pid : activeIds) {
+                                                        if (fromSettings != null) break
+                                                        def prof = pmap.get(pid)
+                                                        if (prof?.getProperties() != null) {
+                                                            String v = prof.getProperties().getProperty('hi.wsdl.tree.root')
+                                                            if (v != null && !v.trim().isEmpty()) {
+                                                                fromSettings = v.trim()
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } catch (Exception ignored) {
+                                                settings.getProfiles()?.each { prof ->
+                                                    if (fromSettings == null && activeIds.contains(prof.getId())) {
+                                                        String v = prof.getProperties()?.getProperty('hi.wsdl.tree.root')
+                                                        if (v != null && !v.trim().isEmpty()) fromSettings = v.trim()
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (fromSettings != null) {
+                                        project.properties.setProperty('hi.wsdl.tree.root', resolveTreePath(fromSettings, baseDir))
+                                        return
+                                    }
+                                    project.properties.setProperty('hi.wsdl.tree.root',
+                                            baseDir.resolve('wsdls').resolve('xml').toAbsolutePath().normalize().toString())
+                                ]]></script>
+                            </scripts>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>merge-and-strip-wsimport</id>
+                        <phase>process-sources</phase>
+                        <goals><goal>execute</goal></goals>
+                        <configuration>
+                            <skipScriptExecution>${hi.wsdl.codegen.skip}</skipScriptExecution>
+                            <scripts>
+                                <script><![CDATA[
+                                    def bd = project.build.directory as File
+                                    def out = new File(bd, 'generated-sources/wsimport')
+                                    out.mkdirs()
+                                    def base = new File(bd, 'generated-sources/wsimport-parts')
+                                    def names = [
+                                        'wsimport-consumer-search-ihi',
+                                        'wsimport-consumer-search-ihi-batch-sync',
+                                        'wsimport-provider-batch-async-individual',
+                                        'wsimport-provider-batch-async-organisation',
+                                        'wsimport-provider-search-individual',
+                                        'wsimport-provider-search-organisation',
+                                        'wsimport-provider-manage-org',
+                                        'wsimport-provider-manage-directory-entry',
+                                        'wsimport-provider-hpio-directory',
+                                        'wsimport-provider-read-reference-data',
+                                        'wsimport-provider-read-org',
+                                        'wsimport-provider-manage-admin-individual',
+                                        'wsimport-provider-read-admin-individual',
+                                        'wsimport-provider-hpii-directory',
+                                        'wsimport-consumer-search-ihi-batch-async',
+                                        'wsimport-consumer-create-provisional-ihi',
+                                        'wsimport-consumer-merge-provisional-ihi',
+                                        'wsimport-consumer-update-provisional-ihi',
+                                        'wsimport-consumer-create-unverified-ihi',
+                                        'wsimport-consumer-resolve-provisional-ihi',
+                                        'wsimport-consumer-notify-duplicate-ihi',
+                                        'wsimport-consumer-notify-replica-ihi',
+                                        'wsimport-consumer-update-ihi',
+                                        'wsimport-consumer-create-verified-ihi',
+                                        'wsimport-provider-manage-tds-provider-individual',
+                                        'wsimport-provider-search-tds-provider-individual'
+                                    ]
+                                    names.each { String part ->
+                                        def dir = new File(base, part)
+                                        if (!dir.isDirectory()) return
+                                        dir.eachFileRecurse(groovy.io.FileType.FILES) { File f ->
+                                            def rel = dir.toPath().relativize(f.toPath()).toString().replace('\\', '/')
+                                            def target = new File(out, rel)
+                                            target.parentFile.mkdirs()
+                                            if (!target.exists()) {
+                                                f.withInputStream { ins -> target.withOutputStream { os -> os << ins } }
+                                            }
+                                        }
+                                    }
+                                    project.getCompileSourceRoots().findAll { String p -> p.contains('wsimport-parts') }.each { project.removeCompileSourceRoot(it) }
+                                    if (base.isDirectory()) {
+                                        base.deleteDir()
+                                    }
+                                ]]></script>
+                            </scripts>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.groovy</groupId>
+                        <artifactId>groovy</artifactId>
+                        <version>${groovy.version}</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.groovy</groupId>
+                        <artifactId>groovy-ant</artifactId>
+                        <version>${groovy.version}</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>com.sun.xml.ws</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>${jaxws.maven.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.sun.xml.ws</groupId>
+                        <artifactId>jaxws-tools</artifactId>
+                        <version>${jaxws.rt.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.glassfish.jaxb</groupId>
+                        <artifactId>jaxb-xjc</artifactId>
+                        <version>${jaxb.xjc.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <skip>${hi.wsdl.codegen.skip}</skip>
+                    <xnocompile>true</xnocompile>
+                    <extension>true</extension>
+                    <quiet>true</quiet>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <xjcArgs>
+                        <xjcArg>-XautoNameResolution</xjcArg>
+                    </xjcArgs>
+                    <!-- JAXP XML security property (JDK name uses javax.*); wsimport uses it for schema resolution. -->
+                    <vmArgs>
+                        <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
+                        <vmArg>-Djava.io.tmpdir=${project.build.directory}/jaxws/tmp</vmArg>
+                    </vmArgs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>wsimport-consumer-search-ihi</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-consumer-search-ihi</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-consumer-search-ihi</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-consumer-search-ihi</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/consumer/20100731</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ConsumerSearchIHI-3.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ConsumerSearchIHI-3.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-consumer-search-ihi-batch-sync</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-consumer-search-ihi-batch-sync</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-consumer-search-ihi-batch-sync</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-consumer-search-ihi-batch-sync</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/consumer/20100731</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ConsumerSearchIHIBatchSync-3.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ConsumerSearchIHIBatchSync-3.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-provider-batch-async-individual</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-provider-batch-async-individual</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-provider-batch-async-individual</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-provider-batch-async-individual</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/provider/20130622</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ProviderBatchAsyncSearchForProviderIndividual-5.1.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ProviderBatchAsyncSearchForProviderIndividual-5.1.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-provider-batch-async-organisation</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-provider-batch-async-organisation</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-provider-batch-async-organisation</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-provider-batch-async-organisation</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/provider/20130622</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ProviderBatchAsyncSearchForProviderOrganisation-5.1.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ProviderBatchAsyncSearchForProviderOrganisation-5.1.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-provider-search-individual</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-provider-search-individual</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-provider-search-individual</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-provider-search-individual</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/provider/20130401</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ProviderSearchForProviderIndividual-5.0.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ProviderSearchForProviderIndividual-5.0.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-provider-search-organisation</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-provider-search-organisation</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-provider-search-organisation</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-provider-search-organisation</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/provider/20130401</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ProviderSearchForProviderOrganisation-5.0.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ProviderSearchForProviderOrganisation-5.0.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-provider-manage-org</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-provider-manage-org</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-provider-manage-org</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-provider-manage-org</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/provider/20100930</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ProviderManageProviderOrganisation-3.2.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ProviderManageProviderOrganisation-3.2.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-provider-manage-directory-entry</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-provider-manage-directory-entry</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-provider-manage-directory-entry</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-provider-manage-directory-entry</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/provider/20100930</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ProviderManageProviderDirectoryEntry-3.2.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ProviderManageProviderDirectoryEntry-3.2.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-provider-hpio-directory</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-provider-hpio-directory</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-provider-hpio-directory</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-provider-hpio-directory</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/provider/20100930</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ProviderSearchHIProviderDirectoryForOrganisation-3.2.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ProviderSearchHIProviderDirectoryForOrganisation-3.2.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-provider-read-reference-data</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-provider-read-reference-data</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-provider-read-reference-data</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-provider-read-reference-data</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/provider/20100930</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ProviderReadReferenceData-3.2.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ProviderReadReferenceData-3.2.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-provider-read-org</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-provider-read-org</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-provider-read-org</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-provider-read-org</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/provider/20100930</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ProviderReadProviderOrganisation-3.2.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ProviderReadProviderOrganisation-3.2.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-provider-manage-admin-individual</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-provider-manage-admin-individual</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-provider-manage-admin-individual</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-provider-manage-admin-individual</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/provider/20100930</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ProviderManageProviderAdministrativeIndividual-3.2.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ProviderManageProviderAdministrativeIndividual-3.2.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-provider-read-admin-individual</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-provider-read-admin-individual</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-provider-read-admin-individual</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-provider-read-admin-individual</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/provider/20100930</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ProviderReadProviderAdministrativeIndividual-3.2.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ProviderReadProviderAdministrativeIndividual-3.2.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-provider-hpii-directory</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-provider-hpii-directory</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-provider-hpii-directory</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-provider-hpii-directory</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/provider/20100930</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ProviderSearchHIProviderDirectoryForIndividual-3.2.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ProviderSearchHIProviderDirectoryForIndividual-3.2.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-consumer-search-ihi-batch-async</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-consumer-search-ihi-batch-async</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-consumer-search-ihi-batch-async</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-consumer-search-ihi-batch-async</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/consumer/20100731</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ConsumerSearchIHIBatchAsync-3.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ConsumerSearchIHIBatchAsync-3.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-consumer-create-provisional-ihi</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-consumer-create-provisional-ihi</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-consumer-create-provisional-ihi</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-consumer-create-provisional-ihi</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/consumer/20100731</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ConsumerCreateProvisionalIHI-3.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ConsumerCreateProvisionalIHI-3.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-consumer-merge-provisional-ihi</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-consumer-merge-provisional-ihi</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-consumer-merge-provisional-ihi</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-consumer-merge-provisional-ihi</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/consumer/20100731</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ConsumerMergeProvisionalIHI-3.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ConsumerMergeProvisionalIHI-3.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-consumer-update-provisional-ihi</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-consumer-update-provisional-ihi</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-consumer-update-provisional-ihi</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-consumer-update-provisional-ihi</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/consumer/20100731</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ConsumerUpdateProvisionalIHI-3.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ConsumerUpdateProvisionalIHI-3.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-consumer-create-unverified-ihi</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-consumer-create-unverified-ihi</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-consumer-create-unverified-ihi</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-consumer-create-unverified-ihi</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/consumer/20100821</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ConsumerCreateUnverifiedIHI-3.0.2.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ConsumerCreateUnverifiedIHI-3.0.2.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-consumer-resolve-provisional-ihi</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-consumer-resolve-provisional-ihi</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-consumer-resolve-provisional-ihi</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-consumer-resolve-provisional-ihi</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/consumer/20100821</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ConsumerResolveProvisionalIHI-3.0.2.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ConsumerResolveProvisionalIHI-3.0.2.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-consumer-notify-duplicate-ihi</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-consumer-notify-duplicate-ihi</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-consumer-notify-duplicate-ihi</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-consumer-notify-duplicate-ihi</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/consumer/20100930</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ConsumerNotifyDuplicateIHI-3.2.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ConsumerNotifyDuplicateIHI-3.2.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-consumer-notify-replica-ihi</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-consumer-notify-replica-ihi</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-consumer-notify-replica-ihi</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-consumer-notify-replica-ihi</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/consumer/20100930</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ConsumerNotifyReplicaIHI-3.2.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ConsumerNotifyReplicaIHI-3.2.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-consumer-update-ihi</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-consumer-update-ihi</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-consumer-update-ihi</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-consumer-update-ihi</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/consumer/20100930</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ConsumerUpdateIHI-3.2.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ConsumerUpdateIHI-3.2.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-consumer-create-verified-ihi</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-consumer-create-verified-ihi</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-consumer-create-verified-ihi</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-consumer-create-verified-ihi</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/consumer/20111201</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ConsumerCreateVerifiedIHI-4.0.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ConsumerCreateVerifiedIHI-4.0.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-provider-manage-tds-provider-individual</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-provider-manage-tds-provider-individual</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-provider-manage-tds-provider-individual</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-provider-manage-tds-provider-individual</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/provider/20130622</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ProviderManageTdsProviderIndividual-5.1.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ProviderManageTdsProviderIndividual-5.1.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wsimport-provider-search-tds-provider-individual</id>
+                        <goals><goal>wsimport</goal></goals>
+                        <configuration>
+                            <destDir>${project.build.directory}/jaxws/dest/wsimport-provider-search-tds-provider-individual</destDir>
+                            <staleFile>${project.build.directory}/jaxws/stale-wsimport-provider-search-tds-provider-individual</staleFile>
+                            <sourceDestDir>${project.build.directory}/generated-sources/wsimport-parts/wsimport-provider-search-tds-provider-individual</sourceDestDir>
+                            <wsdlDirectory>${hi.wsdl.tree.root}/wsdl/provider/20130622</wsdlDirectory>
+                            <wsdlFiles><wsdlFile>HI_ProviderSearchTdsProviderIndividual-5.1.0.wsdl</wsdlFile></wsdlFiles>
+                            <wsdlLocation>HI_ProviderSearchTdsProviderIndividual-5.1.0.wsdl</wsdlLocation>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <id>add-wsimport-source</id>
+                        <phase>process-sources</phase>
+                        <goals><goal>add-source</goal></goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/wsimport</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>dev-javadoc-off</id>
+            <properties>
+                <maven.javadoc.skip>true</maven.javadoc.skip>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <includes combine.self="override">
+                                <include>**/*Test.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>sample</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>3.6.1</version>
+                        <executions>
+                            <execution>
+                                <id>add-sample-sources</id>
+                                <phase>generate-sources</phase>
+                                <goals><goal>add-source</goal></goals>
+                                <configuration>
+                                    <sources>
+                                        <source>${project.basedir}/src/sample/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>fat-jar</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>${maven.shade.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>shade-runtime-deps</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                                <configuration>
+                                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                                    <shadedClassifierName>all</shadedClassifierName>
+                                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                                    <filters>
+                                        <filter>
+                                            <artifact>*:*</artifact>
+                                            <excludes>
+                                                <exclude>META-INF/*.SF</exclude>
+                                                <exclude>META-INF/*.DSA</exclude>
+                                                <exclude>META-INF/*.RSA</exclude>
+                                                <exclude>module-info.class</exclude>
+                                                <exclude>META-INF/MANIFEST.MF</exclude>
+                                            </excludes>
+                                        </filter>
+                                        <filter>
+                                            <artifact>org.glassfish.ha:ha-api</artifact>
+                                            <excludes>
+                                                <exclude>META-INF/hk2-locator/default</exclude>
+                                            </excludes>
+                                        </filter>
+                                        <filter>
+                                            <artifact>au.gov.nehta:smi-xsp</artifact>
+                                            <excludes>
+                                                <exclude>au/gov/nehta/common/utils/ArgumentUtils.class</exclude>
+                                            </excludes>
+                                        </filter>
+                                    </filters>
+                                    <transformers>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer"/>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
+                                            <addHeader>false</addHeader>
+                                        </transformer>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                    </transformers>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- Optional: pre-generated types from hi-wsdl-java (install au.gov.nehta:hi-wsdl first). jaxws-maven-plugin 4.0.2 ignores global skip; phase none per execution is required. -->
+        <profile>
+            <id>hi-wsdl-artifact</id>
+            <properties>
+                <hi.wsdl.codegen.skip>true</hi.wsdl.codegen.skip>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>au.gov.nehta</groupId>
+                    <artifactId>hi-wsdl</artifactId>
+                    <version>${hi.wsdl.version}</version>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.sun.xml.ws</groupId>
+                        <artifactId>jaxws-maven-plugin</artifactId>
+                        <executions>
+                            <execution><id>wsimport-consumer-search-ihi</id><phase>none</phase></execution>
+                            <execution><id>wsimport-consumer-search-ihi-batch-sync</id><phase>none</phase></execution>
+                            <execution><id>wsimport-provider-batch-async-individual</id><phase>none</phase></execution>
+                            <execution><id>wsimport-provider-batch-async-organisation</id><phase>none</phase></execution>
+                            <execution><id>wsimport-provider-search-individual</id><phase>none</phase></execution>
+                            <execution><id>wsimport-provider-search-organisation</id><phase>none</phase></execution>
+                            <execution><id>wsimport-provider-manage-org</id><phase>none</phase></execution>
+                            <execution><id>wsimport-provider-manage-directory-entry</id><phase>none</phase></execution>
+                            <execution><id>wsimport-provider-hpio-directory</id><phase>none</phase></execution>
+                            <execution><id>wsimport-provider-read-reference-data</id><phase>none</phase></execution>
+                            <execution><id>wsimport-provider-read-org</id><phase>none</phase></execution>
+                            <execution><id>wsimport-provider-manage-admin-individual</id><phase>none</phase></execution>
+                            <execution><id>wsimport-provider-read-admin-individual</id><phase>none</phase></execution>
+                            <execution><id>wsimport-provider-hpii-directory</id><phase>none</phase></execution>
+                            <execution><id>wsimport-consumer-search-ihi-batch-async</id><phase>none</phase></execution>
+                            <execution><id>wsimport-consumer-create-provisional-ihi</id><phase>none</phase></execution>
+                            <execution><id>wsimport-consumer-merge-provisional-ihi</id><phase>none</phase></execution>
+                            <execution><id>wsimport-consumer-update-provisional-ihi</id><phase>none</phase></execution>
+                            <execution><id>wsimport-consumer-create-unverified-ihi</id><phase>none</phase></execution>
+                            <execution><id>wsimport-consumer-resolve-provisional-ihi</id><phase>none</phase></execution>
+                            <execution><id>wsimport-consumer-notify-duplicate-ihi</id><phase>none</phase></execution>
+                            <execution><id>wsimport-consumer-notify-replica-ihi</id><phase>none</phase></execution>
+                            <execution><id>wsimport-consumer-update-ihi</id><phase>none</phase></execution>
+                            <execution><id>wsimport-consumer-create-verified-ihi</id><phase>none</phase></execution>
+                            <execution><id>wsimport-provider-manage-tds-provider-individual</id><phase>none</phase></execution>
+                            <execution><id>wsimport-provider-search-tds-provider-individual</id><phase>none</phase></execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-wsimport-source</id>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

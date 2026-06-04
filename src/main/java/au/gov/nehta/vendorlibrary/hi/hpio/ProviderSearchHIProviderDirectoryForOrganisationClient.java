@@ -1,9 +1,11 @@
 /*
  * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -24,7 +26,7 @@ import au.net.electronichealth.ns.hi.xsd.providercore.address._3_2.AustralianAdd
 import au.net.electronichealth.ns.hi.xsd.providercore.address._3_2.InternationalAddressCriteriaType;
 
 import javax.net.ssl.SSLSocketFactory;
-import javax.xml.ws.Holder;
+import jakarta.xml.ws.Holder;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
@@ -41,7 +43,7 @@ public class ProviderSearchHIProviderDirectoryForOrganisationClient extends Base
     private ArgumentValidator argumentValidator = new ArgumentValidator();
 
     /**
-     * Constructor which creates a new ProviderSearchHIProviderDirectoryForIndividual Client with an endpoint and an SSL Socket Factory.
+     * Constructor which creates a new ProviderSearchHIProviderDirectoryForOrganisation client with an endpoint and an SSL Socket Factory.
      *
      * @param serviceEndpoint       the Web Service endpoint for the Medicare HI Service interface (Mandatory)
      * @param individualQualifiedId The qualified user ID for connecting to the ProviderSearchHIProviderDirectoryForOrganisation service (Mandatory)
@@ -69,7 +71,7 @@ public class ProviderSearchHIProviderDirectoryForOrganisationClient extends Base
     }
 
     /**
-     * Constructor which creates a new ProviderSearchHIProviderDirectoryForIndividual Client with an endpoint and an SSL Socket Factory, with
+     * Constructor which creates a new ProviderSearchHIProviderDirectoryForOrganisation client with an endpoint and an SSL Socket Factory, with
      * the optional contracted service providers HPI-O organisation qualified ID set.
      *
      * @param serviceEndpoint         the Web Service endpoint for the Medicare HI Service interface (Mandatory)
@@ -105,7 +107,7 @@ public class ProviderSearchHIProviderDirectoryForOrganisationClient extends Base
     }
 
     /**
-     * Constructor which creates a new ProviderSearchHIProviderDirectoryForIndividual Client with an endpoint and an SSL Socket Factory.
+     * Constructor which creates a new ProviderSearchHIProviderDirectoryForOrganisation client with an endpoint and an SSL Socket Factory.
      * This is an overloaded constructor for the generic qualified id and product types.
      *
      * @param serviceEndpoint       the Web Service endpoint for the Medicare HI Service interface (Mandatory)
@@ -134,7 +136,7 @@ public class ProviderSearchHIProviderDirectoryForOrganisationClient extends Base
     }
 
     /**
-     * Constructor which creates a new ProviderSearchHIProviderDirectoryForIndividual Client with an endpoint and an SSL Socket Factory, with
+     * Constructor which creates a new ProviderSearchHIProviderDirectoryForOrganisation client with an endpoint and an SSL Socket Factory, with
      * the optional contracted service providers HPI-O organisation qualified ID set.
      *
      * @param serviceEndpoint         the Web Service endpoint for the Medicare HI Service interface (Mandatory)
@@ -172,7 +174,7 @@ public class ProviderSearchHIProviderDirectoryForOrganisationClient extends Base
     }
 
     /**
-     * Constructor which creates a new ProviderSearchHIProviderDirectoryForIndividual Client with an endpoint and an SSL Socket Factory.
+     * Constructor which creates a new ProviderSearchHIProviderDirectoryForOrganisation client with an endpoint and an SSL Socket Factory.
      * This is an overloaded constructor for the generic qualified id and product types.
      *
      * @param serviceEndpoint    the Web Service endpoint for the Medicare HI Service interface (Mandatory)
@@ -201,11 +203,11 @@ public class ProviderSearchHIProviderDirectoryForOrganisationClient extends Base
     /**
      * Executes an Identifier HPI-O search.
      *
-     * @param request the SearchHIProviderDirectoryForIndividual request object containing the following mandatory fields:
+     * @param request the SearchHIProviderDirectoryForOrganisation request object containing the following mandatory fields:
      *                HPI-O
      *                and the following optional fields:
      *                Link Search Type
-     * @return the response from the SearchHIProviderDirectoryForIndividual service
+     * @return the response from the SearchHIProviderDirectoryForOrganisation service
      * @throws StandardErrorMsg if the Web Service call fails.
      */
     public final SearchHIProviderDirectoryForOrganisationResponse identifierSearch(SearchHIProviderDirectoryForOrganisation request)
@@ -226,11 +228,11 @@ public class ProviderSearchHIProviderDirectoryForOrganisationClient extends Base
     /**
      * Executes a Demographic HPI-O search.
      *
-     * @param request the SearchHIProviderDirectoryForIndividual request object containing the following mandatory fields:
+     * @param request the SearchHIProviderDirectoryForOrganisation request object containing the following mandatory fields:
      *                Name
      *                and the following optional fields:
      *                Either "Australian Address Criteria" OR "International Address Criteria" but not both.
-     * @return the response from the SearchHIProviderDirectoryForIndividual service
+     * @return the response from the SearchHIProviderDirectoryForOrganisation service
      * @throws StandardErrorMsg if the Web Service call fails.
      */
     public final SearchHIProviderDirectoryForOrganisationResponse demographicSearch(SearchHIProviderDirectoryForOrganisation request) throws StandardErrorMsg {
@@ -250,12 +252,12 @@ public class ProviderSearchHIProviderDirectoryForOrganisationClient extends Base
     /**
      * Executes an Identifier HPI-O search.
      *
-     * @param request      the SearchHIProviderDirectoryForIndividual request object containing the following mandatory fields:
+     * @param request      the SearchHIProviderDirectoryForOrganisation request object containing the following mandatory fields:
      *                     HPI-O
      *                     and the following optional fields:
      *                     Link Search Type
      * @param individualId the qualified user id of the user making the request
-     * @return the response from the SearchHIProviderDirectoryForIndividual service
+     * @return the response from the SearchHIProviderDirectoryForOrganisation service
      * @throws StandardErrorMsg if the Web Service call fails.
      */
     public final SearchHIProviderDirectoryForOrganisationResponse identifierSearch(SearchHIProviderDirectoryForOrganisation request,
@@ -277,12 +279,12 @@ public class ProviderSearchHIProviderDirectoryForOrganisationClient extends Base
     /**
      * Executes a Demographic HPI-O search.
      *
-     * @param request      the SearchHIProviderDirectoryForIndividual request object containing the following mandatory fields:
+     * @param request      the SearchHIProviderDirectoryForOrganisation request object containing the following mandatory fields:
      *                     Name
      *                     and the following optional fields:
      *                     Either "Australian Address Criteria" OR "International Address Criteria" but not both.
      * @param individualId the qualified user id of the user making the request
-     * @return the response from the SearchHIProviderDirectoryForIndividual service
+     * @return the response from the SearchHIProviderDirectoryForOrganisation service
      * @throws StandardErrorMsg if the Web Service call fails.
      */
     public final SearchHIProviderDirectoryForOrganisationResponse demographicSearch(SearchHIProviderDirectoryForOrganisation request,

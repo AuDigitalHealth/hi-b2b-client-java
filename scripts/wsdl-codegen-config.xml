@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2011 NEHTA
+  Copyright 2021-2026 ADHA (Australian Digital Health Agency)
+  Apache License 2.0 - see LICENSE.txt. Fragment merged into pom.xml (WSDL locations under wsdls/).
+  Paths assume the licensed Services Australia / ADHA WSDL artifact is unpacked at the project root
+  under wsdls/xml/ (see README.md). wsdlDir values are relative to the project root.
+-->
+<wsdl-codegen>
+  <entry wsdlDir="wsdls/xml/wsdl/consumer/20100731" file="HI_ConsumerSearchIHI-3.0.wsdl"/>
+  <entry wsdlDir="wsdls/xml/wsdl/consumer/20100731" file="HI_ConsumerSearchIHIBatchSync-3.0.wsdl"/>
+  <entry wsdlDir="wsdls/xml/wsdl/provider/20130622" file="HI_ProviderBatchAsyncSearchForProviderIndividual-5.1.0.wsdl"/>
+  <entry wsdlDir="wsdls/xml/wsdl/provider/20130622" file="HI_ProviderBatchAsyncSearchForProviderOrganisation-5.1.0.wsdl"/>
+  <entry wsdlDir="wsdls/xml/wsdl/provider/20130401" file="HI_ProviderSearchForProviderIndividual-5.0.0.wsdl"/>
+  <entry wsdlDir="wsdls/xml/wsdl/provider/20130401" file="HI_ProviderSearchForProviderOrganisation-5.0.0.wsdl"/>
+  <entry wsdlDir="wsdls/xml/wsdl/provider/20100930" file="HI_ProviderManageProviderOrganisation-3.2.0.wsdl"/>
+  <entry wsdlDir="wsdls/xml/wsdl/provider/20100930" file="HI_ProviderManageProviderDirectoryEntry-3.2.0.wsdl"/>
+  <entry wsdlDir="wsdls/xml/wsdl/provider/20100930" file="HI_ProviderSearchHIProviderDirectoryForOrganisation-3.2.0.wsdl"/>
+  <entry wsdlDir="wsdls/xml/wsdl/provider/20100930" file="HI_ProviderReadReferenceData-3.2.0.wsdl"/>
+  <entry wsdlDir="wsdls/xml/wsdl/provider/20100930" file="HI_ProviderReadProviderOrganisation-3.2.0.wsdl"/>
+  <entry wsdlDir="wsdls/xml/wsdl/provider/20100930" file="HI_ProviderManageProviderAdministrativeIndividual-3.2.0.wsdl"/>
+  <entry wsdlDir="wsdls/xml/wsdl/provider/20100930" file="HI_ProviderReadProviderAdministrativeIndividual-3.2.0.wsdl"/>
+  <entry wsdlDir="wsdls/xml/wsdl/provider/20100930" file="HI_ProviderSearchHIProviderDirectoryForIndividual-3.2.0.wsdl"/>
+</wsdl-codegen>

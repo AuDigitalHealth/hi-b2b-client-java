@@ -21,7 +21,7 @@
     <!-- The WSDL relative path is set because the WSDL requires the schema file/s
                   relative path to understand import statements -->
 
-    <!-- Ant target to generate ConsumerIHISearch java artifacts -->
+    <!-- Ant target to generate ConsumerIHISearch java artefacts -->
     <target name="--IhiSearchConsumerTLS">
         <generateWSDLArtifacts service="${ihisearch.consumer.tls}"
                                jarFilename="${ihisearch.consumer.tls.jarFileName}"
@@ -52,7 +52,7 @@
                                original.binding.dir="${basedir}/binding"/>
     </target>
 
-    <!-- Ant target to generate ProviderSearchHIProviderDirectoryForIndividual java artifacts -->
+    <!-- Ant target to generate ProviderSearchHIProviderDirectoryForIndividual java artefacts -->
     <target name="--HI_ProviderSearchHIProviderDirectoryForIndividual">
         <generateWSDLArtifacts service="${searchhpii.provider.tls}"
                                jarFilename="${searchhpii.provider.tls.jarFileName}"
@@ -68,12 +68,12 @@
                                original.binding.dir="${basedir}/binding"/>
     </target>
 
-	<!-- Ant target to generate ConsumerSearchIHIBatchSync java artifacts -->
+	<!-- Ant target to generate ConsumerSearchIHIBatchSync java artefacts -->
 	<target name="--ConsumerSearchIHIBatchSync">
 		<generateWSDLArtifacts service="${ihisearchBatchSync.consumer.tls}" interface="${ihisearchBatchSync.consumer.tls.interface}" schemas="../xsd/*.xsd,${ihisearchBatchSync.jaxb.binding.prefix}.xml,${jaxws.binding.prefix}.xml,
 								${jaxwsInterface.binding.prefix}.xml" jaxbbinding="${ihisearchBatchSync.jaxb.binding.prefix}.xml" jaxwsbinding="${jaxws.binding.prefix}.xml,${jaxwsInterface.binding.prefix}.xml" version="${ihisearchBatchSync.wsdl.version}" versionSepChar="-" serviceDir="${ihisearchBatchSync.consumer.tls}" package.name="${ihisearchBatchSync.consumer.tls.packageName}" wsdlRelativePath="consumer/20100731/" original.wsdl.dir="${basedir}/wsdl" original.xsd.dir="${basedir}/schema" original.binding.dir="${basedir}/binding" />
 	</target>
-    <!-- Ant target to generate ProviderSearchHIProviderDirectoryForIndividual java artifacts -->
+    <!-- Ant target to generate ProviderSearchHIProviderDirectoryForIndividual java artefacts -->
     <target name="--HI_ProviderSearchHIProviderDirectoryForOrganisation">
         <generateWSDLArtifacts service="${searchhpio.provider.tls}"
                                jarFilename="${searchhpio.provider.tls.jarFileName}"
@@ -89,7 +89,7 @@
                                original.binding.dir="${basedir}/binding"/>
     </target>
 
-    <!-- Ant target to generate ProviderSearchHIProviderDirectoryForIndividual java artifacts -->
+    <!-- Ant target to generate ProviderSearchHIProviderDirectoryForIndividual java artefacts -->
     <target name="--HI_ProviderReadReferenceData">
         <generateWSDLArtifacts service="${readReferenceData.provider.tls}"
                                jarFilename="${readReferenceData.provider.tls.jarFileName}"
@@ -134,7 +134,7 @@
         </zip>
     </target>
 
-    <!-- Ant target for generating interface artefact files -->
+    <!-- Ant target for generating interface artifact files -->
     <target name="dist" depends="--prepare"
             description="Generates packaged jar files for all Interfaces">
 
