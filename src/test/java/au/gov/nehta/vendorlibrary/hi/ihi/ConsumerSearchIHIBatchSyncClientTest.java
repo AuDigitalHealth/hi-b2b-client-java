@@ -1,9 +1,11 @@
 /*
  * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -15,8 +17,8 @@ package au.gov.nehta.vendorlibrary.hi.ihi;
 
 import au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants;
 import au.gov.nehta.vendorlibrary.ws.handler.LoggingHandler;
-import au.net.electronichealth.ns.hi.consumermessages.searchihi._3.SearchIHI;
-import au.net.electronichealth.ns.hi.consumermessages.searchihi._3.SearchIHIResult;
+import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihi._3.SearchIHI;
+import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihi._3.SearchIHIResult;
 import au.net.electronichealth.ns.hi.svc.consumersearchihibatchsyncrequest._3.SearchIHIBatchResponse;
 import au.net.electronichealth.ns.hi.xsd.common.addresscore._3.PostalDeliveryGroupType;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.SexType;
@@ -29,7 +31,7 @@ import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihibatch._3.Sear
 import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihibatch._3.SearchIHIResultType;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import au.gov.nehta.vendorlibrary.hi.test.utils.TestReflect;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
@@ -54,7 +56,7 @@ public class ConsumerSearchIHIBatchSyncClientTest {
         setSystemVariablesForTest();
         ConsumerSearchIHIBatchSyncClient testClient = getMedicareTestClient();
 
-        ReflectionTestUtils.setField(testClient, "loggingHandler", null);
+        TestReflect.setField(testClient, "loggingHandler", null);
 
         String lastSoapRequest = testClient.getLastSoapRequest();
         Assert.assertEquals(lastSoapRequest, LoggingHandler.EMPTY);

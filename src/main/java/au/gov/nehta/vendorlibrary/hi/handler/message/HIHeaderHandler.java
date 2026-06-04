@@ -1,3 +1,18 @@
+/*
+ * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 package au.gov.nehta.vendorlibrary.hi.handler.message;
 
 import java.util.ArrayList;
@@ -5,12 +20,12 @@ import java.util.List;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPHeader;
-import javax.xml.soap.SOAPMessage;
-import javax.xml.ws.handler.MessageContext;
-import javax.xml.ws.handler.soap.SOAPHandler;
-import javax.xml.ws.handler.soap.SOAPMessageContext;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPHeader;
+import jakarta.xml.soap.SOAPMessage;
+import jakarta.xml.ws.handler.MessageContext;
+import jakarta.xml.ws.handler.soap.SOAPHandler;
+import jakarta.xml.ws.handler.soap.SOAPMessageContext;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -24,14 +39,8 @@ public class HIHeaderHandler implements SOAPHandler<SOAPMessageContext> {
      */
     public static final String HPIO_CSP_HEADER_ELEMENT_NAME = "hpio";
 
-    /**
-     * FaultTo header name. Medicare cannot handle
-     *
-     * <pre>
-     * <wsa:FaultTo>Anything</wsa:FaultTo>
-     * </pre>
-     * <p>
-     * so we strip it from the outbound messages before signing.
+    /* FaultTo header name. Medicare cannot handle FaultTo:
+     *     so we strip it from the outbound messages before signing.
      */
     public static final String FAULT_TO_HEADER_ELEMENT_NAME = "FaultTo";
 
@@ -56,7 +65,7 @@ public class HIHeaderHandler implements SOAPHandler<SOAPMessageContext> {
      *
      * @param context the incoming / outgoing soap message context
      * @return true Always returns true.
-     * @see javax.xml.ws.handler.Handler#handleMessage(javax.xml.ws.handler.MessageContext)
+     * @see jakarta.xml.ws.handler.Handler#handleMessage(jakarta.xml.ws.handler.MessageContext)
      */
     public final boolean handleMessage(final SOAPMessageContext context) {
         Boolean isOutgoing = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
@@ -111,7 +120,7 @@ public class HIHeaderHandler implements SOAPHandler<SOAPMessageContext> {
      *
      * @param context the incoming / outgoing soap message context
      * @return true if the handle signature check is successful.
-     * @see javax.xml.ws.handler.Handler#handleFault(javax.xml.ws.handler.MessageContext)
+     * @see jakarta.xml.ws.handler.Handler#handleFault(jakarta.xml.ws.handler.MessageContext)
      */
     public final boolean handleFault(final SOAPMessageContext context) {
         return false;
@@ -120,7 +129,7 @@ public class HIHeaderHandler implements SOAPHandler<SOAPMessageContext> {
     /**
      * Does nothing returns null.<br>
      *
-     * @return @see javax.xml.ws.handler.soap.SOAPHandler#getHeaders()
+     * @return @see jakarta.xml.ws.handler.soap.SOAPHandler#getHeaders()
      */
     public final Set<QName> getHeaders() {
         return null;
@@ -131,8 +140,7 @@ public class HIHeaderHandler implements SOAPHandler<SOAPMessageContext> {
      * Not utilised for dumping SOAP message.
      *
      * @param context the message context
-     * @see javax.xml.ws.handler.Handler close() javax.xml.ws.handler .
-     * MessageContext)
+     * @see jakarta.xml.ws.handler.Handler#close(jakarta.xml.ws.handler.MessageContext)
      */
     public void close(final MessageContext context) {
         // Do nothing

@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2011 NEHTA
+  Copyright 2021-2026 ADHA (Australian Digital Health Agency)
+  SPDX: Apache-2.0; full text in LICENSE.txt at the repository root.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>au.gov.nehta</groupId>
     <artifactId>hi-b2b-client</artifactId>
-    <version>1.6.3-SNAPSHOT</version>
+    <version>1.7.0-SNAPSHOT</version>
     <name>HI B2B client</name>
     <description>Example client implementations of Healthcare Identifiers (HI) service</description>
     <url>https://github.com/AuDigitalHealth/hi-b2b-client-java</url>
@@ -38,7 +43,7 @@
             scm:git:https://github.com/AuDigitalHealth/hi-b2b-client-java.git
         </developerConnection>
         <url>https://github.com/AuDigitalHealth/hi-b2b-client-java.git</url>
-        <tag>hi-b2b-client-1.6.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
@@ -52,6 +57,22 @@
         </repository>
     </distributionManagement>
 
+    <properties>
+        <maven.compiler.release>11</maven.compiler.release>
+        <encoding>UTF-8</encoding>
+        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
+        <project.resources.sourceEncoding>${encoding}</project.resources.sourceEncoding>
+        <archetype.encoding>${encoding}</archetype.encoding>
+        <skipTests>false</skipTests>
+        <!-- Eclipse EE4J XML Web Services (Jakarta XML-WS RI). -->
+        <jaxws.rt.version>4.0.4</jaxws.rt.version>
+        <!-- Jakarta hi-wsdl 1.7 line from hi-wsdl-java (Java 11 / EE4J). Install sibling 11.hi-wsdl-java first. -->
+        <hi.wsdl.version>${project.version}</hi.wsdl.version>
+        <maven.shade.plugin.version>3.6.2</maven.shade.plugin.version>
+    </properties>
+
+    <!-- Compile/runtime: smi-xsp, Jakarta hi-wsdl types, jaxws-rt RI. JUnit is test-scoped only. -->
     <dependencies>
         <dependency>
             <groupId>au.gov.nehta</groupId>
@@ -60,62 +81,74 @@
         </dependency>
         <dependency>
             <groupId>au.gov.nehta</groupId>
-            <artifactId>common-library</artifactId>
-            <version>1.2.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.sun.xml.ws</groupId>
-                    <artifactId>webservices-rt</artifactId>
-                </exclusion>
-            </exclusions>			
+            <artifactId>hi-wsdl</artifactId>
+            <version>${hi.wsdl.version}</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
-            <version>2.3.5</version>
-        </dependency>		
-        <dependency>
-            <groupId>au.gov.nehta</groupId>
-            <artifactId>hi-wsdl</artifactId>
-            <version>1.6.2</version>
+            <version>${jaxws.rt.version}</version>
         </dependency>
-        <dependency>
-            <groupId>au.gov.nehta</groupId>
-            <artifactId>smi-common-utils</artifactId>
-            <version>1.2.1</version>
-        </dependency>
-        <!-- For test scope -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>5.3.3</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <encoding>UTF-8</encoding>
-        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
-        <project.resources.sourceEncoding>${encoding}</project.resources.sourceEncoding>
-        <archetype.encoding>${encoding}</archetype.encoding>
-        <skipTests>true</skipTests> <!-- Need to neutralize out-of-date tests for deployment -->
-    </properties>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <retryOnError>true</retryOnError>
+                    <fast>false</fast>
+                    <force>true</force>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.6.2</version>
+                <executions>
+                    <execution>
+                        <id>enforce-build-tooling</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>[3.6.3,)</version>
+                                </requireMavenVersion>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>com.sun.xml.ws:webservices-rt</exclude>
+                                        <exclude>com.sun.xml.ws:webservices-api</exclude>
+                                        <exclude>com.sun.xml.ws:webservices-extra</exclude>
+                                        <exclude>com.sun.xml.ws:webservices-extra-api</exclude>
+                                        <exclude>javax.xml.ws:*</exclude>
+                                        <exclude>javax.xml.bind:*</exclude>
+                                        <exclude>javax.xml.soap:*</exclude>
+                                    </excludes>
+                                    <message>Use Eclipse EE4J jaxws-rt and Jakarta XML APIs, not legacy Metro / javax JAX-WS.</message>
+                                </bannedDependencies>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
+                <version>3.2.8</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
@@ -129,11 +162,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.12.0</version>
                 <configuration>
-                    <verbose>true</verbose>
-                    <!--<skip>true</skip>-->
                     <doclint>none</doclint>
+                    <detectOfflineLinks>false</detectOfflineLinks>
                     <encoding>${encoding}</encoding>
                 </configuration>
                 <executions>
@@ -148,12 +180,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>jar-no-fork</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -161,7 +193,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.0.0-M1</version>
+                <version>3.1.4</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>
@@ -169,7 +201,7 @@
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
+                <version>1.7.0</version>
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>nexus-releases</serverId>
@@ -178,33 +210,27 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M4</version>
-                <configuration>
-                    <showSuccess>false</showSuccess>
-                    <title>CDA Schema Java Tests Output</title>
-                    <outputDirectory>${basedir}/target/surefire-reports</outputDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.5.5</version>
                 <configuration>
                     <skipTests>${skipTests}</skipTests>
                     <encoding>UTF-8</encoding>
                     <enableAssertions>true</enableAssertions>
-                    <forkCount>3</forkCount>
-                    <reuseForks>true</reuseForks>
                     <argLine>-Xmx1024m</argLine>
+                    <!-- Default Surefire: offline unit tests (14 SOAP facades). Full mutual-TLS: mvn -Pintegration test -->
+                    <includes>
+                        <include>**/TimeUtilityTest.java</include>
+                        <include>**/TestConfigurationTest.java</include>
+                        <include>**/HiWsdlArtifactRootTest.java</include>
+                        <include>**/ConsumerSearchIHIClientArgumentValidatorTest.java</include>
+                    </includes>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>3.0.0-M1</version>
+                <version>3.3.1</version>
                 <configuration>
-                    <branchName>mavenization</branchName>
                     <useReleaseProfile>false</useReleaseProfile>
                     <releaseProfiles>release</releaseProfiles>
                     <localCheckout>true</localCheckout>
@@ -214,23 +240,134 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.15.0</version>
                 <configuration>
-                    <compilerArgs>
-                        <arg>-Xlint:unchecked</arg>
-                        <arg>-verbose</arg>
-                    </compilerArgs>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
+                    <release>${maven.compiler.release}</release>
                     <encoding>${project.build.sourceEncoding}</encoding>
-                    <debug>true</debug><!--By default it is set to true-->
+                    <proc>none</proc>
+                    <debug>true</debug>
                     <debuglevel>lines,vars,source</debuglevel>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
-                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <!-- WSDL/XSD ship in au.gov.nehta:hi-wsdl; runtime resolution via HiWsdlArtifactRoot. -->
+                    <excludes>
+                        <exclude>**/*.wsdl</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>dev-javadoc-off</id>
+            <properties>
+                <maven.javadoc.skip>true</maven.javadoc.skip>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <includes combine.self="override">
+                                <include>**/*Test.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>sample</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>3.6.1</version>
+                        <executions>
+                            <execution>
+                                <id>add-sample-sources</id>
+                                <phase>generate-sources</phase>
+                                <goals><goal>add-source</goal></goals>
+                                <configuration>
+                                    <sources>
+                                        <source>${project.basedir}/src/sample/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>fat-jar</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>${maven.shade.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>shade-runtime-deps</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                                <configuration>
+                                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                                    <shadedClassifierName>all</shadedClassifierName>
+                                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                                    <filters>
+                                        <filter>
+                                            <artifact>org.glassfish.ha:ha-api</artifact>
+                                            <excludes>
+                                                <exclude>META-INF/hk2-locator/default</exclude>
+                                            </excludes>
+                                        </filter>
+                                        <filter>
+                                            <artifact>*:*</artifact>
+                                            <excludes>
+                                                <exclude>module-info.class</exclude>
+                                                <exclude>META-INF/versions/*/module-info.class</exclude>
+                                                <exclude>META-INF/MANIFEST.MF</exclude>
+                                                <exclude>META-INF/*.SF</exclude>
+                                                <exclude>META-INF/*.DSA</exclude>
+                                                <exclude>META-INF/*.RSA</exclude>
+                                            </excludes>
+                                        </filter>
+                                        <filter>
+                                            <artifact>au.gov.nehta:smi-xsp</artifact>
+                                            <excludes>
+                                                <exclude>au/gov/nehta/common/utils/ArgumentUtils.class</exclude>
+                                            </excludes>
+                                        </filter>
+                                    </filters>
+                                    <transformers>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer"/>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer"/>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                    </transformers>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

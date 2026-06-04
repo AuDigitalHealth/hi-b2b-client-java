@@ -1,0 +1,25 @@
+# Default unit tests + Javadoc/sources (verify), then sample profile compile.
+# WSDL/XSD live under wsdls/xml in this branch; hi.wsdl.tree.root defaults to ${project.basedir}/wsdls/xml (pom + initialize script).
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "11"
+          cache: maven
+      - name: Maven verify
+        run: mvn -B -Dgpg.skip=true clean verify
+      - name: Compile sample sources (sample profile)
+        run: mvn -B -Psample -Dgpg.skip=true -DskipTests=true clean compile
