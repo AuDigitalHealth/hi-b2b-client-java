@@ -206,6 +206,7 @@ public class SearchBatch {
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
+            ensureNull(request.getIhiNumber(), "IHI Number");
         }
 
         /**
@@ -224,6 +225,7 @@ public class SearchBatch {
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
+            ensureNull(request.getIhiNumber(), "IHI Number");
         }
 
         /**
@@ -241,6 +243,7 @@ public class SearchBatch {
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
+            ensureNull(request.getIhiNumber(), "IHI Number");
         }
 
         /**
@@ -320,6 +323,7 @@ public class SearchBatch {
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
             ensureNull(request.getAustralianPostalAddress(), "Australian Postal Address");
             ensureNull(request.getHistory(), "History");
+            ensureNull(request.getIhiNumber(), "IHI Number");
         }
 
 
@@ -334,6 +338,7 @@ public class SearchBatch {
             ensureNull(request.getDvaFileNumber(), "DVA File Name");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
+            ensureNull(request.getIhiNumber(), "IHI Number");
         }
 
         /**

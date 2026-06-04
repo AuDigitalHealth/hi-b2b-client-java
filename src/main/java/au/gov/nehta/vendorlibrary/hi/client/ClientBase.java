@@ -19,7 +19,7 @@ import au.gov.nehta.xsp.CertificateValidator;
 public abstract class ClientBase<T> {
 
     /**
-     * The Metro/XML Webservice binding port for webservice operations
+     * The JAX-WS service port for web service operations.
      */
     protected T port;
     /**
@@ -43,8 +43,7 @@ public abstract class ClientBase<T> {
     protected static final String SSL_SOCKET_FACTORY_INTERNAL = "com.sun.xml.internal.ws.transport.https.client.SSLSocketFactory";
 
     /**
-     * SSL socket factory class name
-     * Also added for non "internal" clients where the Metro libraries are supplied on the classpath
+     * SSL socket factory class name for {@code com.sun.xml.ws:jaxws-rt} (use with {@link #SSL_SOCKET_FACTORY_INTERNAL}).
      */
     protected static final String SSL_SOCKET_FACTORY = "com.sun.xml.ws.transport.https.client.SSLSocketFactory";
 

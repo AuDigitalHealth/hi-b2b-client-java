@@ -29,7 +29,7 @@ import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihibatch._3.Sear
 import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihibatch._3.SearchIHIResultType;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import au.gov.nehta.vendorlibrary.hi.test.utils.ReflectionFieldSetter;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
@@ -54,7 +54,7 @@ public class ConsumerSearchIHIBatchSyncClientTest {
         setSystemVariablesForTest();
         ConsumerSearchIHIBatchSyncClient testClient = getMedicareTestClient();
 
-        ReflectionTestUtils.setField(testClient, "loggingHandler", null);
+        ReflectionFieldSetter.setField(testClient, "loggingHandler", null);
 
         String lastSoapRequest = testClient.getLastSoapRequest();
         Assert.assertEquals(lastSoapRequest, LoggingHandler.EMPTY);

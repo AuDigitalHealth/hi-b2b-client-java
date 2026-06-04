@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  OPTIONAL Maven user settings fragment (profile hi-wsdl-tree, hi.wsdl.tree.root).
+
+  This Java 8 branch compiles generated SOAP types from au.gov.nehta:hi-wsdl on Maven Central by default.
+  The POM does not read hi.wsdl.tree.root in the normal lifecycle; this file exists for parity with the
+  Java 11 lines (scripts, CI shape) and for any local tooling that expects the same property name.
+
+  Default build: from the project root run
+    mvn clean verify
+  with no project settings file and no -s flag — your ~/.m2/settings.xml (mirrors, <server> credentials)
+  continues to apply.
+
+  If you merge this profile into ~/.m2/settings.xml, keep activeProfiles consistent with your needs.
+  Using "mvn -s <file>" replaces effective user settings for that invocation only; see README.md
+  for the full warning.
+
+  Copyright 2021-2026 ADHA. SPDX-License-Identifier: Apache-2.0 (same as the project).
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 https://maven.apache.org/xsd/settings-1.2.0.xsd">
+    <profiles>
+        <profile>
+            <id>hi-wsdl-tree</id>
+            <properties>
+                <hi.wsdl.tree.root>./wsdls/xml</hi.wsdl.tree.root>
+            </properties>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>hi-wsdl-tree</activeProfile>
+    </activeProfiles>
+</settings>
