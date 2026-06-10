@@ -12,7 +12,8 @@
     <name>HI WSDLs - EE4J JAX-WS lib sync (internal)</name>
 
     <properties>
-        <ee4j.jaxws.version>2.3.7</ee4j.jaxws.version>
+        <!-- Keep in sync with jaxws.rt.version in ../pom.xml (this POM only feeds optional wsdls/ Ant). -->
+        <ee4j.jaxws.version>4.0.4</ee4j.jaxws.version>
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
         <plugin.dependency.version>3.10.0</plugin.dependency.version>

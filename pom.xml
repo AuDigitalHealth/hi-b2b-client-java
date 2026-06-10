@@ -9,7 +9,7 @@
 
     <groupId>au.gov.nehta</groupId>
     <artifactId>hi-b2b-client</artifactId>
-    <version>1.6.3-SNAPSHOT</version>
+    <version>1.6.5-SNAPSHOT</version>
     <name>HI B2B client</name>
     <description>Example client implementations of Healthcare Identifiers (HI) service</description>
     <url>https://github.com/AuDigitalHealth/hi-b2b-client-java</url>
@@ -64,59 +64,26 @@
     </distributionManagement>
 
     <properties>
-        <maven.compiler.release>8</maven.compiler.release>
+        <maven.compiler.release>11</maven.compiler.release>
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
         <project.resources.sourceEncoding>${encoding}</project.resources.sourceEncoding>
         <archetype.encoding>${encoding}</archetype.encoding>
         <skipTests>false</skipTests>
-        <!-- Eclipse EE4J JAX-WS RI: com.sun.xml.ws:jaxws-rt. 2.3.7 is the last 2.3.x on Central (Java 8 / javax packages). -->
-        <ee4j.jaxws.version>2.3.7</ee4j.jaxws.version>
-        <junit.version>4.13.2</junit.version>
-        <plugin.clean.version>3.5.0</plugin.clean.version>
-        <plugin.compiler.version>3.15.0</plugin.compiler.version>
-        <plugin.surefire.version>3.5.5</plugin.surefire.version>
-        <plugin.javadoc.version>3.12.0</plugin.javadoc.version>
-        <plugin.source.version>3.4.0</plugin.source.version>
-        <plugin.deploy.version>3.1.4</plugin.deploy.version>
-        <plugin.release.version>3.3.1</plugin.release.version>
-        <plugin.nexus.staging.version>1.7.0</plugin.nexus.staging.version>
-        <plugin.build.helper.version>3.6.1</plugin.build.helper.version>
-        <plugin.gpg.version>3.2.8</plugin.gpg.version>
-        <jacoco.version>0.8.14</jacoco.version>
-        <nehta.lib.version>1.2.1</nehta.lib.version>
-        <maven.shade.plugin.version>3.6.2</maven.shade.plugin.version>
-        <!-- Same version as this artifact (SNAPSHOT during dev; GA at release). See README local development. -->
+        <!-- Eclipse EE4J XML Web Services (Jakarta XML-WS RI). -->
+        <jaxws.rt.version>4.0.4</jaxws.rt.version>
+        <!-- Jakarta hi-wsdl at ${project.version}. mvn install in hi-wsdl-java first for unpublished SNAPSHOTs. -->
         <hi.wsdl.version>${project.version}</hi.wsdl.version>
-        <plugin.jar.version>3.5.0</plugin.jar.version>
-        <plugin.enforcer.version>3.6.2</plugin.enforcer.version>
-        <!-- Surefire JVM heap; JaCoCo profile prepends the agent via prepare-agent when -Pcoverage is active. -->
-        <argLine>-Xmx1024m</argLine>
-        <!-- Build speed: source jar-no-fork, javadoc detectOfflineLinks off, compiler proc none. Optional: -Pdev-javadoc-off, -Pcoverage for JaCoCo. -->
+        <maven.shade.plugin.version>3.6.2</maven.shade.plugin.version>
     </properties>
 
+    <!-- Compile/runtime: smi-xsp, Jakarta hi-wsdl types, jaxws-rt RI. JUnit is test-scoped only. -->
     <dependencies>
         <dependency>
             <groupId>au.gov.nehta</groupId>
-            <artifactId>common-library</artifactId>
-            <version>${nehta.lib.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.sun.xml.ws</groupId>
-                    <artifactId>webservices-rt</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>au.gov.nehta</groupId>
             <artifactId>smi-xsp</artifactId>
-            <version>${nehta.lib.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.xml.ws</groupId>
-            <artifactId>jaxws-rt</artifactId>
-            <version>${ee4j.jaxws.version}</version>
+            <version>1.2.1</version>
         </dependency>
         <dependency>
             <groupId>au.gov.nehta</groupId>
@@ -124,9 +91,14 @@
             <version>${hi.wsdl.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-rt</artifactId>
+            <version>${jaxws.rt.version}</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -136,7 +108,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>${plugin.clean.version}</version>
+                <version>3.5.0</version>
                 <configuration>
                     <retryOnError>true</retryOnError>
                     <fast>false</fast>
@@ -145,8 +117,41 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.6.2</version>
+                <executions>
+                    <execution>
+                        <id>enforce-build-tooling</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>[3.6.3,)</version>
+                                </requireMavenVersion>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>com.sun.xml.ws:webservices-rt</exclude>
+                                        <exclude>com.sun.xml.ws:webservices-api</exclude>
+                                        <exclude>com.sun.xml.ws:webservices-extra</exclude>
+                                        <exclude>com.sun.xml.ws:webservices-extra-api</exclude>
+                                        <exclude>javax.xml.ws:*</exclude>
+                                        <exclude>javax.xml.bind:*</exclude>
+                                        <exclude>javax.xml.soap:*</exclude>
+                                    </excludes>
+                                    <message>Use Eclipse EE4J jaxws-rt and Jakarta XML APIs, not legacy Metro / javax JAX-WS.</message>
+                                </bannedDependencies>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>${plugin.gpg.version}</version>
+                <version>3.2.8</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>
@@ -163,13 +168,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${plugin.javadoc.version}</version>
+                <version>3.12.0</version>
                 <configuration>
-                    <verbose>false</verbose>
                     <doclint>none</doclint>
                     <detectOfflineLinks>false</detectOfflineLinks>
                     <encoding>${encoding}</encoding>
-                    <source>8</source>
                 </configuration>
                 <executions>
                     <execution>
@@ -183,7 +186,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>${plugin.source.version}</version>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -196,7 +199,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>${plugin.deploy.version}</version>
+                <version>3.1.4</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>
@@ -204,7 +207,7 @@
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>${plugin.nexus.staging.version}</version>
+                <version>1.7.0</version>
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>nexus-releases</serverId>
@@ -213,37 +216,14 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>${plugin.enforcer.version}</version>
-                <executions>
-                    <execution>
-                        <id>enforce-build-tooling</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireMavenVersion>
-                                    <version>[3.6.3,)</version>
-                                </requireMavenVersion>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${plugin.surefire.version}</version>
+                <version>3.5.5</version>
                 <configuration>
                     <skipTests>${skipTests}</skipTests>
                     <encoding>UTF-8</encoding>
                     <enableAssertions>true</enableAssertions>
-                    <argLine>${argLine}</argLine>
-                    <environmentVariables>
-                        <HI_CONFIG_UNIT_TEST_FROM_ENV>fromSurefireEnv</HI_CONFIG_UNIT_TEST_FROM_ENV>
-                    </environmentVariables>
-                    <!-- Default Surefire includes: offline-safe unit tests only. Full HI mutual-TLS suite: mvn -Pintegration test -->
+                    <argLine>-Xmx1024m</argLine>
+                    <!-- Default Surefire: offline unit tests (14 SOAP facades). Full mutual-TLS: mvn -Pintegration test -->
                     <includes>
                         <include>**/TimeUtilityTest.java</include>
                         <include>**/TestConfigurationTest.java</include>
@@ -255,7 +235,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>${plugin.release.version}</version>
+                <version>3.3.1</version>
                 <configuration>
                     <useReleaseProfile>false</useReleaseProfile>
                     <releaseProfiles>release</releaseProfiles>
@@ -266,14 +246,11 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${plugin.compiler.version}</version>
+                <version>3.15.0</version>
                 <configuration>
                     <release>${maven.compiler.release}</release>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <proc>none</proc>
-                    <compilerArgs>
-                        <arg>-Xlint:unchecked</arg>
-                    </compilerArgs>
                     <debug>true</debug>
                     <debuglevel>lines,vars,source</debuglevel>
                     <showDeprecation>true</showDeprecation>
@@ -283,8 +260,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>${plugin.jar.version}</version>
+                <version>3.5.0</version>
                 <configuration>
+                    <!-- WSDL/XSD ship in au.gov.nehta:hi-wsdl; runtime resolution via HiWsdlArtifactRoot. -->
                     <excludes>
                         <exclude>**/*.wsdl</exclude>
                     </excludes>
@@ -301,42 +279,13 @@
             </properties>
         </profile>
         <profile>
-            <id>coverage</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>${jacoco.version}</version>
-                        <executions>
-                            <execution>
-                                <id>jacoco-prepare-agent</id>
-                                <goals>
-                                    <goal>prepare-agent</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>jacoco-report</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>report</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
             <id>integration</id>
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
-                            <systemPropertyVariables>
-                                <hi.require.live.config>true</hi.require.live.config>
-                            </systemPropertyVariables>
                             <includes combine.self="override">
                                 <include>**/*Test.java</include>
                             </includes>
@@ -352,17 +301,15 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>${plugin.build.helper.version}</version>
+                        <version>3.6.1</version>
                         <executions>
                             <execution>
                                 <id>add-sample-sources</id>
                                 <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>add-source</goal>
-                                </goals>
+                                <goals><goal>add-source</goal></goals>
                                 <configuration>
                                     <sources>
-                                        <source>src/sample/java</source>
+                                        <source>${project.basedir}/src/sample/java</source>
                                     </sources>
                                 </configuration>
                             </execution>
@@ -371,7 +318,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>fat-jar</id>
             <build>
@@ -393,27 +339,20 @@
                                     <createDependencyReducedPom>false</createDependencyReducedPom>
                                     <filters>
                                         <filter>
-                                            <artifact>*:*</artifact>
-                                            <excludes>
-                                                <exclude>META-INF/*.SF</exclude>
-                                                <exclude>META-INF/*.DSA</exclude>
-                                                <exclude>META-INF/*.RSA</exclude>
-                                                <exclude>module-info.class</exclude>
-                                                <exclude>META-INF/versions/*/module-info.class</exclude>
-                                                <exclude>META-INF/MANIFEST.MF</exclude>
-                                            </excludes>
-                                        </filter>
-                                        <filter>
                                             <artifact>org.glassfish.ha:ha-api</artifact>
                                             <excludes>
                                                 <exclude>META-INF/hk2-locator/default</exclude>
                                             </excludes>
                                         </filter>
                                         <filter>
-                                            <artifact>au.gov.nehta:common-library</artifact>
+                                            <artifact>*:*</artifact>
                                             <excludes>
-                                                <exclude>au/gov/nehta/common/utils/ArgumentUtils.class</exclude>
-                                                <exclude>au/gov/nehta/vendorlibrary/ws/WebServiceClientUtil.class</exclude>
+                                                <exclude>module-info.class</exclude>
+                                                <exclude>META-INF/versions/*/module-info.class</exclude>
+                                                <exclude>META-INF/MANIFEST.MF</exclude>
+                                                <exclude>META-INF/*.SF</exclude>
+                                                <exclude>META-INF/*.DSA</exclude>
+                                                <exclude>META-INF/*.RSA</exclude>
                                             </excludes>
                                         </filter>
                                         <filter>
@@ -425,9 +364,7 @@
                                     </filters>
                                     <transformers>
                                         <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer"/>
-                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
-                                            <addHeader>false</addHeader>
-                                        </transformer>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer"/>
                                         <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                     </transformers>
                                 </configuration>

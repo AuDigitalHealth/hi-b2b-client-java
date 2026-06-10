@@ -68,8 +68,6 @@ public final class TestConfiguration {
     public static final String HI_PRODUCT_NAME = "HI_PRODUCT_NAME";
     public static final String HI_PRODUCT_VERSION = "HI_PRODUCT_VERSION";
     public static final String HI_PRODUCT_PLATFORM = "HI_PRODUCT_PLATFORM";
-    /** Same key as {@link au.gov.nehta.vendorlibrary.hi.wsdl.HiWsdlArtifactRoot#HI_WSDL_ARTIFACT_ROOT}. */
-    public static final String HI_WSDL_ARTIFACT_ROOT = "HI_WSDL_ARTIFACT_ROOT";
 
     private static final Properties LOCAL = new Properties();
 

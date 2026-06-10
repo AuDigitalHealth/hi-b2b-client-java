@@ -1,9 +1,11 @@
 /*
  * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -55,7 +57,7 @@ import java.security.GeneralSecurityException;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import au.gov.nehta.vendorlibrary.hi.test.utils.ReflectionFieldSetter;
+import au.gov.nehta.vendorlibrary.hi.test.utils.TestReflect;
 
 import au.gov.nehta.vendorlibrary.hi.client.BaseClient_3;
 import au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants;
@@ -88,7 +90,7 @@ public class ProviderSearchHIProviderDirectoryForIndividualClientTest {
         setSystemVariablesForTest();
         ProviderSearchHIProviderDirectoryForIndividualClient testClient = getMedicareTestClient();
 
-        ReflectionFieldSetter.setField(testClient, "loggingHandler", null);
+        TestReflect.setField(testClient, "loggingHandler", null);
 
         String lastSoapRequest = testClient.getLastSoapRequest();
         assertEquals(lastSoapRequest, LoggingHandler.EMPTY);

@@ -43,11 +43,17 @@ import java.util.stream.Stream;
  * local configuration without restarting the JVM before first class load. Finally, the JVM system
  * property {@code HI_WSDL_ARTIFACT_ROOT}.
  * <p>
- * Maven builds of this checkout use {@code hi.wsdl.tree.root} from {@code settings.xml} (see
- * {@code settings.xml.example}); the Maven build does not read {@code HI_WSDL_ARTIFACT_ROOT}.
+ * Maven resolves {@code hi.wsdl.tree.root} from the POM default, {@code -Dhi.wsdl.tree.root},
+ * {@code HI_WSDL_TREE_ROOT}, or the effective user settings for that invocation; the build does not
+ * read {@code HI_WSDL_ARTIFACT_ROOT}. See the project README (<em>Maintainers</em> vs <em>Implementors</em>
+ * under Licensed WSDL and XSD).
  */
 public final class HiWsdlArtifactRoot {
 
+    /**
+     * Environment variable, {@code local.properties} key, and system property name for the
+     * directory that contains {@code wsdl/} and {@code schema/}.
+     */
     public static final String HI_WSDL_ARTIFACT_ROOT = "HI_WSDL_ARTIFACT_ROOT";
 
     private static final AtomicReference<Path> CONFIGURED = new AtomicReference<>();
@@ -86,10 +92,20 @@ public final class HiWsdlArtifactRoot {
     private HiWsdlArtifactRoot() {
     }
 
+    /**
+     * Sets the artifact root for this JVM, overriding environment, {@code local.properties}, and
+     * system property. Pass {@code null} to clear a programmatic value so those sources are used
+     * again.
+     */
     public static void setRoot(Path root) {
         CONFIGURED.set(root);
     }
 
+    /**
+     * @return explicit {@link #setRoot(Path)} value, else non-blank env {@code HI_WSDL_ARTIFACT_ROOT},
+     *         else the same key in {@code local.properties} (working directory), else non-blank
+     *         system property, else {@code null}
+     */
     public static Path getRootOrNull() {
         Path p = CONFIGURED.get();
         if (p != null) {
@@ -110,6 +126,14 @@ public final class HiWsdlArtifactRoot {
         return null;
     }
 
+    /**
+     * Locates a WSDL file under the configured artifact root.
+     *
+     * @param wsdlLocation value from {@code @WebServiceClient#wsdlLocation()} (typically a bare
+     *                     {@code *.wsdl} filename)
+     * @return a {@code file:} URL to an existing file, or {@code null} if there is no root, no
+     * {@code wsdl/} directory, or no matching file
+     */
     public static URL findWsdlUrl(String wsdlLocation) {
         if (wsdlLocation == null || wsdlLocation.isEmpty()) {
             return null;
@@ -146,7 +170,7 @@ public final class HiWsdlArtifactRoot {
                 }
                 return hit.get().toUri().toURL();
             }
-        } catch (IOException e) {
+        } catch (java.io.IOException e) {
             return null;
         }
     }

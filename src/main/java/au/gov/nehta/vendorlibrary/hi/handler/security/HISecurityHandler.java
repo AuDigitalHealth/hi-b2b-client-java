@@ -1,9 +1,11 @@
 /*
  * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -22,10 +24,10 @@ import org.w3c.dom.NodeList;
 
 import javax.security.auth.x500.X500PrivateCredential;
 import javax.xml.namespace.QName;
-import javax.xml.soap.*;
-import javax.xml.ws.handler.MessageContext;
-import javax.xml.ws.handler.soap.SOAPHandler;
-import javax.xml.ws.handler.soap.SOAPMessageContext;
+import jakarta.xml.soap.*;
+import jakarta.xml.ws.handler.MessageContext;
+import jakarta.xml.ws.handler.soap.SOAPHandler;
+import jakarta.xml.ws.handler.soap.SOAPMessageContext;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
@@ -108,7 +110,7 @@ public class HISecurityHandler implements SOAPHandler<SOAPMessageContext> {
      *
      * @param context the incoming / outgoing soap message context
      * @return true Always returns true.
-     * @see javax.xml.ws.handler.Handler#handleMessage(javax.xml.ws.handler.MessageContext)
+     * @see jakarta.xml.ws.handler.Handler#handleMessage(jakarta.xml.ws.handler.MessageContext)
      */
     public final boolean handleMessage(final SOAPMessageContext context) {
         Boolean isOutgoing = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
@@ -126,7 +128,7 @@ public class HISecurityHandler implements SOAPHandler<SOAPMessageContext> {
      *
      * @param context the incoming / outgoing soap message context
      * @return true if the handle signature check is successful.
-     * @see javax.xml.ws.handler.Handler#handleFault(javax.xml.ws.handler.MessageContext)
+     * @see jakarta.xml.ws.handler.Handler#handleFault(jakarta.xml.ws.handler.MessageContext)
      */
     public final boolean handleFault(final SOAPMessageContext context) {
         if (!(Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY)) {
@@ -141,7 +143,7 @@ public class HISecurityHandler implements SOAPHandler<SOAPMessageContext> {
      * Ignore processing of SOAP header as the primary intention is just to
      * 'Dump' the SOAP message
      *
-     * @return @see javax.xml.ws.handler.soap.SOAPHandler#getHeaders()
+     * @return @see jakarta.xml.ws.handler.soap.SOAPHandler#getHeaders()
      */
     public final Set<QName> getHeaders() {
         return null;
@@ -151,7 +153,7 @@ public class HISecurityHandler implements SOAPHandler<SOAPMessageContext> {
      * Does nothing <br>
      * Not utilised for dumping SOAP message.
      *
-     * @param context @see javax.xml.ws.handler.Handler#close(javax.xml.ws.handler.MessageContext)
+     * @param context @see jakarta.xml.ws.handler.Handler#close(jakarta.xml.ws.handler.MessageContext)
      */
     public void close(final MessageContext context) {
         //Do nothing
@@ -159,11 +161,12 @@ public class HISecurityHandler implements SOAPHandler<SOAPMessageContext> {
 
     /**
      * Signs the SOAP message parts matching the Medicare UHI specification. <br>
-     * The JAX-WS client runtime can strip the SOAP body {@code Id} attribute; a workaround has been
-     * introduced to remove the WSS Security Tube from the tubeline assembly for TLS-based services. <br>
+     * The Jakarta XML Web Services runtime removes the SOAP body attribute {@code Id}. A workaround has been
+     * introduced to remove WSS Security Tube from the Tubeline Assembly for TLS
+     * based service <br>
      *
-     * @param context of type {@link javax.xml.ws.handler.soap.SOAPMessageContext} (Mandatory)
-     *                returns {@link javax.xml.ws.handler.soap.SOAPMessageContext} with the signed SOAP element
+     * @param context of type {@link jakarta.xml.ws.handler.soap.SOAPMessageContext} (Mandatory)
+     *                returns {@link jakarta.xml.ws.handler.soap.SOAPMessageContext} with the signed SOAP element
      */
     private void signBodyAndSOAPHeaders(final SOAPMessageContext context) {
         ArgumentUtils.checkNotNull(context, "context");
@@ -291,9 +294,9 @@ public class HISecurityHandler implements SOAPHandler<SOAPMessageContext> {
     }
 
     /**
-     * Verifies the signature value of the provided {@link javax.xml.ws.handler.soap.SOAPMessageContext}.
+     * Verifies the signature value of the provided {@link jakarta.xml.ws.handler.soap.SOAPMessageContext}.
      *
-     * @param context the MCA Inbound {@link javax.xml.ws.handler.soap.SOAPMessageContext}
+     * @param context the MCA Inbound {@link jakarta.xml.ws.handler.soap.SOAPMessageContext}
      */
     private void extractElementsAndVerifyingSignature(final SOAPMessageContext context) {
         SOAPMessageContext localContext = context;

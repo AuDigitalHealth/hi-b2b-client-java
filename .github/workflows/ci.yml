@@ -1,13 +1,13 @@
-# Runs default unit tests + Javadoc/sources attach (verify), then compiles sample sources.
+# Default unit tests + Javadoc/sources (verify), then sample profile compile.
+# SOAP types from au.gov.nehta:hi-wsdl at ${project.version}; install hi-wsdl-java (java-11-jakarta) for unpublished SNAPSHOTs.
 name: CI
+
 on:
   push:
   pull_request:
 
 permissions:
   contents: read
-
-# Plain mvn keeps contributor ~/.m2/settings.xml behaviour; this line does not require a project settings.xml.
 
 jobs:
   verify:
@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 8
+          java-version: "11"
           cache: maven
       - name: Maven verify
         run: mvn -B -Dgpg.skip=true clean verify

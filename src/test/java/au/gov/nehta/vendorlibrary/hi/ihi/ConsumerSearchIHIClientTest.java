@@ -1,9 +1,11 @@
 /*
  * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -16,11 +18,12 @@ package au.gov.nehta.vendorlibrary.hi.ihi;
 import au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants;
 import au.gov.nehta.vendorlibrary.ws.TimeUtility;
 import au.gov.nehta.vendorlibrary.ws.handler.LoggingHandler;
-import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihi._3.SearchIHIResult;
+import au.net.electronichealth.ns.hi.consumermessages.searchihi._3.SearchIHIResult;
 import au.net.electronichealth.ns.hi.svc.consumersearchihi._3.SearchIHI;
 import au.net.electronichealth.ns.hi.svc.consumersearchihi._3.SearchIHIResponse;
 import au.net.electronichealth.ns.hi.svc.consumersearchihi._3.StandardErrorMsg;
 import au.net.electronichealth.ns.hi.xsd.common.addresscore._3.PostalDeliveryGroupType;
+import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.CountryType;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.SexType;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.StateType;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.StreetType;
@@ -33,8 +36,10 @@ import au.net.electronichealth.ns.hi.xsd.consumercore.consumercoredatatypes._3.I
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import au.gov.nehta.vendorlibrary.hi.test.utils.ReflectionFieldSetter;
+import au.gov.nehta.vendorlibrary.hi.test.utils.TestReflect;
 
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -56,7 +61,7 @@ public class ConsumerSearchIHIClientTest {
         setSystemVariablesForTest();
         ConsumerSearchIHIClient testClient = getDrpTestClient();
 
-        ReflectionFieldSetter.setField(testClient, "loggingHandler", null);
+        TestReflect.setField(testClient, "loggingHandler", null);
 
         String lastSoapRequest = testClient.getLastSoapRequest();
         Assert.assertEquals(lastSoapRequest, LoggingHandler.EMPTY);
@@ -131,8 +136,8 @@ public class ConsumerSearchIHIClientTest {
         // <ns7:familyName>Schmidt</ns7:familyName>
         // <ns7:givenName>Helga</ns7:givenName>
 
-        XMLGregorianCalendar cal = javax.xml.datatype.DatatypeFactory.newInstance()
-                .newXMLGregorianCalendarDate(1942, 8, 19, javax.xml.datatype.DatatypeConstants.FIELD_UNDEFINED);
+        XMLGregorianCalendar cal = DatatypeFactory.newInstance()
+                .newXMLGregorianCalendarDate(1942, 8, 19, DatatypeConstants.FIELD_UNDEFINED);
 
         searchIHI.setMedicareCardNumber("2950190661");
         searchIHI.setFamilyName("Schmidt");
@@ -289,7 +294,7 @@ public class ConsumerSearchIHIClientTest {
         setSystemVariablesForTest();
         ConsumerSearchIHIClient testClient = getMedicareTestClient();
         SearchIHI searchIHI = getInternationalAddressSearchForMedicare();
-        searchIHI.getInternationalAddress().setCountry("1101");
+        searchIHI.getInternationalAddress().setCountry(CountryType.fromValue("1101"));
         SearchIHIResponse addressSearchResponse = testClient.internationalAddressSearch(searchIHI);
         verifySoapMessages(testClient);
 

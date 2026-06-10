@@ -31,11 +31,11 @@ Add the artifact from [Maven Central](https://central.sonatype.com/). Use a **`<
 <dependency>
   <groupId>au.gov.nehta</groupId>
   <artifactId>hi-b2b-client</artifactId>
-  <version>1.6.3</version>
+  <version>1.6.5</version>
 </dependency>
 ```
 
-**This line (`1.6.3`):** Java **8**, **`javax.xml.ws`** / **`javax.xml.bind`**, **14** standard HI B2B facade clients. Add **`com.sun.xml.ws:jaxws-rt`** **2.3.7** at runtime in your application.
+**This line (`1.6.5`):** Java **11**, **Jakarta** XML Web Services / JAXB, **14** standard HI B2B facade clients. Transitive runtime includes **`com.sun.xml.ws:jaxws-rt`** **4.0.4**.
 
 ---
 
@@ -49,7 +49,7 @@ Add the artifact from [Maven Central](https://central.sonatype.com/). Use a **`<
 
 All published versions are on **[Maven Central](https://central.sonatype.com/)**.
 
-SOAP application code on **`1.6.3`** uses **`javax.xml.ws`**, **`javax.xml.bind`**, and related **`javax`** APIs. SOAP types come from **`au.gov.nehta:hi-wsdl`** at the same version when both artifacts are on the classpath.
+SOAP application code on **`1.6.5`** uses **`jakarta.xml.ws`**, **`jakarta.xml.bind`**, and related Jakarta APIs. Java SE types such as **`javax.net.ssl`** and **`javax.xml.datatype.XMLGregorianCalendar`** are unchanged. SOAP types come from **`au.gov.nehta:hi-wsdl`** at the same version when both artifacts are on the classpath.
 
 ---
 
@@ -57,7 +57,7 @@ SOAP application code on **`1.6.3`** uses **`javax.xml.ws`**, **`javax.xml.bind`
 
 The published JAR does **not** contain HI WSDL or XSD files. You must obtain the ADHA/Services Australia bundle under your licence and make it available at runtime.
 
-1. Download from https://healthsoftware.humanservices.gov.au/claiming/ext-vnd/ (see **`wsdls/readme.txt`**).
+1. Download from https://healthsoftware.humanservices.gov.au/claiming/ext-vnd/ (see **`wsdls/README.md`**).
 2. Install so one directory has **immediate** children **`wsdl/`** and **`schema/`** (lowercase).
 
 Point the library at that directory using **`au.gov.nehta.vendorlibrary.hi.wsdl.HiWsdlArtifactRoot`**. Resolution order (first match wins):
@@ -69,7 +69,7 @@ Point the library at that directory using **`au.gov.nehta.vendorlibrary.hi.wsdl.
 
 Optional: place WSDL on the application classpath under your licence (fallback when no root is configured).
 
-**`hi.wsdl.tree.root`** and **`HI_WSDL_TREE_ROOT`** are used only when **building this project from source**; they are not read at runtime. See **`CONTRIBUTING.md`** and **`wsdls/readme.txt`**.
+The default Maven lifecycle compiles against **`au.gov.nehta:hi-wsdl`** and does **not** run **`wsimport`**. Optional Ant helpers under **`wsdls/`** may use **`hi.wsdl.tree.root`** locally; see **`wsdls/README.md`**.
 
 ---
 
@@ -110,7 +110,7 @@ Copy **`local.properties.example`** to **`local.properties`**, fill in values, a
 
 ## Client classes
 
-Package base: **`au.gov.nehta.vendorlibrary.hi`**. This artifact line (**1.6.3**) exposes **14** standard HI B2B facade classes. Full MCA coverage (**26** stubs) is version **1.7.0**.
+Package base: **`au.gov.nehta.vendorlibrary.hi`**. This artifact (**1.6.5**) exposes **14** standard HI B2B facade classes.
 
 | Area | Classes |
 | ---- | ------- |
@@ -144,7 +144,7 @@ Batch sync/async clients apply the same rules in **`SearchBatch.ArgumentValidato
 
 | Document | Content |
 | -------- | ------- |
-| **`wsdls/readme.txt`** | WSDL download, layout, runtime property names |
+| **`wsdls/README.md`** | WSDL download, layout, runtime property names |
 | **`SECURITY.md`** | Secrets and reporting |
 | **`CONTRIBUTING.md`** | Building or changing this repository from source |
 | **`MAINTAINERS.md`** | Release and build internals |

@@ -6,7 +6,7 @@
 
 ## Prerequisites
 
-- **JDK 8+** with **`JAVA_HOME`** set (see **`maven.compiler.release`** in **`pom.xml`**).
+- **JDK 11+** with **`JAVA_HOME`** set (see **`maven.compiler.release`** in **`pom.xml`**).
 - **Maven 3.6+** on **`PATH`**.
 
 Dependencies resolve from **[Maven Central](https://central.sonatype.com/)** unless you are doing a **local build** (below).
@@ -21,7 +21,7 @@ From the repository root (directory containing **`pom.xml`**):
 mvn -B "-Dgpg.skip=true" clean verify
 ```
 
-This line (**`1.6.3`**) compiles against **`au.gov.nehta:hi-wsdl`** — it does **not** run **`wsimport`**.
+This line (**`1.6.5`**) compiles against **`au.gov.nehta:hi-wsdl`** — it does **not** run **`wsimport`**.
 
 Optional faster local **`verify`** without the Javadoc JAR: **`mvn -B -Pdev-javadoc-off -Dgpg.skip=true clean verify`**.
 
@@ -42,6 +42,8 @@ Optional faster local **`verify`** without the Javadoc JAR: **`mvn -B -Pdev-java
 | **macOS / Linux** | `./build.sh` | `./build.sh shaded` |
 
 Set environment variable **`MVN_SETTINGS`** to pass **`-s`** to Maven (path to your Maven user settings file).
+
+Maven uses your normal user settings (mirrors, servers) unless **`MVN_SETTINGS`** is set.
 
 ---
 

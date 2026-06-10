@@ -1,9 +1,11 @@
 /*
  * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -18,7 +20,7 @@ import au.gov.nehta.vendorlibrary.common.security.KeystoreUtil;
 import au.gov.nehta.vendorlibrary.hi.ihi.ConsumerSearchIHIBatchSyncClient;
 import au.gov.nehta.vendorlibrary.hi.ihi.SearchBatch;
 import au.gov.nehta.vendorlibrary.ws.TimeUtility;
-import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihi._3.SearchIHI;
+import au.net.electronichealth.ns.hi.consumermessages.searchihi._3.SearchIHI;
 import au.net.electronichealth.ns.hi.svc.consumersearchihibatchsyncrequest._3.SearchIHIBatchResponse;
 import au.net.electronichealth.ns.hi.svc.consumersearchihibatchsyncrequest._3.StandardErrorMsg;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.SexType;

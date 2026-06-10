@@ -15,13 +15,13 @@ Healthcare Identifiers (HI) B2B facade client — **not** MHR/PCEHR.
 | **1.6.5** | 11 | Jakarta | **14** |
 | **1.7.0** | 11 | Jakarta | **26** (full MCA) |
 
-**This checkout:** **`1.6.3-SNAPSHOT`** — **`au.gov.nehta:hi-wsdl`** from Maven Central (or matching **`mvn install`** for SNAPSHOT), Java **8** / **`javax.*`**.
+**This checkout:** **`1.6.5-SNAPSHOT`** — **`au.gov.nehta:hi-wsdl`** from Maven Central (or matching **`mvn install`** for SNAPSHOT), no in-repo **`wsimport`**.
 
 ## Build from source
 
-- JDK **8**: `mvn -B "-Dgpg.skip=true" clean verify`
+- JDK **11**: `mvn -B "-Dgpg.skip=true" clean verify`
 - **Local / unpublished:** install **`hi-wsdl`** at **`${project.version}`** then **`verify`** — see **`CONTRIBUTING.md`**
-- **`jaxws-rt` 2.3.7**
+- **`jaxws-rt` 4.0.4**
 - Default Surefire: offline tests; **`-Pintegration`** for mutual-TLS
 
 ## Consumer Search IHI

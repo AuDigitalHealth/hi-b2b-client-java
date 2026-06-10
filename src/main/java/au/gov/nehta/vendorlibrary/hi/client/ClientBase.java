@@ -1,3 +1,18 @@
+/*
+ * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 package au.gov.nehta.vendorlibrary.hi.client;
 
 import java.security.PrivateKey;
@@ -7,9 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.SSLSocketFactory;
-import javax.xml.ws.Binding;
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.handler.Handler;
+import jakarta.xml.ws.Binding;
+import jakarta.xml.ws.BindingProvider;
+import jakarta.xml.ws.handler.Handler;
 
 import au.gov.nehta.vendorlibrary.hi.handler.message.HIHeaderHandler;
 import au.gov.nehta.vendorlibrary.hi.handler.security.HISecurityHandler;
@@ -19,7 +34,7 @@ import au.gov.nehta.xsp.CertificateValidator;
 public abstract class ClientBase<T> {
 
     /**
-     * The JAX-WS service port for web service operations.
+     * The Jakarta XML Web Services port for SOAP operations.
      */
     protected T port;
     /**
@@ -43,7 +58,7 @@ public abstract class ClientBase<T> {
     protected static final String SSL_SOCKET_FACTORY_INTERNAL = "com.sun.xml.internal.ws.transport.https.client.SSLSocketFactory";
 
     /**
-     * SSL socket factory class name for {@code com.sun.xml.ws:jaxws-rt} (use with {@link #SSL_SOCKET_FACTORY_INTERNAL}).
+     * SSL socket factory class name for the EE4J XML-WS stack ({@code com.sun.xml.ws}) on the classpath.
      */
     protected static final String SSL_SOCKET_FACTORY = "com.sun.xml.ws.transport.https.client.SSLSocketFactory";
 
@@ -166,6 +181,7 @@ public abstract class ClientBase<T> {
         }
     }
 
+    /** @return {@code true} if {@code s} is {@code null} or has length zero */
     public static boolean isEmpty(String s) {
         return s == null || s.length() == 0;
     }
