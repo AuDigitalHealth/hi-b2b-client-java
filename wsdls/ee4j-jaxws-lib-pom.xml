@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Populates wsdls/local-lib/ee4j-jaxws-from-maven for the legacy Ant wsimport classpath.
+  JARs resolve from Maven Central (Eclipse EE4J). Keep ee4j.jaxws.version aligned with ../pom.xml.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>au.gov.nehta</groupId>
+    <artifactId>hi-b2b-wsdls-jaxws-lib</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>HI WSDLs - EE4J JAX-WS lib sync (internal)</name>
+
+    <properties>
+        <ee4j.jaxws.version>2.3.7</ee4j.jaxws.version>
+        <encoding>UTF-8</encoding>
+        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
+        <plugin.dependency.version>3.10.0</plugin.dependency.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-tools</artifactId>
+            <version>${ee4j.jaxws.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-rt</artifactId>
+            <version>${ee4j.jaxws.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${plugin.dependency.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-ee4j-jaxws-for-ant</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/local-lib/ee4j-jaxws-from-maven</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

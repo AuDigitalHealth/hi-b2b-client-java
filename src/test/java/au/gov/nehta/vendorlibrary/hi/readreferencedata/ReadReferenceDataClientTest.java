@@ -20,7 +20,7 @@ import au.net.electronichealth.ns.hi.svc.providerreadreferencedata._3_2.ReadRefe
 import au.net.electronichealth.ns.hi.xsd.providermessages.readreferencedata._3_2.ElementReferenceValuesType;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import au.gov.nehta.vendorlibrary.hi.test.utils.ReflectionFieldSetter;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -46,7 +46,7 @@ public class ReadReferenceDataClientTest {
         setSystemVariablesForTest();
         ReadReferenceDataClient testClient = getMedicareTestClient();
 
-        ReflectionTestUtils.setField(testClient, "loggingHandler", null);
+        ReflectionFieldSetter.setField(testClient, "loggingHandler", null);
 
         String lastSoapRequest = testClient.getLastSoapRequest();
         assertEquals(lastSoapRequest, LoggingHandler.EMPTY);

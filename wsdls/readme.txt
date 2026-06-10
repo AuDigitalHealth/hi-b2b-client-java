@@ -2,102 +2,117 @@
 	IMPORTANT
 ***************************
 
-The latest files can be downloaded here:
-The "wsdl-artefacts-<date>.zip" file containing these files can be downloaded from the following web site:
+Healthcare Identifier WSDL and XSD files are licensed material from Services Australia / ADHA and
+are NOT shipped in this Git repository. Download them from:
 
-http://www.medicareaustralia.gov.au/provider/vendors/healthcare-identifiers-developers/licensed-material/current-versions.jsp
+  https://healthsoftware.humanservices.gov.au/claiming/ext-vnd/
 
+Extract the bundle to a directory whose immediate children are lowercase wsdl/ and schema/. Some
+hosts and CI runners are case-sensitive, so the casing matters. Optional JAX-WS / JAXB binding
+fragments that this repository does ship live under wsdls/xml/binding/.
 
-
-WSDL files to be supplied:
-consumer\20100731\HI_ConsumerCreateProvisionalIHI-3.0.wsdl
-consumer\20100731\HI_ConsumerCreateProvisionalIHIInterface-3.0.wsdl
-consumer\20100731\HI_ConsumerMergeProvisionalIHI-3.0.wsdl
-consumer\20100731\HI_ConsumerMergeProvisionalIHIInterface-3.0.wsdl
-consumer\20100731\HI_ConsumerSearchIHI-3.0.wsdl
-consumer\20100731\HI_ConsumerSearchIHIBatchAsync-3.0.wsdl
-consumer\20100731\HI_ConsumerSearchIHIBatchAsyncInterface-3.0.wsdl
-consumer\20100731\HI_ConsumerSearchIHIBatchSync-3.0.wsdl
-consumer\20100731\HI_ConsumerSearchIHIBatchSyncInterface-3.0.wsdl
-consumer\20100731\HI_ConsumerSearchIHIInterface-3.0.wsdl
-consumer\20100731\HI_ConsumerUpdateProvisionalIHI-3.0.wsdl
-consumer\20100731\HI_ConsumerUpdateProvisionalIHIInterface-3.0.wsdl
-consumer\20100821\HI_ConsumerCreateUnverifiedIHI-3.0.2.wsdl
-consumer\20100821\HI_ConsumerCreateUnverifiedIHIInterface-3.0.2.wsdl
-consumer\20100821\HI_ConsumerResolveProvisionalIHI-3.0.2.wsdl
-consumer\20100821\HI_ConsumerResolveProvisionalIHIInterface-3.0.2.wsdl
-consumer\20100821\HI_ConsumerUpdateIHI-3.0.2.wsdl
-consumer\20100821\HI_ConsumerUpdateIHIInterface-3.0.2.wsdl
-consumer\20100930\HI_ConsumerNotifyDuplicateIHI-3.2.0.wsdl
-consumer\20100930\HI_ConsumerNotifyDuplicateIHIInterface-3.2.0.wsdl
-consumer\20100930\HI_ConsumerNotifyReplicaIHI-3.2.0.wsdl
-consumer\20100930\HI_ConsumerNotifyReplicaIHIInterface-3.2.0.wsdl
-consumer\20100930\HI_ConsumerUpdateIHI-3.2.0.wsdl
-consumer\20100930\HI_ConsumerUpdateIHIInterface-3.2.0.wsdl
-provider\20100930\HI_ProviderReadReferenceData-3.2.0.wsdl
-provider\20100930\HI_ProviderReadReferenceDataInterface-3.2.0.wsdl
-provider\20100930\HI_ProviderSearchHIProviderDirectoryForIndividual-3.2.0.wsdl
-provider\20100930\HI_ProviderSearchHIProviderDirectoryForIndividualInterface-3.2.0.wsdl
-provider\20100930\HI_ProviderSearchHIProviderDirectoryForOrganisation-3.2.0.wsdl
-provider\20100930\HI_ProviderSearchHIProviderDirectoryForOrganisationInterface-3.2.0.wsdl
-
-XSD files to be supplied:
-schema\mca\common\20100731\AddressCore.xsd
-schema\mca\common\20100731\CommonCoreDatatypes.xsd
-schema\mca\common\20100731\CommonCoreElements.xsd
-schema\mca\common\20100731\CommonQualifiedIdentifier.xsd
-schema\mca\common\20100731\ElectronicCommunicationCore.xsd
-schema\mca\common\20100731\IndividualNameCore.xsd
-schema\mca\consumer\core\20100731\Address.xsd
-schema\mca\consumer\core\20100731\ConsumerCoreDatatypes.xsd
-schema\mca\consumer\core\20100731\ConsumerCoreElements.xsd
-schema\mca\consumer\core\20100731\ElectronicCommunication.xsd
-schema\mca\consumer\core\20100731\IndividualHealthcareIdentification.xsd
-schema\mca\consumer\core\20100731\IndividualName.xsd
-schema\mca\consumer\core\20100930\ConsumerCoreDatatypes.xsd
-schema\mca\consumer\core\20100930\ConsumerCoreElements.xsd
-schema\mca\consumer\core\20100930\IndividualName.xsd
-schema\mca\consumer\messages\20100731\CreateProvisionalIHIMessages.xsd
-schema\mca\consumer\messages\20100731\CreateUnverifiedIHIMessages.xsd
-schema\mca\consumer\messages\20100731\MergeProvisionalIHIMessages.xsd
-schema\mca\consumer\messages\20100731\ResolveProvisionalIHIMessages.xsd
-schema\mca\consumer\messages\20100731\SearchIHIBatchMessages.xsd
-schema\mca\consumer\messages\20100731\SearchIHIMessages.xsd
-schema\mca\consumer\messages\20100731\UpdateIHIMessages.xsd
-schema\mca\consumer\messages\20100731\UpdateProvisionalIHIMessages.xsd
-schema\mca\consumer\messages\20100930\NotifyDuplicateIHIMessages.xsd
-schema\mca\consumer\messages\20100930\NotifyReplicaIHIMessages.xsd
-schema\mca\consumer\messages\20100930\UpdateIHIMessages.xsd
-schema\mca\provider\core\20100930\Address.xsd
-schema\mca\provider\core\20100930\ElectronicCommunication.xsd
-schema\mca\provider\core\20100930\Endpoint.xsd
-schema\mca\provider\core\20100930\IndividualName.xsd
-schema\mca\provider\core\20100930\LinkedType.xsd
-schema\mca\provider\core\20100930\OrganisationDetails.xsd
-schema\mca\provider\core\20100930\OrganisationName.xsd
-schema\mca\provider\core\20100930\OrganisationService.xsd
-schema\mca\provider\core\20100930\PersonalDetails.xsd
-schema\mca\provider\core\20100930\ProviderCoreElements.xsd
-schema\mca\provider\core\20100930\ProviderType.xsd
-schema\mca\provider\messages\20100930\ReadReferenceDataMessages.xsd
-schema\mca\provider\messages\20100930\SearchHIProviderDirectoryForIndividualMessages.xsd
-schema\mca\provider\messages\20100930\SearchHIProviderDirectoryForOrganisationMessages.xsd
-schema\w3c\xmldsig-core-schema.xsd	
+See "Configuring the location" below to tell the build and/or the library where you put the tree.
+See CONTRIBUTING.md for building this repository and README.md for runtime use of the library.
 
 
 ***************************
-Run command
- ant -f build.xml dist
- 
-You can regenerate the JAR files with the following steps 
- Run the ant file located in nehta-vendorlibrary-java-hiclient-wsdl-1.2.0 folder. [ "ant clean" followed by "ant dist" ]
-	(or)
- Optionally you can customize/redirect the generated Java artefacts to custom package/s names using the following steps.
-    i)  Update/Add JaxB custom binding  file/s to customise the generated schema class package names. 
-	    [Refer: ihiSearchJaxbBindings.xml, searchHpiiJaxbBindings.xml, searchHpiiJaxbBindings.xml,
-	    createUnverifiedIHIJaxbBindings.xml orreadReferenceDataJaxbBindings  under
-	    nehta-vendorlibrary-java-hiclient-wsdl-1.2.0/binding folder]
-    ii)  Redirect class files to custom package/s using nehta-vendorlibrary-java-hiclient-wsdl-1.2.0/build.properties
-    settings. [Example: ihisearch.consumer.tls.packageName='au.net.electronichealth.ns.hi.svc.consumersearchihi._3_0'].
-    iii) Clean the existing artefacts by running ant clean [build.xml from  MCAWsdlWsimpot ]
-    iv)  Run ant followed by default 'dist' target using this command "ant -f build.xml dist"
+  Configuring the location
+***************************
+
+There are TWO separate settings. They use DIFFERENT names because they cover different lifecycles,
+and you can point them at the SAME directory or at different directories.
+
+  - hi.wsdl.tree.root      build time only (Maven wsimport, enforcer)
+  - HI_WSDL_ARTIFACT_ROOT  runtime only    (the published library, HiWsdlArtifactRoot)
+
+The Maven build NEVER reads HI_WSDL_ARTIFACT_ROOT. The library at runtime NEVER reads
+hi.wsdl.tree.root. Set whichever one(s) you need for the workflow you are running.
+
+
+1. Build time: hi.wsdl.tree.root
+--------------------------------
+
+Used by jaxws-maven-plugin (wsimport) and the maven-enforcer-plugin WSDL presence check when you
+build this checkout (mvn compile / test / verify / package / install). The value must be a
+directory whose immediate children are wsdl/ and schema/.
+
+Resolution order (first match wins):
+
+  1. -Dhi.wsdl.tree.root=<path>            CLI user property; quote on PowerShell if the path has
+                                            spaces.
+  2. HI_WSDL_TREE_ROOT                     environment variable.
+  3. hi.wsdl.tree.root in an active        e.g. mvn -s settings.xml ... uses the repository
+     Maven settings.xml profile             settings.xml hi-wsdl-tree profile, or merge that
+                                            profile into your Maven user settings file.
+  4. Default                               <project.basedir>/wsdls/xml
+
+Relative paths are resolved against the project root. The published JAR excludes *.wsdl
+(maven-jar-plugin), so the licensed tree is consumed during this checkout's build only and never
+redistributed inside hi-b2b-client.
+
+Pass -Dhi.wsdl.codegen.skip=true to skip wsimport and the enforcer presence check (only useful when
+you already have a fresh merged tree under target/ from a previous build).
+
+
+2. Runtime: HI_WSDL_ARTIFACT_ROOT
+---------------------------------
+
+Used by au.gov.nehta.vendorlibrary.hi.wsdl.HiWsdlArtifactRoot when the published library resolves
+@WebServiceClient wsdlLocation values at runtime. Integration tests in this repo (mvn -Pintegration
+test) also read this. The value must be a directory whose immediate children are wsdl/ and schema/.
+
+Resolution order (first match wins):
+
+  1. HiWsdlArtifactRoot.setRoot(Path)      programmatic; highest precedence.
+  2. HI_WSDL_ARTIFACT_ROOT                 process environment variable.
+  3. HI_WSDL_ARTIFACT_ROOT                 key in local.properties in the JVM working directory
+                                            (typically next to pom.xml in a checkout, or your
+                                            application's working directory in production).
+                                            Re-read on each resolve.
+  4. HI_WSDL_ARTIFACT_ROOT                 JVM system property (-D...).
+
+local.properties is gitignored; see local.properties.example for the documented keys (including
+HI_WSDL_ARTIFACT_ROOT). Prefer forward slashes in property values for cross-platform behaviour.
+
+
+***************************
+  Template files
+***************************
+
+Two template files ship in Git at the project root, beside pom.xml:
+
+  settings.xml.example        Maven user settings template; sets hi.wsdl.tree.root for wsimport
+                              and maven-enforcer-plugin so the build can find the licensed tree.
+                              Activated by mvn -s settings.xml ...
+
+  local.properties.example    Runtime / test configuration template; documents HI_WSDL_ARTIFACT_ROOT
+                              and the HI_* keys (keystore, truststore, endpoints, product / vendor
+                              identifiers) used by integration tests and by HiWsdlArtifactRoot.
+
+Both files are TEMPLATES. They are committed so you can see the expected shape; the real values
+belong in copies that you keep LOCAL to your machine or build agent:
+
+  settings.xml.example       ->  settings.xml
+  local.properties.example   ->  local.properties
+
+Copy each one to the name on the right, edit it in place with the values you need, then run Maven
+from the project root (e.g. mvn -s settings.xml ...). local.properties is read by the library /
+tests automatically from the JVM working directory.
+
+local.properties is gitignored. settings.xml is not currently gitignored but should be treated the
+same way: do NOT commit settings.xml or local.properties (or any keystore, password, token, or
+production endpoint URL) to this repository or to any other source control repository - public or
+private. For CI and production use repository secrets, a vault, or per-machine environment
+variables instead of checking the populated files in.
+
+
+Which one applies to you:
+
+  - Users of the library (applications depending on au.gov.nehta:hi-b2b-client from Maven Central
+    or another repository) set HI_WSDL_ARTIFACT_ROOT only. hi.wsdl.tree.root is irrelevant to you;
+    you are not running this project's Maven build.
+
+  - Contributors building this library from a source checkout set hi.wsdl.tree.root so wsimport and
+    the enforcer can find the licensed tree (see CONTRIBUTING.md). If the same checkout runs
+    integration tests (mvn -Pintegration test), also set HI_WSDL_ARTIFACT_ROOT; both can point at
+    wsdls/xml.

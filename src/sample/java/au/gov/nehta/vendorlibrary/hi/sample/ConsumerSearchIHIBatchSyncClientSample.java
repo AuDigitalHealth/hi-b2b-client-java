@@ -18,7 +18,7 @@ import au.gov.nehta.vendorlibrary.common.security.KeystoreUtil;
 import au.gov.nehta.vendorlibrary.hi.ihi.ConsumerSearchIHIBatchSyncClient;
 import au.gov.nehta.vendorlibrary.hi.ihi.SearchBatch;
 import au.gov.nehta.vendorlibrary.ws.TimeUtility;
-import au.net.electronichealth.ns.hi.consumermessages.searchihi._3.SearchIHI;
+import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihi._3.SearchIHI;
 import au.net.electronichealth.ns.hi.svc.consumersearchihibatchsyncrequest._3.SearchIHIBatchResponse;
 import au.net.electronichealth.ns.hi.svc.consumersearchihibatchsyncrequest._3.StandardErrorMsg;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.SexType;

@@ -159,9 +159,8 @@ public class HISecurityHandler implements SOAPHandler<SOAPMessageContext> {
 
     /**
      * Signs the SOAP message parts matching the Medicare UHI specification. <br>
-     * Metro toolkit removes the SOAP body attribute Id. A work around as been
-     * introduced to remove WSS Security Tube from the Tubeline Assembly for TLS
-     * based service <br>
+     * The JAX-WS client runtime can strip the SOAP body {@code Id} attribute; a workaround has been
+     * introduced to remove the WSS Security Tube from the tubeline assembly for TLS-based services. <br>
      *
      * @param context of type {@link javax.xml.ws.handler.soap.SOAPMessageContext} (Mandatory)
      *                returns {@link javax.xml.ws.handler.soap.SOAPMessageContext} with the signed SOAP element

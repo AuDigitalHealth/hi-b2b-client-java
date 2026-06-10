@@ -21,12 +21,12 @@
 
 	<!--  task definitions -->
 	<path id="jaxws.path">
-		<fileset dir="local-lib/metro-2.3/">
+		<fileset dir="${jaxws.ant.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
 	<path id="xjcclasspath">
-		<fileset dir="local-lib/metro-2.3/" includes="**/*.jar" />
+		<fileset dir="${jaxws.ant.lib.dir}" includes="**/*.jar" />
 	</path>
 	<taskdef name="xjc" classname="com.sun.tools.xjc.XJC2Task">
 		<classpath refid="xjcclasspath" />
@@ -155,7 +155,7 @@
 				<include name="${buildInterface.file}" />
 			</zipfileset>
 
-			<!--Include src and java files and metro.xml  due to MCA direction we no longer include wsdls  
+			<!--Include src and java files and tooling metadata due to MCA direction we no longer include wsdls  
             <zipfileset dir="${binding.dir}" prefix="binding">
                 <include name="**/*.xml"/>
             </zipfileset>-->
@@ -179,7 +179,7 @@
 			</zipfileset>
 
 			<!--Include dependency jar file-->
-			<zipfileset dir="${metro.dir}" prefix="lib">
+			<zipfileset dir="${jaxws.ant.lib.dir}" prefix="lib">
 				<include name="**/*.jar" />
 			</zipfileset>
 		</zip>
@@ -193,7 +193,7 @@
 		<mkdir dir="${basedir}/lib" />
 		<mkdir dir="${basedir}/target" />
 		<copy todir="${basedir}/lib">
-			<fileset dir="${metro.dir}" includes="**/*" />
+			<fileset dir="${jaxws.ant.lib.dir}" includes="**/*" />
 		</copy>
 	</target>
 

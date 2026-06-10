@@ -1,3 +1,46 @@
 /target/
 /.idea/
 *.iml
+
+# Local integration-test secrets (copy from local.properties.example / settings.xml.example)
+/local.properties
+local.properties
+/settings.xml
+settings.xml
+
+hi-b2b-client-java.code-workspace
+
+# Root-only PDF drops; README backups anywhere (not part of the published tree)
+/*.pdf
+README.md.bak*
+
+# Accidental Maven plugin metadata at repo root (this library is not a maven-plugin)
+/META-INF/
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+*.swp
+*.orig
+*~
+
+# Maven
+.flattened-pom.xml
+dependency-reduced-pom.xml
+
+# Optional Ant classpath only - not ADHA WSDL/XSD content (see MAINTAINERS.md, wsdls/ee4j-jaxws-lib-pom.xml).
+wsdls/local-lib/
+
+# Ant / Eclipse build output under wsdls/ (see wsdls/build.xml, wsdls/.classpath)
+wsdls/tmp/
+wsdls/target/
+wsdls/dist/
+wsdls/lib/
+
+# Licensed HI WSDL/XSD bundle: not redistributed in this Git repository (see wsdls/readme.txt,
+# README.md -> Licensed WSDL and XSD). The build resolves hi.wsdl.tree.root (default wsdls/xml).
+# Bindings under wsdls/xml/binding/ stay tracked (they are project-authored fragments).
+/wsdls/xml/wsdl/*
+!/wsdls/xml/wsdl/README.md
+/wsdls/xml/schema/*
+!/wsdls/xml/schema/README.md
