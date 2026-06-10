@@ -15,6 +15,7 @@
  */
 package au.gov.nehta.vendorlibrary.hi.ihi;
 
+import au.gov.nehta.common.utils.ArgumentUtils;
 import au.gov.nehta.vendorlibrary.hi.client.BaseClient_3;
 import au.gov.nehta.xsp.CertificateValidator;
 import au.net.electronichealth.ns.hi.svc.consumersearchihibatchsyncrequest._3.ConsumerSearchIHIBatchSyncPortType;
@@ -200,6 +201,7 @@ public class ConsumerSearchIHIBatchSyncClient extends BaseClient_3<ConsumerSearc
      * @throws StandardErrorMsg if the Web Service call fails.
      */
     public final SearchIHIBatchResponse batchSearch(SearchBatch request) throws StandardErrorMsg {
+        ArgumentUtils.checkNotNull(request, "request");
         checkUserID();
         TimestampType timestampHeader = getTimestampHeader();
         Holder<SignatureContainerType> signatureHeader = null;
@@ -224,7 +226,8 @@ public class ConsumerSearchIHIBatchSyncClient extends BaseClient_3<ConsumerSearc
      */
     public final SearchIHIBatchResponse batchSearch(SearchBatch request,
                                                     au.gov.nehta.vendorlibrary.hi.client.wrapped.QualifiedId individualId) throws StandardErrorMsg {
-
+        ArgumentUtils.checkNotNull(request, "request");
+        ArgumentUtils.checkNotNull(individualId, "individualId");
         TimestampType timestampHeader = getTimestampHeader();
         Holder<SignatureContainerType> signatureHeader = null;
         Holder<ProductType> productHolder = new Holder<>(productHeader);

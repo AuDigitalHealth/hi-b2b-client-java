@@ -15,16 +15,15 @@
  */
 package au.gov.nehta.vendorlibrary.hi.hpio;
 
-import au.gov.nehta.vendorlibrary.hi.client.ClientBase;
 import au.gov.nehta.vendorlibrary.hi.test.utils.HPIOHPIITestConstants;
 import au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants;
+import au.gov.nehta.vendorlibrary.hi.test.utils.TestReflect;
+import au.gov.nehta.vendorlibrary.ws.handler.LoggingHandler;
 import au.net.electronichealth.ns.hi.svc.providermanageproviderorganisation._3_2.ManageProviderOrganisation;
 import au.net.electronichealth.ns.hi.svc.providermanageproviderorganisation._3_2.ManageProviderOrganisationResponse;
-import au.net.electronichealth.ns.hi.svc.providermanageproviderorganisation._3_2.ProviderManageProviderOrganisationPortType;
 import au.net.electronichealth.ns.hi.svc.providermanageproviderorganisation._3_2.StandardErrorMsg;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoreelements._3.ProductType;
 import au.net.electronichealth.ns.hi.xsd.common.qualifiedidentifier._3.QualifiedId;
-import au.net.electronichealth.ns.hi.xsd.providercore.organisationdetails._3_2.OrganisationDetails;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -44,44 +43,50 @@ public class ProviderManageOrganisationClientTest {
     }
 
     @Test
+    public void testNullLoggingHandler() throws Exception {
+        setSystemVariablesForTest();
+        ProviderManageProviderOrganisationClient testClient = getMCATestClient();
+        TestReflect.setField(testClient, "loggingHandler", null);
+        Assert.assertEquals(LoggingHandler.EMPTY, testClient.getLastSoapRequest());
+        Assert.assertEquals(LoggingHandler.EMPTY, testClient.getLastSoapResponse());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void manageProviderOrganisation_nullRequest_clientUser() throws Exception {
+        getMCATestClient().manageProviderOrganisation(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void manageProviderOrganisation_nullRequest_explicitUser() throws Exception {
+        getMCATestClient().manageProviderOrganisation(null, getUserQualifiedId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void manageProviderOrganisation_blankHpio_clientUser() throws Exception {
+        ManageProviderOrganisation req = new ManageProviderOrganisation();
+        req.setHpioNumber("  ");
+        getMCATestClient().manageProviderOrganisation(req);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void manageProviderOrganisation_blankHpio_explicitUser() throws Exception {
+        ManageProviderOrganisation req = new ManageProviderOrganisation();
+        req.setHpioNumber("  ");
+        getMCATestClient().manageProviderOrganisation(req, getUserQualifiedId());
+    }
+
+    @Test
     public void runProviderOrgClient() throws GeneralSecurityException, IOException, StandardErrorMsg {
         ProviderManageProviderOrganisationClient tc = getMCATestClient();
 
         ManageProviderOrganisation request = new ManageProviderOrganisation();
         request.setHpioNumber(HPIOHPIITestConstants.MCA_HPIO);
-
-
-        OrganisationDetails orgDetails = new OrganisationDetails();
-        orgDetails.setAustralianBusinessNumber("99 111 111 111");
-
-
         ManageProviderOrganisationResponse response = tc.manageProviderOrganisation(request);
-        System.out.println(response.getManageProviderOrganisationResult().getStatus());
+        Assert.assertNotNull(response.getManageProviderOrganisationResult());
     }
 
     private ProviderManageProviderOrganisationClient getMCATestClient() throws GeneralSecurityException, IOException {
         ProviderManageProviderOrganisationClient testClient = new ProviderManageProviderOrganisationClient(MEDICARE_ENDPOINT_URL,
-                getUserQualifiedId(),
-                getProductHeader(),
-                getSigningPrivateKeyForMedicare(),
-                getSigningCertificateKeyForMedicare(),
-                getSslSocketFactoryForMedicare());
-        return testClient;
-    }
-
-    private ProviderManageProviderOrganisationClient getMCATestIClient() throws GeneralSecurityException, IOException {
-        ProviderManageProviderOrganisationClient testClient = new ProviderManageProviderOrganisationClient(MEDICARE_ENDPOINT_URL,
-                getUserQualifiedId(),
-                getProductHeader(),
-                getSigningPrivateKeyForMedicare(),
-                getSigningCertificateKeyForMedicare(),
-                getSslSocketFactoryForMedicare());
-        return testClient;
-    }
-
-    private ClientBase<ProviderManageProviderOrganisationPortType> getGenericMCATestIClient() throws GeneralSecurityException, IOException {
-
-        ClientBase<ProviderManageProviderOrganisationPortType> testClient = new ProviderManageProviderOrganisationClient(MEDICARE_ENDPOINT_URL,
                 getUserQualifiedId(),
                 getProductHeader(),
                 getSigningPrivateKeyForMedicare(),

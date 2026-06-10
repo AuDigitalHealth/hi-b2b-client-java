@@ -16,7 +16,7 @@
 package au.gov.nehta.vendorlibrary.hi.ihi;
 
 import au.gov.nehta.common.utils.ArgumentUtils;
-import au.net.electronichealth.ns.hi.consumermessages.searchihi._3.SearchIHI;
+import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihi._3.SearchIHI;
 import au.net.electronichealth.ns.hi.svc.consumersearchihibatchsyncrequest._3.SearchIHIBatchSync;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.SexType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianPostalAddressType;

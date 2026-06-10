@@ -1,6 +1,6 @@
 # WSDL / binding change log
 
-Historical notes for the **`wsdls/`** tree (bindings and legacy Ant helpers). For the main library release history see **CHANGELOG.md** at the repository root.
+Notes for the **`wsdls/`** tree (bindings and optional Ant helpers). Main library releases: **`CHANGELOG.md`** at the repository root.
 
 ## 1.6.0
 

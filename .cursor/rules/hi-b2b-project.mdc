@@ -15,12 +15,12 @@ Healthcare Identifiers (HI) B2B facade client — **not** MHR/PCEHR.
 | **1.6.5** | 11 | Jakarta | **14** |
 | **1.7.0** | 11 | Jakarta | **26** (full MCA) |
 
-**This checkout:** **`1.6.5-SNAPSHOT`** — **`au.gov.nehta:hi-wsdl`** from Maven Central (or matching **`mvn install`** for SNAPSHOT), no in-repo **`wsimport`**.
+**This checkout:** **`1.7.0`** — **26** facades, in-repo **`wsimport`** when building from source (licensed tree at **`wsdls/xml/`**), or **`-Phi-wsdl-artifact`** with **`au.gov.nehta:hi-wsdl`**.
 
 ## Build from source
 
-- JDK **11**: `mvn -B "-Dgpg.skip=true" clean verify`
-- **Local / unpublished:** install **`hi-wsdl`** at **`${project.version}`** then **`verify`** — see **`CONTRIBUTING.md`**
+- JDK **11**: `mvn -B "-Dgpg.skip=true" clean verify` (licensed **`wsdls/xml/`** required unless **`-Phi-wsdl-artifact`**)
+- **Local / unpublished:** install matching **`hi-wsdl`** then **`-Phi-wsdl-artifact verify`** — see **`CONTRIBUTING.md`**
 - **`jaxws-rt` 4.0.4**
 - Default Surefire: offline tests; **`-Pintegration`** for mutual-TLS
 
@@ -31,6 +31,6 @@ Healthcare Identifiers (HI) B2B facade client — **not** MHR/PCEHR.
 ## Doc split
 
 - **`documentation-standards.mdc`**: implementor-first, Maven Central default, local/OS sections, relative paths, no secrets
-- **`README.md`**: integrators (Maven Central default)
+- **`README.md`**, **`CLIENT-FEATURES.md`**: integrators (Maven Central default)
 - **`CONTRIBUTING.md`**: build from source, local SNAPSHOT, OS wrappers
-- **`MAINTAINERS.md`**: POM / dependency internals
+- **`MAINTAINERS.md`**: POM / wsimport internals

@@ -15,10 +15,8 @@
  */
 package au.gov.nehta.vendorlibrary.hi.hpio;
 
-import au.gov.nehta.vendorlibrary.hi.client.ClientBase;
 import au.gov.nehta.vendorlibrary.hi.test.utils.HPIOHPIITestConstants;
 import au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants;
-import au.net.electronichealth.ns.hi.svc.providerreadproviderorganisation._3_2.ProviderReadProviderOrganisationPortType;
 import au.net.electronichealth.ns.hi.svc.providerreadproviderorganisation._3_2.ReadProviderOrganisation;
 import au.net.electronichealth.ns.hi.svc.providerreadproviderorganisation._3_2.ReadProviderOrganisationResponse;
 import au.net.electronichealth.ns.hi.svc.providerreadproviderorganisation._3_2.StandardErrorMsg;
@@ -50,7 +48,7 @@ public class ProviderReadOrganisationClientTest {
         ReadProviderOrganisation request = new ReadProviderOrganisation();
         request.setHpioNumber(HPIOHPIITestConstants.MCA_HPIO);
         ReadProviderOrganisationResponse response = tc.readProvider(request);
-        System.out.println(response.getReadProviderOrganisationResult().getStatus());
+        Assert.assertNotNull(response.getReadProviderOrganisationResult());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -81,8 +79,7 @@ public class ProviderReadOrganisationClientTest {
         request.setLinkSearchType("Children");
 
         ReadProviderOrganisationResponse identifierSearch = tic.readProvider(request);
-
-        System.out.println(identifierSearch.getReadProviderOrganisationResult().getStatus());
+        Assert.assertNotNull(identifierSearch.getReadProviderOrganisationResult());
     }
 
     private ProviderReadProviderOrganisationClient getMCATestClient() throws GeneralSecurityException, IOException {
@@ -97,17 +94,6 @@ public class ProviderReadOrganisationClientTest {
 
     private ProviderReadProviderOrganisationClient getMCATestIClient() throws GeneralSecurityException, IOException {
         ProviderReadProviderOrganisationClient testClient = new ProviderReadProviderOrganisationClient(MEDICARE_ENDPOINT_URL,
-                getUserQualifiedId(),
-                getProductHeader(),
-                getSigningPrivateKeyForMedicare(),
-                getSigningCertificateKeyForMedicare(),
-                getSslSocketFactoryForMedicare());
-        return testClient;
-    }
-
-    private ClientBase<ProviderReadProviderOrganisationPortType> getGenericMCATestIClient() throws GeneralSecurityException, IOException {
-
-        ClientBase<ProviderReadProviderOrganisationPortType> testClient = new ProviderReadProviderOrganisationClient(MEDICARE_ENDPOINT_URL,
                 getUserQualifiedId(),
                 getProductHeader(),
                 getSigningPrivateKeyForMedicare(),

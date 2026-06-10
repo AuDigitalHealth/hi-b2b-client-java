@@ -38,10 +38,10 @@ wsdls/dist/
 wsdls/lib/
 
 # Licensed HI WSDL/XSD bundle: not redistributed in this Git repository (see wsdls/README.md,
-# README.md -> Licensed WSDL and XSD). Default Maven build uses au.gov.nehta:hi-wsdl; optional Ant
-# tooling may use hi.wsdl.tree.root (default wsdls/xml).
+# README.md -> Licensed WSDL and XSD). The build resolves hi.wsdl.tree.root (default wsdls/xml).
 # Bindings under wsdls/xml/binding/ stay tracked (they are project-authored fragments).
 /wsdls/xml/wsdl/*
 !/wsdls/xml/wsdl/README.md
 /wsdls/xml/schema/*
 !/wsdls/xml/schema/README.md
+libs/*

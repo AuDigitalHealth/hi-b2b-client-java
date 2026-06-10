@@ -15,10 +15,8 @@
  */
 package au.gov.nehta.vendorlibrary.hi.hpio;
 
-import au.gov.nehta.vendorlibrary.hi.client.ClientBase;
 import au.gov.nehta.vendorlibrary.hi.test.utils.HPIOHPIITestConstants;
 import au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants;
-import au.net.electronichealth.ns.hi.svc.providerreadprovideradministrativeindividual._3_2.ProviderReadProviderAdministrativeIndividualPortType;
 import au.net.electronichealth.ns.hi.svc.providerreadprovideradministrativeindividual._3_2.ReadProviderAdministrativeIndividual;
 import au.net.electronichealth.ns.hi.svc.providerreadprovideradministrativeindividual._3_2.ReadProviderAdministrativeIndividualResponse;
 import au.net.electronichealth.ns.hi.svc.providerreadprovideradministrativeindividual._3_2.StandardErrorMsg;
@@ -50,8 +48,7 @@ public class ProviderReadAdminIndiviualClientTest {
         ReadProviderAdministrativeIndividual request = new ReadProviderAdministrativeIndividual();
         request.setQualifiedIdentifier(HPIOHPIITestConstants.MCA_HPIO);
         ReadProviderAdministrativeIndividualResponse response = tc.readProviderAdministrativeIndividual(request);
-
-        System.out.println(response.getReadProviderAdministrativeIndividualResult().getStatus());
+        Assert.assertNotNull(response.getReadProviderAdministrativeIndividualResult());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -82,8 +79,7 @@ public class ProviderReadAdminIndiviualClientTest {
 
 
         ReadProviderAdministrativeIndividualResponse identifierSearch = tic.readProviderAdministrativeIndividual(request);
-
-        System.out.println(identifierSearch.getReadProviderAdministrativeIndividualResult().getStatus());
+        Assert.assertNotNull(identifierSearch.getReadProviderAdministrativeIndividualResult());
     }
 
     private ProviderReadAdministrativeIndividualClient getMCATestClient() throws GeneralSecurityException, IOException {
@@ -98,17 +94,6 @@ public class ProviderReadAdminIndiviualClientTest {
 
     private ProviderReadAdministrativeIndividualClient getMCATestIClient() throws GeneralSecurityException, IOException {
         ProviderReadAdministrativeIndividualClient testClient = new ProviderReadAdministrativeIndividualClient(MEDICARE_ENDPOINT_URL,
-                getUserQualifiedId(),
-                getProductHeader(),
-                getSigningPrivateKeyForMedicare(),
-                getSigningCertificateKeyForMedicare(),
-                getSslSocketFactoryForMedicare());
-        return testClient;
-    }
-
-    private ClientBase<ProviderReadProviderAdministrativeIndividualPortType> getGenericMCATestIClient() throws GeneralSecurityException, IOException {
-
-        ClientBase<ProviderReadProviderAdministrativeIndividualPortType> testClient = new ProviderReadAdministrativeIndividualClient(MEDICARE_ENDPOINT_URL,
                 getUserQualifiedId(),
                 getProductHeader(),
                 getSigningPrivateKeyForMedicare(),

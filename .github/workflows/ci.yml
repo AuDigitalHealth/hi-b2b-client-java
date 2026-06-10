@@ -1,5 +1,6 @@
 # Default unit tests + Javadoc/sources (verify), then sample profile compile.
-# SOAP types from au.gov.nehta:hi-wsdl at ${project.version}; install hi-wsdl-java (java-11-jakarta) for unpublished SNAPSHOTs.
+# Full wsimport verify when licensed HI WSDL is present under wsdls/xml/.
+# Without licensed tree: validate only (public CI) or -Phi-wsdl-artifact locally (see CONTRIBUTING.md).
 name: CI
 
 on:
@@ -19,7 +20,12 @@ jobs:
           distribution: temurin
           java-version: "11"
           cache: maven
-      - name: Maven verify
-        run: mvn -B -Dgpg.skip=true clean verify
-      - name: Compile sample sources (sample profile)
-        run: mvn -B -Psample -Dgpg.skip=true -DskipTests=true clean compile
+      - name: Maven verify (when licensed WSDL present)
+        run: |
+          if [ -f wsdls/xml/wsdl/consumer/20100731/HI_ConsumerSearchIHI-3.0.wsdl ]; then
+            mvn -B -Dgpg.skip=true clean verify
+            mvn -B -Psample -Dgpg.skip=true -DskipTests=true clean compile
+          else
+            echo "Licensed HI WSDL not in tree; running validate only (expected on public GitHub CI)."
+            mvn -B -Dgpg.skip=true validate
+          fi

@@ -1,103 +1,50 @@
 # Copyright 2011 NEHTA; Copyright 2021-2026 ADHA. Apache-2.0 - see LICENSE.md.
 #
-# Copy to "local.properties" in the project root (next to pom.xml) and fill in values.
-
-# "local.properties" is gitignored - never commit it.
-
-#
-
-# These keys configure the INTEGRATION TESTS in this repo: paths to keystores,
-
-# passwords, SOAP endpoint URLs, and product/vendor identifiers for Australia's
-
-# Healthcare Identifiers (HI) SOAP services. You need ADHA/Services Australia
-
-# vendor registration to obtain real values - see README.md.
-
-#
-
-# Java Properties format: key=value (one per line). UTF-8. Escape : and = in values with \.
-
-# Same names can be set as environment variables; if both are set, env wins.
-
-# See CONTRIBUTING.md (integration tests, -Pintegration).
-
-
-
-# --- Licensed WSDL/XSD tree (runtime; directory containing wsdl/ and schema/) ---
+# Copy to local.properties beside the JVM working directory (gitignored).
+# Used by HiWsdlArtifactRoot (HI_WSDL_ARTIFACT_ROOT) and by this repo's integration tests.
+# See README.md (runtime) and CONTRIBUTING.md (building and testing this repository).
 
 HI_WSDL_ARTIFACT_ROOT=./wsdls/xml
 
-
-
-# --- Keystore (TLS client cert + often SOAP signing key) ---
-
 HI_KEYSTORE_TYPE=JKS
-
 HI_KEYSTORE_PATH=./src/test/resources/keystore.jks
-
 HI_KEYSTORE_PASSWORD=
-
 HI_KEY_PASSWORD=
 
-# Private key entry alias inside the keystore (IHI tests vs HPI-I/HPI-O tests may differ):
+# PKCS12 from your ADHA registration pack (see CONTRIBUTING.md):
+# HI_KEYSTORE_TYPE=PKCS12
+# HI_KEYSTORE_PATH=./certs/<your-ra-folder>/fac_sign.p12
+# HI_KEYSTORE_PASSWORD=<keystore-password>
+# HI_KEY_PASSWORD=<key-password>
 
 HI_KEY_ALIAS_MEDICARE=
-
 HI_KEY_ALIAS_MEDICARE_IHI=
-
 HI_KEY_ALIAS_MEDICARE_HPIO=
-
 HI_KEY_ALIAS_MEDICARE_CSP=
-
 HI_KEY_ALIAS_DRP=
 
-
-
-# --- Truststore (CA certs so the JVM trusts the HI service HTTPS server) ---
-
 HI_TRUSTSTORE_TYPE=JKS
-
 HI_TRUSTSTORE_PATH=./src/test/resources/truststore.jks
-
 HI_TRUSTSTORE_PASSWORD=
-
-
-
-# --- Service endpoints (SOAP base / DRP-style URLs in tests - replace per your registration) ---
 
 HI_MEDICARE_ENDPOINT_BASE=https://www5.medicareaustralia.gov.au/cert/soap/services/
 
 HI_DRP_IHI_SEARCH_ENDPOINT_URL=
-
 HI_DRP_HPII_SEARCH_ENDPOINT_URL=
-
 HI_DRP_HPIO_SEARCH_ENDPOINT_URL=
 
-
-
-# --- Product / vendor identifiers (as issued for your software product) ---
-
 HI_USER_QUALIFIER=
-
 HI_USER_QUALIFIED_ID=
 
 HI_VENDOR_QUALIFIER=
-
 HI_VENDOR_QUALIFIED_ID=
 
 HI_HPIO_QUALIFIER=
-
 HI_HPIO_QUALIFIED_ID=
 
 HI_NEHTA_HPIO_QUALIFIER=
-
 HI_NEHTA_HPIO_QUALIFIED_ID=
 
 HI_PRODUCT_NAME=
-
 HI_PRODUCT_VERSION=
-
 HI_PRODUCT_PLATFORM=
-
-

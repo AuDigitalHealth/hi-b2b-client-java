@@ -31,6 +31,9 @@ import java.util.Properties;
  * {@code local.properties}, then the default supplied by the caller. Environment variables override
  * the property file when both define a value.
  * <p>
+ * The library reads {@code HI_WSDL_ARTIFACT_ROOT} from the same {@code local.properties} path (see
+ * {@link au.gov.nehta.vendorlibrary.hi.wsdl.HiWsdlArtifactRoot}).
+ * <p>
  * This follows common Java practice: deployment-specific values (passwords, endpoints, registered
  * identifiers) should be supplied externally rather than edited into source and committed.
  */

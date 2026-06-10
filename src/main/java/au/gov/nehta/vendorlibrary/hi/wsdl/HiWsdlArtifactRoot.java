@@ -45,8 +45,7 @@ import java.util.stream.Stream;
  * <p>
  * Maven resolves {@code hi.wsdl.tree.root} from the POM default, {@code -Dhi.wsdl.tree.root},
  * {@code HI_WSDL_TREE_ROOT}, or the effective user settings for that invocation; the build does not
- * read {@code HI_WSDL_ARTIFACT_ROOT}. See the project README (<em>Maintainers</em> vs <em>Implementors</em>
- * under Licensed WSDL and XSD).
+ * read {@code HI_WSDL_ARTIFACT_ROOT}. See README.md (runtime) and CONTRIBUTING.md / wsdls/README.md (build).
  */
 public final class HiWsdlArtifactRoot {
 

@@ -1,4 +1,7 @@
 @echo off
+REM Build from source: mvn clean verify from repository root.
+REM WSDL tree override: HI_WSDL_TREE_ROOT or -Dhi.wsdl.tree.root=... (see CONTRIBUTING.md).
+REM Optional: set MVN_SETTINGS to path to Maven user settings file (-s).
 setlocal
 set "P="
 if /i "%~1"=="shaded" set "P=-Pfat-jar "

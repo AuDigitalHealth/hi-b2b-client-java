@@ -1,15 +1,11 @@
 # Change Log/Revision History
 
-= 1.6.5-SNAPSHOT =
+= 1.7.0 =
 ======
-Changes not yet assigned to a numbered release; **`pom.xml`** **`<version>`** is **`1.6.5-SNAPSHOT`** until release **1.6.5** is tagged.
-
-- **Java 11 / Jakarta:** **`maven.compiler.release` 11**; Eclipse EE4J **`com.sun.xml.ws:jaxws-rt` 4.0.4**; **`maven-enforcer-plugin`** bans legacy Metro **`webservices-*`** and **`javax.xml.ws` / `javax.xml.bind` / `javax.xml.soap`** coordinates. Application SOAP code uses **`jakarta.xml.ws`** / **`jakarta.xml.bind`**; **`hi-wsdl`** at **`hi.wsdl.version`** = **`${project.version}`** (install matching **`hi-wsdl-java`** for unpublished SNAPSHOTs). Default lifecycle does **not** run **`wsimport`**.
-- **Dependencies:** **`au.gov.nehta:smi-xsp` 1.2.1** plus **`hi-wsdl`** and **`jaxws-rt`** at compile/runtime scope. In-repo **`ArgumentUtils`**, **`KeystoreUtil`**, **`SimpleCertificateValidator`**, **`TimeUtility`**, **`WebServiceClientUtil`**, **`HiWsdlArtifactRoot`**, **`LoggingHandler`**, and **`hi_override` XMLDSig** types replace former transitive helpers from **`common-library`** / **`smi-common-utils`**.
-- **Handlers / clients:** **`HISecurityHandler`**, **`HIHeaderHandler`**, and facade clients updated for Jakarta APIs and **`jaxws-rt` 4.x** **`Service`** metadata. Removed unused **`BaseClient_30`**. Batch **`SearchIHI`** types use **`au.net.electronichealth.ns.hi.consumermessages.searchihi._3`** (Jakarta **`hi-wsdl`** package layout).
-- **Tests:** **`TestConfiguration`**, **`TestSslSupport`**, **`TestReflect`**; default Surefire runs offline-safe tests (**`TimeUtilityTest`**, **`TestConfigurationTest`**, **`HiWsdlArtifactRootTest`**, **`ConsumerSearchIHIClientArgumentValidatorTest`**); **`-Pintegration`** runs **`**/*Test.java`** with **`local.properties`** / **`HI_*`**. International-address test fixtures use **`CountryType`** from Jakarta **`hi-wsdl`**.
-- **Docs / CI:** **`LICENSE.md`**, release-line tables, **`AGENTS.md`**, **`.cursor/rules/*`**. CI: Temurin **11**, **`mvn verify`** + **`sample`** compile. Licensed WSDL/XSD remain **out of Git** (**`.gitignore`**); runtime via **`HI_WSDL_ARTIFACT_ROOT`**.
-- **Optional:** **`fat-jar`** profile (**`maven-shade-plugin`**, classifier **`all`**); **`dev-javadoc-off`** for faster local **`verify`**.
+- Java **11**, Jakarta XML Web Services / JAXB (**`jaxws-rt` 4.x**). **26** full MCA facade clients over licensed **`HI_*`** WSDLs.
+- In-repo **`wsimport`** (26 executions) with build-time root **`hi.wsdl.tree.root`** (default **`wsdls/xml`**). Optional profile **`hi-wsdl-artifact`** skips codegen when **`au.gov.nehta:hi-wsdl`** is on the classpath. Published JAR excludes **`*.wsdl`**; runtime WSDL via **`HiWsdlArtifactRoot`** / **`HI_WSDL_ARTIFACT_ROOT`**.
+- Optional **`fat-jar`** profile and **`build.* shaded`** produce classifier **`all`** uber-JAR.
+- Default Surefire runs offline unit tests; **`-Pintegration`** for mutual-TLS against cert endpoints with **`local.properties`** / **`HI_*`**.
 
 = 1.6.2 =
 ======

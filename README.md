@@ -6,6 +6,8 @@ Maven library for Australia's **Healthcare Identifiers (HI) Service** over **JAX
 
 Traffic uses **HTTPS with mutual TLS** and **signed** SOAP. You need ADHA / Services Australia **registration**, test or production **certificates**, and **endpoint URLs** before live calls succeed.
 
+Registration: https://implementer.digitalhealth.gov.au/resources/hi-service-registration-and-certificates
+
 ---
 
 ## Terms
@@ -17,9 +19,7 @@ Traffic uses **HTTPS with mutual TLS** and **signed** SOAP. You need ADHA / Serv
 | IHI | Individual Healthcare Identifier. |
 | HPI-I | Healthcare Provider Identifier - Individual. |
 | HPI-O | Healthcare Provider Identifier - Organisation. |
-| NEHTA | Historical agency name; package namespaces may still use `nehta`. |
-
-Registration: https://implementer.digitalhealth.gov.au/resources/hi-service-registration-and-certificates
+| NEHTA | Name used in Java package namespaces (`nehta`). |
 
 ---
 
@@ -31,11 +31,13 @@ Add the artifact from [Maven Central](https://central.sonatype.com/). Use a **`<
 <dependency>
   <groupId>au.gov.nehta</groupId>
   <artifactId>hi-b2b-client</artifactId>
-  <version>1.6.5</version>
+  <version>1.7.0</version>
 </dependency>
 ```
 
-**This line (`1.6.5`):** Java **11**, **Jakarta** XML Web Services / JAXB, **14** standard HI B2B facade clients. Transitive runtime includes **`com.sun.xml.ws:jaxws-rt`** **4.0.4**.
+**This line (`1.7.0`):** Java **11**, Jakarta XML Web Services / JAXB, **26** full MCA facade clients. Transitive runtime includes **`com.sun.xml.ws:jaxws-rt`** (Jakarta). No separate JDK SOAP install is required.
+
+SOAP application code uses **`jakarta.xml.ws`**, **`jakarta.xml.bind`**, and related Jakarta APIs. Java SE types such as **`javax.net.ssl`** and **`javax.xml.datatype.XMLGregorianCalendar`** are unchanged.
 
 ---
 
@@ -49,31 +51,29 @@ Add the artifact from [Maven Central](https://central.sonatype.com/). Use a **`<
 
 All published versions are on **[Maven Central](https://central.sonatype.com/)**.
 
-SOAP application code on **`1.6.5`** uses **`jakarta.xml.ws`**, **`jakarta.xml.bind`**, and related Jakarta APIs. Java SE types such as **`javax.net.ssl`** and **`javax.xml.datatype.XMLGregorianCalendar`** are unchanged. SOAP types come from **`au.gov.nehta:hi-wsdl`** at the same version when both artifacts are on the classpath.
-
 ---
 
 ## Licensed WSDL and XSD (runtime)
 
-The published JAR does **not** contain HI WSDL or XSD files. You must obtain the ADHA/Services Australia bundle under your licence and make it available at runtime.
+The published JAR does **not** contain HI WSDL or XSD files. Obtain the ADHA/Services Australia bundle under your licence and make it available at runtime.
 
-1. Download from https://healthsoftware.humanservices.gov.au/claiming/ext-vnd/ (see **`wsdls/README.md`**).
-2. Install so one directory has **immediate** children **`wsdl/`** and **`schema/`** (lowercase).
+1. Download from https://healthsoftware.humanservices.gov.au/claiming/ext-vnd/ (layout details: **`wsdls/README.md`**).
+2. Install so one directory has **immediate** children **`wsdl/`** and **`schema/`** (lowercase; case-sensitive on some hosts).
 
-Point the library at that directory using **`au.gov.nehta.vendorlibrary.hi.wsdl.HiWsdlArtifactRoot`**. Resolution order (first match wins):
+Point the library at that directory with **`au.gov.nehta.vendorlibrary.hi.wsdl.HiWsdlArtifactRoot`**. Resolution order (first match wins):
 
 1. **`HiWsdlArtifactRoot.setRoot(Path)`**
 2. Environment variable **`HI_WSDL_ARTIFACT_ROOT`**
-3. Key **`HI_WSDL_ARTIFACT_ROOT`** in **`local.properties`** in the JVM **working directory** (`user.dir`)
-4. JVM system property **`-DHI_WSDL_ARTIFACT_ROOT=...`**
+3. JVM system property **`-DHI_WSDL_ARTIFACT_ROOT=...`**
+4. Key **`HI_WSDL_ARTIFACT_ROOT`** in a **`local.properties`** file in the JVM working directory (**`user.dir`**), if present
 
 Optional: place WSDL on the application classpath under your licence (fallback when no root is configured).
 
-The default Maven lifecycle compiles against **`au.gov.nehta:hi-wsdl`** and does **not** run **`wsimport`**. Optional Ant helpers under **`wsdls/`** may use **`hi.wsdl.tree.root`** locally; see **`wsdls/README.md`**.
+See **`wsdls/README.md`** for property names and directory layout.
 
 ---
 
-## What you configure in your application
+## Application configuration
 
 Construct a facade client (for example **`ConsumerSearchIHIClient`**) with:
 
@@ -85,13 +85,13 @@ Construct a facade client (for example **`ConsumerSearchIHIClient`**) with:
 | Product / vendor / user qualified IDs | Values issued for your software product. |
 | WSDL root | As above (`HiWsdlArtifactRoot` or equivalent). |
 
-Load keystores, truststores, and identifiers from your platform (secrets manager, environment, or config files). Do not commit credentials to source control (**`SECURITY.md`**).
+Load keystores, truststores, and identifiers from your platform (secrets manager, environment, or configuration files). Do not commit credentials to source control (**`SECURITY.md`**).
 
-Keystore paths in **`.properties`** files: prefer forward slashes (`./config/keystore.jks`).
+Use **forward slashes** in filesystem paths inside property files (for example `./config/keystore.jks`) so the same values work on Windows, macOS, and Linux.
 
-### Optional `local.properties` keys
+### Configuration keys (optional)
 
-If **`local.properties`** exists in **`user.dir`**, the library reads **`HI_WSDL_ARTIFACT_ROOT`** from it (see **`local.properties.example`**). The same property names are used by **this repository's** integration tests when you build from a checkout (**`CONTRIBUTING.md`**); your production app may use different configuration.
+If you use a **`local.properties`** file in **`user.dir`**, the library reads **`HI_WSDL_ARTIFACT_ROOT`** and related keys documented in **`local.properties.example`** (template for integrators and for this repository's tests).
 
 | Key | Purpose |
 | --- | --- |
@@ -104,22 +104,22 @@ If **`local.properties`** exists in **`user.dir`**, the library reads **`HI_WSDL
 | **`HI_MEDICARE_ENDPOINT_BASE`** | SOAP base URL (cert environment example in **`local.properties.example`**). |
 | **`HI_USER_*`**, **`HI_VENDOR_*`**, **`HI_HPIO_*`**, **`HI_PRODUCT_*`** | Registration metadata. |
 
-Copy **`local.properties.example`** to **`local.properties`**, fill in values, and keep **`local.properties`** out of Git.
+Your production application may use environment variables or a secrets store instead of **`local.properties`**.
 
 ---
 
 ## Client classes
 
-Package base: **`au.gov.nehta.vendorlibrary.hi`**. This artifact (**1.6.5**) exposes **14** standard HI B2B facade classes.
+Package base: **`au.gov.nehta.vendorlibrary.hi`**. Version **1.7.0** exposes **26** facade classes:
 
 | Area | Classes |
 | ---- | ------- |
-| **IHI** (`ihi`) | `ConsumerSearchIHIClient`, `ConsumerSearchIHIBatchSyncClient` |
-| **HPI-I** (`hpii`) | `ProviderSearchForProviderIndividualClient`, `ProviderSearchHIProviderDirectoryForIndividualClient`, `SearchForProviderIndividualBatchAsyncClient` |
+| **IHI** (`ihi`) | `ConsumerSearchIHIClient`, `ConsumerSearchIHIBatchSyncClient`, `ConsumerSearchIHIBatchAsyncClient`, `ConsumerCreateProvisionalIHIClient`, `ConsumerMergeProvisionalIHIClient`, `ConsumerUpdateProvisionalIHIClient`, `ConsumerCreateUnverifiedIHIClient`, `ConsumerResolveProvisionalIHIClient`, `ConsumerNotifyDuplicateIHIClient`, `ConsumerNotifyReplicaIHIClient`, `ConsumerUpdateIHIClient`, `ConsumerCreateVerifiedIHIClient` |
+| **HPI-I** (`hpii`) | `ProviderSearchForProviderIndividualClient`, `ProviderSearchHIProviderDirectoryForIndividualClient`, `SearchForProviderIndividualBatchAsyncClient`, `ProviderManageTdsProviderIndividualClient`, `ProviderSearchTdsProviderIndividualClient` |
 | **HPI-O** (`hpio`) | `ProviderSearchForProviderOrganisationClient`, `ProviderSearchHIProviderDirectoryForOrganisationClient`, `SearchForProviderOrganisationBatchAsyncClient`, `ProviderReadProviderOrganisationClient`, `ProviderReadAdministrativeIndividualClient`, `ProviderManageProviderOrganisationClient`, `ProviderManageProviderDirectoryEntryClient`, `ProviderManageProviderAdministrativeIndividualClient` |
 | **Reference data** | `ReadReferenceDataClient` |
 
-Samples under **`src/sample/java`** (`...hi.sample`) are not on the default classpath; see **`CONTRIBUTING.md`** to compile them from a source checkout.
+Published Javadoc is attached to releases on Maven Central.
 
 ---
 
@@ -142,13 +142,12 @@ Batch sync/async clients apply the same rules in **`SearchBatch.ArgumentValidato
 
 ## Further reading
 
-| Document | Content |
-| -------- | ------- |
-| **`wsdls/README.md`** | WSDL download, layout, runtime property names |
+| Document | Audience |
+| -------- | -------- |
+| **`wsdls/README.md`** | Licensed WSDL/XSD layout and runtime properties |
 | **`SECURITY.md`** | Secrets and reporting |
 | **`CONTRIBUTING.md`** | Building or changing this repository from source |
 | **`MAINTAINERS.md`** | Release and build internals |
-| Javadoc | Attached to releases on Maven Central |
 
 ---
 

@@ -13,72 +13,82 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package au.gov.nehta.vendorlibrary.hi.hpio;
+package au.gov.nehta.vendorlibrary.hi.hpii;
 
-import au.gov.nehta.vendorlibrary.hi.client.ClientBase;
-import au.gov.nehta.vendorlibrary.hi.hpii.ProviderSearchForProviderIndividualClient;
 import au.gov.nehta.vendorlibrary.hi.test.utils.HPIOHPIITestConstants;
 import au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants;
-import au.net.electronichealth.ns.hi.svc.providersearchforproviderindividual._5_0.ProviderSearchForProviderIndividualPortType;
+import au.gov.nehta.vendorlibrary.hi.test.utils.TestReflect;
+import au.gov.nehta.vendorlibrary.ws.handler.LoggingHandler;
 import au.net.electronichealth.ns.hi.svc.providersearchforproviderindividual._5_0.SearchForProviderIndividual;
 import au.net.electronichealth.ns.hi.svc.providersearchforproviderindividual._5_0.SearchForProviderIndividualResponse;
-import au.net.electronichealth.ns.hi.svc.providersearchforproviderorganisation._5_0.SearchForProviderOrganisation;
-import au.net.electronichealth.ns.hi.svc.providersearchforproviderorganisation._5_0.SearchForProviderOrganisationResponse;
-import au.net.electronichealth.ns.hi.svc.providersearchforproviderorganisation._5_0.StandardErrorMsg;
 import au.net.electronichealth.ns.hi.xsd.common.addresscore._5_0.SearchAustralianAddressType;
 import au.net.electronichealth.ns.hi.xsd.common.addresscore._5_0.SearchInternationalAddressType;
-import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.CountryType;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.SexType;
-import au.net.electronichealth.ns.hi.xsd.common.commoncoreelements._3.ProductType;
-import au.net.electronichealth.ns.hi.xsd.common.qualifiedidentifier._3.QualifiedId;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
-import static au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants.*;
+import static au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants.setSystemVariablesForTest;
+import static au.gov.nehta.vendorlibrary.hi.test.utils.TestConstants.getProductHeader;
+import static au.gov.nehta.vendorlibrary.hi.test.utils.TestConstants.getSigningCertificateKeyForMedicare;
+import static au.gov.nehta.vendorlibrary.hi.test.utils.TestConstants.getSigningPrivateKeyForMedicare;
+import static au.gov.nehta.vendorlibrary.hi.test.utils.TestConstants.getSslSocketFactoryForMedicare;
+import static au.gov.nehta.vendorlibrary.hi.test.utils.TestConstants.getUserQualifiedId;
+import static au.gov.nehta.vendorlibrary.hi.test.utils.TestConstants.getWrappedUserQualifiedId;
+import static au.gov.nehta.vendorlibrary.hi.test.utils.TestConstants.MEDICARE_ENDPOINT_URL;
 import static org.junit.Assert.fail;
 
-public class ProviderSearchClientTest {
+public class ProviderSearchForProviderIndividualClientTest {
 
     @Test
-    public void bindingProviderIsNotNull() throws GeneralSecurityException, IOException, StandardErrorMsg {
-        ProviderSearchForProviderOrganisationClient tc = getMCATestClient();
+    public void bindingProviderIsNotNull() throws GeneralSecurityException, IOException, au.net.electronichealth.ns.hi.svc.providersearchforproviderindividual._5_0.StandardErrorMsg {
+        ProviderSearchForProviderIndividualClient tc = getMCATestIClient();
 
         Assert.assertNotNull(tc.getBindingProvider());
         Assert.assertNotNull(tc.getPort());
     }
 
     @Test
-    public void runProviderOrgClient() throws GeneralSecurityException, IOException, StandardErrorMsg {
-        ProviderSearchForProviderOrganisationClient tc = getMCATestClient();
-
-        SearchForProviderOrganisation request = new SearchForProviderOrganisation();
-        request.setHpioNumber(HPIOHPIITestConstants.MCA_HPIO);
-        SearchForProviderOrganisationResponse response = null;
-
-        response = tc.identifierSearch(request);
-        System.out.println(response.getSearchForProviderOrganisationResult().getStatus());
-    }
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void runProviderOrgClientNegativeTestNoHPIO() throws GeneralSecurityException, IOException, StandardErrorMsg {
-        ProviderSearchForProviderOrganisationClient tc = getMCATestClient();
-
-        SearchForProviderOrganisation request = new SearchForProviderOrganisation();
-        //No hpio
-
-        tc.identifierSearch(request);
-        fail("Exception not thrown");
+    public void testNullLoggingHandler() throws Exception {
+        setSystemVariablesForTest();
+        ProviderSearchForProviderIndividualClient testClient = getMCATestIClient();
+        TestReflect.setField(testClient, "loggingHandler", null);
+        Assert.assertEquals(testClient.getLastSoapRequest(), LoggingHandler.EMPTY);
+        Assert.assertEquals(testClient.getLastSoapResponse(), LoggingHandler.EMPTY);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void runProviderOrgClientNegativeTestNullRequest() throws GeneralSecurityException, IOException, StandardErrorMsg {
-        ProviderSearchForProviderOrganisationClient tc = getMCATestClient();
-        tc.identifierSearch(null);
-        fail("Exception not thrown");
+    public void demographicSearch_nullRequest_clientUser() throws GeneralSecurityException, IOException, au.net.electronichealth.ns.hi.svc.providersearchforproviderindividual._5_0.StandardErrorMsg {
+        getMCATestIClient().demographicSearch(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void demographicSearch_nullRequest_wrappedUser() throws GeneralSecurityException, IOException, au.net.electronichealth.ns.hi.svc.providersearchforproviderindividual._5_0.StandardErrorMsg {
+        getMCATestIClient().demographicSearch(null, getWrappedUserQualifiedId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void identifierSearch_nullRequest_clientUser() throws GeneralSecurityException, IOException, au.net.electronichealth.ns.hi.svc.providersearchforproviderindividual._5_0.StandardErrorMsg {
+        getMCATestIClient().identifierSearch(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void identifierSearch_nullRequest_wrappedUser() throws GeneralSecurityException, IOException, au.net.electronichealth.ns.hi.svc.providersearchforproviderindividual._5_0.StandardErrorMsg {
+        getMCATestIClient().identifierSearch(null, getWrappedUserQualifiedId());
+    }
+
+    @Test
+    public void demographicSearch_clientUser() throws GeneralSecurityException, IOException, au.net.electronichealth.ns.hi.svc.providersearchforproviderindividual._5_0.StandardErrorMsg {
+        ProviderSearchForProviderIndividualClient tic = getMCATestIClient();
+        SearchForProviderIndividual r = new SearchForProviderIndividual();
+        r.setFamilyName("Smith");
+        r.setOnlyNameIndicator(false);
+        r.setPostcode("2900");
+        r.setSex(SexType.M);
+        SearchForProviderIndividualResponse response = tic.demographicSearch(r);
+        Assert.assertNotNull(response);
     }
 
     @Test
@@ -93,10 +103,9 @@ public class ProviderSearchClientTest {
         request.setPostcode("2900");
         request.setSex(SexType.M);
 
-
         SearchForProviderIndividualResponse identifierSearch = tic.identifierSearch(request);
 
-        System.out.println(identifierSearch.getSearchForProviderIndividualResult().getStatus());
+        Assert.assertNotNull(identifierSearch.getSearchForProviderIndividualResult());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -114,7 +123,7 @@ public class ProviderSearchClientTest {
         ProviderSearchForProviderIndividualClient tc = getMCATestIClient();
         SearchForProviderIndividual r = new SearchForProviderIndividual();
         r.setHpiiNumber("12345");
-        r.setFamilyName("12345678901234567890123456789012345678901"); //41 chars
+        r.setFamilyName("12345678901234567890123456789012345678901");
         tc.identifierSearch(r);
         fail("Exception not thrown");
     }
@@ -124,7 +133,7 @@ public class ProviderSearchClientTest {
         ProviderSearchForProviderIndividualClient tc = getMCATestIClient();
         SearchForProviderIndividual r = new SearchForProviderIndividual();
         r.setHpiiNumber("12345");
-        r.setFamilyName("12345678901234567890123456789012345678901"); //41 chars
+        r.setFamilyName("12345678901234567890123456789012345678901");
         tc.demographicSearch(r);
         fail("Exception not thrown");
     }
@@ -156,9 +165,9 @@ public class ProviderSearchClientTest {
         r.setSearchAustralianAddress(oz);
 
         SearchInternationalAddressType intl = new SearchInternationalAddressType();
-        intl.setCountry(CountryType.fromValue("1101"));
+        intl.setCountry("101");
         r.setSearchInternationalAddress(intl);
-        r.setFamilyName("123456789012345678901234567890123456789"); //41 chars
+        r.setFamilyName("123456789012345678901234567890123456789");
         tc.demographicSearch(r);
         fail("Exception not thrown");
     }
@@ -208,57 +217,12 @@ public class ProviderSearchClientTest {
         Assert.assertNotNull(identifierResponse);
     }
 
-    private ProviderSearchForProviderOrganisationClient getMCATestClient() throws GeneralSecurityException, IOException {
-        ProviderSearchForProviderOrganisationClient testClient = new ProviderSearchForProviderOrganisationClient(MEDICARE_ENDPOINT_URL,
-                getUserQualifiedId(),
-                getProductHeader(),
-                getSigningPrivateKeyForMedicare(),
-                getSigningCertificateKeyForMedicare(),
-                getSslSocketFactoryForMedicare());
-        return testClient;
-    }
-
     private ProviderSearchForProviderIndividualClient getMCATestIClient() throws GeneralSecurityException, IOException {
-        ProviderSearchForProviderIndividualClient testClient = new ProviderSearchForProviderIndividualClient(MEDICARE_ENDPOINT_URL,
+        return new ProviderSearchForProviderIndividualClient(MEDICARE_ENDPOINT_URL,
                 getUserQualifiedId(),
                 getProductHeader(),
                 getSigningPrivateKeyForMedicare(),
                 getSigningCertificateKeyForMedicare(),
                 getSslSocketFactoryForMedicare());
-        return testClient;
-    }
-
-    private ClientBase<ProviderSearchForProviderIndividualPortType> getGenericMCATestIClient() throws GeneralSecurityException, IOException {
-
-        ClientBase<ProviderSearchForProviderIndividualPortType> testClient = new ProviderSearchForProviderIndividualClient(MEDICARE_ENDPOINT_URL,
-                getUserQualifiedId(),
-                getProductHeader(),
-                getSigningPrivateKeyForMedicare(),
-                getSigningCertificateKeyForMedicare(),
-                getSslSocketFactoryForMedicare());
-        return testClient;
-    }
-
-    public static QualifiedId getUserQualifiedId() {
-        QualifiedId qualifiedId = new QualifiedId();
-        qualifiedId.setId(IHITestConstants.USER_QUALIFIED_ID);
-        qualifiedId.setQualifier(IHITestConstants.USER_QUALIFIER);
-        return qualifiedId;
-    }
-
-    public static ProductType getProductHeader() {
-        ProductType productHeader = new ProductType();
-        productHeader.setPlatform(IHITestConstants.PRODUCT_PLATFORM);
-        productHeader.setProductName(IHITestConstants.PRODUCT_NAME);
-        productHeader.setProductVersion(IHITestConstants.PRODUCT_VERSION);
-        productHeader.setVendor(getVendorQualifiedId());
-        return productHeader;
-    }
-
-    public static QualifiedId getVendorQualifiedId() {
-        QualifiedId qualifiedId = new QualifiedId();
-        qualifiedId.setId(IHITestConstants.VENDOR_QUALIFIER_ID);
-        qualifiedId.setQualifier(IHITestConstants.VENDOR_QUALIFIER);
-        return qualifiedId;
     }
 }
