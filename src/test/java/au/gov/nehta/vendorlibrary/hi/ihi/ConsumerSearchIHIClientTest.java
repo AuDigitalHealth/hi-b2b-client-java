@@ -1,9 +1,11 @@
 /*
  * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -31,12 +33,13 @@ import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianStree
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.InternationalAddressType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.consumercoredatatypes._3.IHIRecordStatusType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.consumercoredatatypes._3.IHIStatusType;
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import au.gov.nehta.vendorlibrary.hi.test.utils.TestReflect;
 
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -58,7 +61,7 @@ public class ConsumerSearchIHIClientTest {
         setSystemVariablesForTest();
         ConsumerSearchIHIClient testClient = getDrpTestClient();
 
-        ReflectionTestUtils.setField(testClient, "loggingHandler", null);
+        TestReflect.setField(testClient, "loggingHandler", null);
 
         String lastSoapRequest = testClient.getLastSoapRequest();
         Assert.assertEquals(lastSoapRequest, LoggingHandler.EMPTY);
@@ -133,10 +136,8 @@ public class ConsumerSearchIHIClientTest {
         // <ns7:familyName>Schmidt</ns7:familyName>
         // <ns7:givenName>Helga</ns7:givenName>
 
-        XMLGregorianCalendar cal = new XMLGregorianCalendarImpl();
-        cal.setDay(19);
-        cal.setMonth(8);
-        cal.setYear(1942);
+        XMLGregorianCalendar cal = DatatypeFactory.newInstance()
+                .newXMLGregorianCalendarDate(1942, 8, 19, DatatypeConstants.FIELD_UNDEFINED);
 
         searchIHI.setMedicareCardNumber("2950190661");
         searchIHI.setFamilyName("Schmidt");

@@ -1,0 +1,25 @@
+# Default unit tests + Javadoc/sources (verify), then sample profile compile.
+# SOAP types from au.gov.nehta:hi-wsdl at ${project.version}; install hi-wsdl-java (java-11-jakarta) for unpublished SNAPSHOTs.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "11"
+          cache: maven
+      - name: Maven verify
+        run: mvn -B -Dgpg.skip=true clean verify
+      - name: Compile sample sources (sample profile)
+        run: mvn -B -Psample -Dgpg.skip=true -DskipTests=true clean compile

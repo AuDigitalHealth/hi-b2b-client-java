@@ -4,7 +4,7 @@
  * 
  * Licensed under the NEHTA Open Source (Apache) License; you may not use this 
  * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * LICENSE.md under wsdls/ (see repository root LICENSE.md for the full license).
  * 
  * Unless required by applicable law or agreed to in writing, software 
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
@@ -107,7 +107,7 @@
 
         <target name="buildJars" depends="dist">
         <zip destfile="${dist.dir}/${dist.file}">
-            <zipfileset dir="${basedir}">
+            <zipfileset dir="${wsdls.dir}">
                 <include name="${license.file}"/>
                 <include name="${readme.file}"/>
                 <include name="${build.file}"/>
@@ -115,7 +115,7 @@
                 <include name="${build.properties.file}"/>
             </zipfileset>
 
-            <!--Include src and java files and metro.xml-->
+            <!--Include src and java files and tooling metadata-->
             <zipfileset dir="${binding.dir}" prefix="binding">
                 <include name="**/*.xml"/>
             </zipfileset>

@@ -1,0 +1,27 @@
+# Text files: LF in the index and on checkout (see *.bat / *.cmd below for CRLF).
+# Windows: git config core.autocrlf false once per clone so Git does not fight these rules.
+# After changing this file: git add --renormalize .
+# Optional (less diff noise if old blobs had stray CR): git config diff.ignoreCrAtEol true
+* text=auto eol=lf
+
+# Never treat these as text (no CRLF/LF conversion)
+*.class binary
+*.dll binary
+*.ear binary
+*.jar binary
+*.jks binary
+*.keystore binary
+*.pdf binary
+*.png binary
+*.gif binary
+*.ico binary
+*.jpeg binary
+*.jpg binary
+*.war binary
+*.woff binary
+*.woff2 binary
+*.zip binary
+
+# cmd.exe reliably parses these with CRLF; keep them out of LF normalization churn
+*.bat text eol=crlf
+*.cmd text eol=crlf
