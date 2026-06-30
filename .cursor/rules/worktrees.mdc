@@ -1,0 +1,37 @@
+---
+description: Git worktrees are local only; integrator docs use Maven versions, not paths or branches
+alwaysApply: true
+---
+
+# Worktrees (local convenience only)
+
+**`git worktree`** lets a maintainer check out multiple branches of the **same repository** at once. Worktree **directory paths are machine-specific** and must **not** appear in tracked documentation.
+
+## What tracked docs describe
+
+Follow **`documentation-standards.mdc`** (implementor-first, Maven Central default).
+
+| Doc | Audience | Use |
+| --- | -------- | --- |
+| **README**, integrator guides | Implementors | **Maven version** (`1.7.0`), Central coordinates, runtime config |
+| **CONTRIBUTING** | Contributors | Build from source, **Local builds**, OS-specific steps |
+| **MAINTAINERS**, **`.cursor/rules/`** | Maintainers | POM/wsimport internals; **branch mapping** only when labelled maintainer-only |
+
+Integrator docs: **version numbers**, not Git branch names. Local/SNAPSHOT/profile flows: **CONTRIBUTING** only.
+
+## Do not put in tracked docs
+
+- Hardcoded worktree or machine paths (`wt/`, `C:\…`, `/Users/…`, `~/`, `this worktree`, `primary clone`)
+- References to **`wt/README.md`** or other local-only layout files
+- “Open folder X to switch branches” — IDE/local workflow, not repo documentation
+
+## Allowed (maintainer-only, when labelled)
+
+- **Git branch mapping** table (version → branch) in **MAINTAINERS.md** or agent rules
+- Generic worktree example only: `git worktree add <path> <branch>` (placeholder **`<path>`**, never a committed example)
+- Optional **untracked** local notes outside the repo
+
+## When editing docs
+
+1. Identify the **Maven version / release line** the text applies to, not the worktree folder Cursor has open.
+2. Remove or rewrite any committed worktree path tables or branch names in integrator-facing files.

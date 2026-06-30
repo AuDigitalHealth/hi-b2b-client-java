@@ -1,0 +1,31 @@
+# Default unit tests + Javadoc/sources (verify), then sample profile compile.
+# Full wsimport verify when licensed HI WSDL is present under wsdls/xml/.
+# Without licensed tree: validate only (public CI) or -Phi-wsdl-artifact locally (see CONTRIBUTING.md).
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "11"
+          cache: maven
+      - name: Maven verify (when licensed WSDL present)
+        run: |
+          if [ -f wsdls/xml/wsdl/consumer/20100731/HI_ConsumerSearchIHI-3.0.wsdl ]; then
+            mvn -B -Dgpg.skip=true clean verify
+            mvn -B -Psample -Dgpg.skip=true -DskipTests=true clean compile
+          else
+            echo "Licensed HI WSDL not in tree; running validate only (expected on public GitHub CI)."
+            mvn -B -Dgpg.skip=true validate
+          fi

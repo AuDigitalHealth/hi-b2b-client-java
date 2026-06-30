@@ -1,9 +1,22 @@
+/*
+ * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 package au.gov.nehta.vendorlibrary.hi.hpio;
 
-import au.gov.nehta.vendorlibrary.hi.client.ClientBase;
 import au.gov.nehta.vendorlibrary.hi.test.utils.HPIOHPIITestConstants;
 import au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants;
-import au.net.electronichealth.ns.hi.svc.providerreadproviderorganisation._3_2.ProviderReadProviderOrganisationPortType;
 import au.net.electronichealth.ns.hi.svc.providerreadproviderorganisation._3_2.ReadProviderOrganisation;
 import au.net.electronichealth.ns.hi.svc.providerreadproviderorganisation._3_2.ReadProviderOrganisationResponse;
 import au.net.electronichealth.ns.hi.svc.providerreadproviderorganisation._3_2.StandardErrorMsg;
@@ -35,7 +48,7 @@ public class ProviderReadOrganisationClientTest {
         ReadProviderOrganisation request = new ReadProviderOrganisation();
         request.setHpioNumber(HPIOHPIITestConstants.MCA_HPIO);
         ReadProviderOrganisationResponse response = tc.readProvider(request);
-        System.out.println(response.getReadProviderOrganisationResult().getStatus());
+        Assert.assertNotNull(response.getReadProviderOrganisationResult());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -66,8 +79,7 @@ public class ProviderReadOrganisationClientTest {
         request.setLinkSearchType("Children");
 
         ReadProviderOrganisationResponse identifierSearch = tic.readProvider(request);
-
-        System.out.println(identifierSearch.getReadProviderOrganisationResult().getStatus());
+        Assert.assertNotNull(identifierSearch.getReadProviderOrganisationResult());
     }
 
     private ProviderReadProviderOrganisationClient getMCATestClient() throws GeneralSecurityException, IOException {
@@ -82,17 +94,6 @@ public class ProviderReadOrganisationClientTest {
 
     private ProviderReadProviderOrganisationClient getMCATestIClient() throws GeneralSecurityException, IOException {
         ProviderReadProviderOrganisationClient testClient = new ProviderReadProviderOrganisationClient(MEDICARE_ENDPOINT_URL,
-                getUserQualifiedId(),
-                getProductHeader(),
-                getSigningPrivateKeyForMedicare(),
-                getSigningCertificateKeyForMedicare(),
-                getSslSocketFactoryForMedicare());
-        return testClient;
-    }
-
-    private ClientBase<ProviderReadProviderOrganisationPortType> getGenericMCATestIClient() throws GeneralSecurityException, IOException {
-
-        ClientBase<ProviderReadProviderOrganisationPortType> testClient = new ProviderReadProviderOrganisationClient(MEDICARE_ENDPOINT_URL,
                 getUserQualifiedId(),
                 getProductHeader(),
                 getSigningPrivateKeyForMedicare(),

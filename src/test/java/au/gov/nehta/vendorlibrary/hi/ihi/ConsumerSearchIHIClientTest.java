@@ -1,9 +1,11 @@
 /*
  * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -16,32 +18,33 @@ package au.gov.nehta.vendorlibrary.hi.ihi;
 import au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants;
 import au.gov.nehta.vendorlibrary.ws.TimeUtility;
 import au.gov.nehta.vendorlibrary.ws.handler.LoggingHandler;
-import au.net.electronichealth.ns.hi.consumermessages.searchihi._3.SearchIHIResult;
+import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihi._3.SearchIHIResult;
 import au.net.electronichealth.ns.hi.svc.consumersearchihi._3.SearchIHI;
 import au.net.electronichealth.ns.hi.svc.consumersearchihi._3.SearchIHIResponse;
 import au.net.electronichealth.ns.hi.svc.consumersearchihi._3.StandardErrorMsg;
 import au.net.electronichealth.ns.hi.xsd.common.addresscore._3.PostalDeliveryGroupType;
-import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.CountryType;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.SexType;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.StateType;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.StreetType;
-import au.net.electronichealth.ns.hi.xsd.common.commoncoreelements._3.ServiceMessageType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianPostalAddressType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianStreetAddressType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.InternationalAddressType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.consumercoredatatypes._3.IHIRecordStatusType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.consumercoredatatypes._3.IHIStatusType;
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import au.gov.nehta.vendorlibrary.hi.test.utils.TestReflect;
 
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 import static au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants.*;
+import static au.gov.nehta.vendorlibrary.hi.test.utils.TestConstants.getWrappedProductHeader;
+import static au.gov.nehta.vendorlibrary.hi.test.utils.TestConstants.getWrappedUserQualifiedId;
 
 public class ConsumerSearchIHIClientTest {
 
@@ -58,13 +61,83 @@ public class ConsumerSearchIHIClientTest {
         setSystemVariablesForTest();
         ConsumerSearchIHIClient testClient = getDrpTestClient();
 
-        ReflectionTestUtils.setField(testClient, "loggingHandler", null);
+        TestReflect.setField(testClient, "loggingHandler", null);
 
         String lastSoapRequest = testClient.getLastSoapRequest();
         Assert.assertEquals(lastSoapRequest, LoggingHandler.EMPTY);
 
         String lastSoapResponse = testClient.getLastSoapResponse();
         Assert.assertEquals(lastSoapResponse, LoggingHandler.EMPTY);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void basicSearch_nullRequest_clientUser() throws Exception {
+        getMedicareTestClient().basicSearch(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void basicSearch_nullRequest_perRequestUser() throws Exception {
+        getMedicarePerRequestUserClient().basicSearch(null, getWrappedUserQualifiedId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void basicMedicareSearch_nullRequest_clientUser() throws Exception {
+        getMedicareTestClient().basicMedicareSearch(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void basicMedicareSearch_nullRequest_perRequestUser() throws Exception {
+        getMedicarePerRequestUserClient().basicMedicareSearch(null, getWrappedUserQualifiedId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void basicDvaSearch_nullRequest_clientUser() throws Exception {
+        getMedicareTestClient().basicDvaSearch(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void basicDvaSearch_nullRequest_perRequestUser() throws Exception {
+        getMedicarePerRequestUserClient().basicDvaSearch(null, getWrappedUserQualifiedId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void detailedSearch_nullRequest_clientUser() throws Exception {
+        getMedicareTestClient().detailedSearch(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void detailedSearch_nullRequest_perRequestUser() throws Exception {
+        getMedicarePerRequestUserClient().detailedSearch(null, getWrappedUserQualifiedId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void australianPostalAddressSearch_nullRequest_clientUser() throws Exception {
+        getMedicareTestClient().australianPostalAddressSearch(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void australianPostalAddressSearch_nullRequest_perRequestUser() throws Exception {
+        getMedicarePerRequestUserClient().australianPostalAddressSearch(null, getWrappedUserQualifiedId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void australianStreetAddressSearch_nullRequest_clientUser() throws Exception {
+        getMedicareTestClient().australianStreetAddressSearch(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void australianStreetAddressSearch_nullRequest_perRequestUser() throws Exception {
+        getMedicarePerRequestUserClient().australianStreetAddressSearch(null, getWrappedUserQualifiedId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void internationalAddressSearch_nullRequest_clientUser() throws Exception {
+        getMedicareTestClient().internationalAddressSearch(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void internationalAddressSearch_nullRequest_perRequestUser() throws Exception {
+        getMedicarePerRequestUserClient().internationalAddressSearch(null, getWrappedUserQualifiedId());
     }
 
     // Basic Search Integration Tests
@@ -133,10 +206,8 @@ public class ConsumerSearchIHIClientTest {
         // <ns7:familyName>Schmidt</ns7:familyName>
         // <ns7:givenName>Helga</ns7:givenName>
 
-        XMLGregorianCalendar cal = new XMLGregorianCalendarImpl();
-        cal.setDay(19);
-        cal.setMonth(8);
-        cal.setYear(1942);
+        XMLGregorianCalendar cal = DatatypeFactory.newInstance()
+                .newXMLGregorianCalendarDate(1942, 8, 19, DatatypeConstants.FIELD_UNDEFINED);
 
         searchIHI.setMedicareCardNumber("2950190661");
         searchIHI.setFamilyName("Schmidt");
@@ -293,7 +364,7 @@ public class ConsumerSearchIHIClientTest {
         setSystemVariablesForTest();
         ConsumerSearchIHIClient testClient = getMedicareTestClient();
         SearchIHI searchIHI = getInternationalAddressSearchForMedicare();
-        searchIHI.getInternationalAddress().setCountry(CountryType.fromValue("1101"));
+        searchIHI.getInternationalAddress().setCountry("1101");
         SearchIHIResponse addressSearchResponse = testClient.internationalAddressSearch(searchIHI);
         verifySoapMessages(testClient);
 
@@ -326,17 +397,9 @@ public class ConsumerSearchIHIClientTest {
         try {
             SearchIHIResponse addressSearchResponse = testClient.australianStreetAddressSearch(searchIHI);
             verifySoapMessages(testClient);
-
-            for (ServiceMessageType t : addressSearchResponse.getSearchIHIResult().getServiceMessages().getServiceMessage()) {
-                System.out.println(t.getReason());
-            }
-            //addressSearchResponse.getSearchIHIResult().getGivenName().toString();
-            //  Assert.assertNotNull( addressSearchResponse.getSearchIHIResult().getIhiNumber() );
+            Assert.assertNotNull(addressSearchResponse.getSearchIHIResult());
         } catch (StandardErrorMsg e) {
-            for (ServiceMessageType t : e.getFaultInfo().getServiceMessage()) {
-                System.out.println(t.getReason());
-            }
-            e.printStackTrace();
+            throw new AssertionError(e);
         }
 
     }
@@ -407,6 +470,15 @@ public class ConsumerSearchIHIClientTest {
         ConsumerSearchIHIClient testClient = new ConsumerSearchIHIClient(DRP_IHI_SEARCH_ENDPOINT_URL, getUserQualifiedId(), getProductHeader(),
                 getSigningPrivateKeyForRefPlatform(), getSigningCertificateKeyForRefPlatform(), getSslSocketFactoryForRefPlatform());
         return testClient;
+    }
+
+    private ConsumerSearchIHIClient getMedicarePerRequestUserClient() throws GeneralSecurityException, IOException {
+        return new ConsumerSearchIHIClient(
+                MEDICARE_ENDPOINT_URL,
+                getWrappedProductHeader(),
+                getSigningPrivateKeyForMedicare(),
+                getSigningCertificateKeyForMedicare(),
+                getSslSocketFactoryForMedicare());
     }
 
     private SearchIHI getBasicSearchForMedicare() {

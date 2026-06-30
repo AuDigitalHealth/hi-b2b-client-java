@@ -1,5 +1,12 @@
 # Change Log/Revision History
 
+= 1.7.0 =
+======
+- Java **11**, Jakarta XML Web Services / JAXB (**`jaxws-rt` 4.x**). **26** full MCA facade clients over licensed **`HI_*`** WSDLs.
+- In-repo **`wsimport`** (26 executions) with build-time root **`hi.wsdl.tree.root`** (default **`wsdls/xml`**). Optional profile **`hi-wsdl-artifact`** skips codegen when **`au.gov.nehta:hi-wsdl`** is on the classpath. Published JAR excludes **`*.wsdl`**; runtime WSDL via **`HiWsdlArtifactRoot`** / **`HI_WSDL_ARTIFACT_ROOT`**.
+- Optional **`fat-jar`** profile and **`build.* shaded`** produce classifier **`all`** uber-JAR.
+- Default Surefire runs offline unit tests; **`-Pintegration`** for mutual-TLS against cert endpoints with **`local.properties`** / **`HI_*`**.
+
 = 1.6.2 =
 ======
 - Fixed HI WSDL ref and updated WS library
@@ -52,7 +59,7 @@
 ======
 - Added support for JAX-WS > 2.1
   Medicare does not support <FaultTo>, therefore this header is removed before signing.
-- Metro updated to 2.3 / JAX-WS 2.2.8
+- JAX-WS reference implementation stack updated to 2.3 / JAX-WS 2.2.8
 
 = 1.3.0 =
 ======

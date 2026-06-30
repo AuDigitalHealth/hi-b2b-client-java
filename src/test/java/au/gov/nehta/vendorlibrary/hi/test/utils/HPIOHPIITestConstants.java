@@ -1,9 +1,11 @@
 /*
  * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -66,7 +68,7 @@ public final class HPIOHPIITestConstants {
     public static InternationalAddressCriteriaType getInternationalAddressCriteriaTypeForMedicare() {
         InternationalAddressCriteriaType address = new InternationalAddressCriteriaType();
         address.setInternationalAddressLine(MCA_AUSADDR_UNSTRUCTUREDADDRESSLINE);
-        address.setCountry(CountryType.VALUE_13);
+        address.setCountry("13");
         address.setInternationalPostcode(MCA_AUSADDR_POSTCODE);
         address.setInternationalStateProvince("ACT");
         return address;
@@ -90,7 +92,7 @@ public final class HPIOHPIITestConstants {
     public static InternationalAddressCriteriaType getInternationalAddressCriteriaTypeForDRP() {
         InternationalAddressCriteriaType address = new InternationalAddressCriteriaType();
         address.setInternationalAddressLine(DRP_AUSADDR_STREETNAME);
-        address.setCountry(CountryType.VALUE_13);
+        address.setCountry("13");
         address.setInternationalPostcode(DRP_AUSADDR_POSTCODE);
         address.setInternationalStateProvince(StateType.VIC.toString());
         return address;

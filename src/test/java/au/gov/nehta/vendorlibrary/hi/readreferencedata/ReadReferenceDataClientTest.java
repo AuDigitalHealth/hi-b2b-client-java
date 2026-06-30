@@ -1,9 +1,11 @@
 /*
  * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -20,7 +22,7 @@ import au.net.electronichealth.ns.hi.svc.providerreadreferencedata._3_2.ReadRefe
 import au.net.electronichealth.ns.hi.xsd.providermessages.readreferencedata._3_2.ElementReferenceValuesType;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import au.gov.nehta.vendorlibrary.hi.test.utils.TestReflect;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -46,7 +48,7 @@ public class ReadReferenceDataClientTest {
         setSystemVariablesForTest();
         ReadReferenceDataClient testClient = getMedicareTestClient();
 
-        ReflectionTestUtils.setField(testClient, "loggingHandler", null);
+        TestReflect.setField(testClient, "loggingHandler", null);
 
         String lastSoapRequest = testClient.getLastSoapRequest();
         assertEquals(lastSoapRequest, LoggingHandler.EMPTY);

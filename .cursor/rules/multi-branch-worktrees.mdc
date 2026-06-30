@@ -1,0 +1,51 @@
+---
+description: Use git worktree when editing multiple branches of the same repository
+alwaysApply: true
+---
+
+# Multi-branch work — use git worktree
+
+When a task requires **changes on two or more branches of the same Git repository**, use **`git worktree`** — do **not** hop branches with `git checkout` while carrying uncommitted edits or stashes.
+
+## When this applies
+
+- Same-repo edits across release lines (e.g. `java-8-javax`, `java-11-jakarta`, `master`)
+- Applying the same fix to several branches before commit
+- Comparing or building two branches side by side
+
+## When checkout is fine
+
+- Single branch for the whole task
+- Read-only inspection: `git show <branch>:path`
+- Clean working tree and only one target branch
+
+## Workflow
+
+1. **Primary clone** stays on the main working branch; do not stash-and-hop to edit other branches.
+2. **Add a worktree per extra branch** (paths are local — never commit them to tracked docs):
+
+   ```bash
+   git worktree add ../<repo>-<branch-slug> <branch>
+   ```
+
+3. **Edit and commit in each worktree** independently; verify build/tests per branch.
+4. **Remove when done**: `git worktree remove ../<repo>-<branch-slug>` (or `git worktree prune` after manual delete).
+
+## Do not
+
+- `git checkout` other branches with uncommitted changes (Git will block or force stash churn).
+- Stash the same files across multiple branch switches — causes merge conflicts on `stash pop`.
+- Put worktree directory paths in README, CONTRIBUTING, or other tracked docs (see repo **`worktrees.mdc`** / **`documentation-standards.mdc`**).
+
+## Example (maintainer-local paths only)
+
+```bash
+# In hi-wsdl-java primary clone (on java-11-jakarta-full-wsdl)
+git worktree add ../hi-wsdl-java-java-8-javax java-8-javax
+git worktree add ../hi-wsdl-java-java-11-jakarta java-11-jakarta
+
+# Apply edits in each ../hi-wsdl-java-* folder; commit per branch
+# When finished:
+git worktree remove ../hi-wsdl-java-java-8-javax
+git worktree remove ../hi-wsdl-java-java-11-jakarta
+```

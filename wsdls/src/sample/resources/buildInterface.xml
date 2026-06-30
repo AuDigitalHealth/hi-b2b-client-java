@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project name="GenerateInterfaces" default="build">
-  <!-- Metro library external reference -->
+  <!-- JAX-WS tools/runtime JARs (populate lib/ from Maven Central; see MAINTAINERS.md) -->
   <property name="lib.dir" value="${basedir}/lib" />
   <property name="stylesheet.dir" value="${basedir}/xsl" />
   <property name="tmp.dir" value="${basedir}/tmp" />
@@ -15,7 +15,7 @@
   </path>
   <path id="xjcclasspath">
     <fileset dir="${lib.dir}"
-    includes="webservices-rt.jar, webservices-tools.jar" />
+    includes="**/*.jar" />
   </path>
   <taskdef name="xjc" classname="com.sun.tools.xjc.XJC2Task">
     <classpath refid="xjcclasspath" />
@@ -88,7 +88,7 @@
       </javac>
     </sequential>
   </macrodef>
-  <!--   Macro for generating artefact with custom binding -->
+  <!--   Macro for generating artifact with custom binding -->
   <macrodef name="generateWSDLArtifacts">
     <attribute name="service" />
     <attribute name="jarFilename" />
