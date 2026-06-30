@@ -33,7 +33,7 @@
 
 **Contributors:** Do not change **`<version>`**, **`<scm><tag>`**, or **`distributionManagement`** without maintainer direction. Leave **`maven-gpg-plugin`** **`skip`** **`true`** for default **`mvn verify`**. Record user-visible work under **`CHANGELOG.md`** in the **`= <pom-version> =`** block.
 
-**Release publisher:** Set GA **`<version>`** and **`<scm><tag>`**; move **`CHANGELOG.md`** bullets into a new **`= <GA-version> =`** section; deploy via Sonatype staging per organisation policy.
+**Release publisher:** Set GA **`<version>`** and **`<scm><tag>`**; move **`CHANGELOG.md`** bullets into a new **`= <GA-version> =`** section; deploy via Sonatype Central Portal per organisation policy (**`settings.xml.example`**, server id **`central`**).
 
 ## Java / Jakarta stack (`pom.xml` properties)
 
