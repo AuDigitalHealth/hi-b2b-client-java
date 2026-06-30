@@ -53,7 +53,7 @@ WSDL tree (see section 6).
 | wsdls/xml/binding/ | JAX-WS/JAXB binding fragments shipped with the repo |
 | target/generated-sources/wsimport/ | Merged wsimport output (build only) |
 | local.properties.example | Template for runtime and integration-test configuration |
-| settings.xml.example | Optional Maven user-settings template for hi.wsdl.tree.root |
+| settings.xml.example | Optional Maven settings: **hi-wsdl-tree** profile and commented Central Portal deploy credentials |
 | build.ps1, build.sh, build.bat | Thin wrappers around mvn clean verify |
 
 Branch model: **`1.7.0`**, full MCA, in-repo **`wsimport`**. JDK 11, Jakarta XML Web Services (**`jaxws-rt` 4.x**).
@@ -260,7 +260,7 @@ Gitignored: local.properties, certs/, populated keystores, config/ with secrets.
 
 ### 5.4 settings.xml
 
-Copy **`settings.xml.example`** to **`settings.xml`** at the repository root (or merge the **`hi-wsdl-tree`** profile into your Maven user settings file). Sets **`hi.wsdl.tree.root`** for builds that rely on a settings file.
+Copy **`settings.xml.example`** to **`settings.xml`** at the repository root (or merge profiles and **`<servers>`** into your Maven user settings file). The **`hi-wsdl-tree`** profile sets **`hi.wsdl.tree.root`** for builds that rely on a settings file. For **`mvn deploy`**, uncomment the **`central`** server block (server id must match **`pom.xml`**).
 
 Treat populated settings.xml like local.properties: do not commit secrets or machine-only
 paths. Optional env MVN_SETTINGS points build scripts at a settings file.
@@ -325,6 +325,44 @@ retryOnError. See CONTRIBUTING.md for manual delete steps.
 Keep plugin and shared dependency versions aligned with mhr-b2b-client-java where both
 use the same stack (jaxws-rt, jaxws-maven-plugin, gmavenplus, surefire, compiler, shade).
 MHR ships PCEHR WSDL in Git; HI does not ship HI WSDL in Git.
+
+---
+
+## Release
+
+Publishing uses **`central-publishing-maven-plugin`** (Sonatype Central Portal). Copy **`settings.xml.example`** → **`settings.xml`**, server id **`central`**.
+
+**Parallel release lines (maintainers only):** each Git branch publishes a **different Maven version** — integrators choose by coordinate, not branch name.
+
+| Branch | Java | HI client / WSDL version | Facades |
+| ------ | ---- | ------------------------ | ------- |
+| **`java-8-javax`** → **`master`** | 8 / javax | **1.6.3** | 14 |
+| **`java-11-jakarta`** | 11 / Jakarta | **1.6.5** | 14 |
+| **`java-11-jakarta-full-wsdl`** | 11 / Jakarta | **1.7.0** | 26 |
+
+Release **`hi-wsdl`** and **`hi-b2b-client`** at the **same GA version** on the matching branch pair before integrators upgrade.
+
+### SNAPSHOT or manual GA
+
+1. Update **CHANGELOG.md** (and **`pom.xml`** / SCM **`<tag>`** for manual GA).
+2. **`mvn -B "-Prelease" clean verify`**
+3. **`mvn -B "-Prelease" deploy`**
+
+Git/SCM settings for **`maven-release-plugin`** live in **`pom.xml`** properties (**`scm.repo.url`**, **`release.*`**). Tags default to **`{artifactId}-{version}`** (e.g. **`hi-b2b-client-1.7.0`**).
+
+### Automated GA (`maven-release-plugin`)
+
+Run on the **target branch** with a **clean** working tree. The plugin commits version bumps, creates the release tag, deploys from the tag checkout, bumps to the next **`-SNAPSHOT`**, and **pushes branch + tag** (**`pushChanges`** / **`remoteTagging`** in **`pom.xml`**). Git remote credentials (SSH or HTTPS) must work non-interactively.
+
+```text
+mvn -B "-Prelease" release:prepare release:perform -DreleaseVersion=1.7.0 -DdevelopmentVersion=1.7.1-SNAPSHOT -Dtag=hi-b2b-client-1.7.0
+```
+
+Replace versions and **`-Dtag`** for the branch you are on (**`hi-wsdl-1.6.5`**, **`hi-b2b-client-1.6.3`**, etc.). Omit **`-D…`** only if you accept interactive prompts.
+
+**After success:** confirm the artifact on Central; repeat on the paired types/client repo. No extra Git steps unless push failed (then **`git push origin <branch>`** and **`git push origin <tag>`**).
+
+**`-Dgpg.skip=false`** is equivalent to **`-Prelease`** for signing.
 
 ---
 
