@@ -15,8 +15,8 @@ package au.gov.nehta.vendorlibrary.hi.ihi;
 
 import au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants;
 import au.gov.nehta.vendorlibrary.ws.handler.LoggingHandler;
-import au.net.electronichealth.ns.hi.consumermessages.searchihi._3.SearchIHI;
-import au.net.electronichealth.ns.hi.consumermessages.searchihi._3.SearchIHIResult;
+import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihi._3.SearchIHI;
+import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihi._3.SearchIHIResult;
 import au.net.electronichealth.ns.hi.svc.consumersearchihibatchsyncrequest._3.SearchIHIBatchResponse;
 import au.net.electronichealth.ns.hi.xsd.common.addresscore._3.PostalDeliveryGroupType;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.SexType;
@@ -29,7 +29,7 @@ import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihibatch._3.Sear
 import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihibatch._3.SearchIHIResultType;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import au.gov.nehta.vendorlibrary.hi.test.utils.ReflectionFieldSetter;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
@@ -54,7 +54,7 @@ public class ConsumerSearchIHIBatchSyncClientTest {
         setSystemVariablesForTest();
         ConsumerSearchIHIBatchSyncClient testClient = getMedicareTestClient();
 
-        ReflectionTestUtils.setField(testClient, "loggingHandler", null);
+        ReflectionFieldSetter.setField(testClient, "loggingHandler", null);
 
         String lastSoapRequest = testClient.getLastSoapRequest();
         Assert.assertEquals(lastSoapRequest, LoggingHandler.EMPTY);

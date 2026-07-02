@@ -55,7 +55,7 @@ import java.security.GeneralSecurityException;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import au.gov.nehta.vendorlibrary.hi.test.utils.ReflectionFieldSetter;
 
 import au.gov.nehta.vendorlibrary.hi.client.BaseClient_3;
 import au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants;
@@ -88,7 +88,7 @@ public class ProviderSearchHIProviderDirectoryForIndividualClientTest {
         setSystemVariablesForTest();
         ProviderSearchHIProviderDirectoryForIndividualClient testClient = getMedicareTestClient();
 
-        ReflectionTestUtils.setField(testClient, "loggingHandler", null);
+        ReflectionFieldSetter.setField(testClient, "loggingHandler", null);
 
         String lastSoapRequest = testClient.getLastSoapRequest();
         assertEquals(lastSoapRequest, LoggingHandler.EMPTY);

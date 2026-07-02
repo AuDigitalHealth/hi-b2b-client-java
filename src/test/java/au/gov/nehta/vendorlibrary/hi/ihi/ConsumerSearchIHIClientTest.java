@@ -16,12 +16,11 @@ package au.gov.nehta.vendorlibrary.hi.ihi;
 import au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants;
 import au.gov.nehta.vendorlibrary.ws.TimeUtility;
 import au.gov.nehta.vendorlibrary.ws.handler.LoggingHandler;
-import au.net.electronichealth.ns.hi.consumermessages.searchihi._3.SearchIHIResult;
+import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihi._3.SearchIHIResult;
 import au.net.electronichealth.ns.hi.svc.consumersearchihi._3.SearchIHI;
 import au.net.electronichealth.ns.hi.svc.consumersearchihi._3.SearchIHIResponse;
 import au.net.electronichealth.ns.hi.svc.consumersearchihi._3.StandardErrorMsg;
 import au.net.electronichealth.ns.hi.xsd.common.addresscore._3.PostalDeliveryGroupType;
-import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.CountryType;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.SexType;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.StateType;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.StreetType;
@@ -31,11 +30,10 @@ import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianStree
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.InternationalAddressType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.consumercoredatatypes._3.IHIRecordStatusType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.consumercoredatatypes._3.IHIStatusType;
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import au.gov.nehta.vendorlibrary.hi.test.utils.ReflectionFieldSetter;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
@@ -58,7 +56,7 @@ public class ConsumerSearchIHIClientTest {
         setSystemVariablesForTest();
         ConsumerSearchIHIClient testClient = getDrpTestClient();
 
-        ReflectionTestUtils.setField(testClient, "loggingHandler", null);
+        ReflectionFieldSetter.setField(testClient, "loggingHandler", null);
 
         String lastSoapRequest = testClient.getLastSoapRequest();
         Assert.assertEquals(lastSoapRequest, LoggingHandler.EMPTY);
@@ -133,10 +131,8 @@ public class ConsumerSearchIHIClientTest {
         // <ns7:familyName>Schmidt</ns7:familyName>
         // <ns7:givenName>Helga</ns7:givenName>
 
-        XMLGregorianCalendar cal = new XMLGregorianCalendarImpl();
-        cal.setDay(19);
-        cal.setMonth(8);
-        cal.setYear(1942);
+        XMLGregorianCalendar cal = javax.xml.datatype.DatatypeFactory.newInstance()
+                .newXMLGregorianCalendarDate(1942, 8, 19, javax.xml.datatype.DatatypeConstants.FIELD_UNDEFINED);
 
         searchIHI.setMedicareCardNumber("2950190661");
         searchIHI.setFamilyName("Schmidt");
@@ -293,7 +289,7 @@ public class ConsumerSearchIHIClientTest {
         setSystemVariablesForTest();
         ConsumerSearchIHIClient testClient = getMedicareTestClient();
         SearchIHI searchIHI = getInternationalAddressSearchForMedicare();
-        searchIHI.getInternationalAddress().setCountry(CountryType.fromValue("1101"));
+        searchIHI.getInternationalAddress().setCountry("1101");
         SearchIHIResponse addressSearchResponse = testClient.internationalAddressSearch(searchIHI);
         verifySoapMessages(testClient);
 

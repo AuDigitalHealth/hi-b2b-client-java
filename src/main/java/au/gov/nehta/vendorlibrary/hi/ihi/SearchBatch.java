@@ -1,7 +1,7 @@
 package au.gov.nehta.vendorlibrary.hi.ihi;
 
 import au.gov.nehta.common.utils.ArgumentUtils;
-import au.net.electronichealth.ns.hi.consumermessages.searchihi._3.SearchIHI;
+import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihi._3.SearchIHI;
 import au.net.electronichealth.ns.hi.svc.consumersearchihibatchsyncrequest._3.SearchIHIBatchSync;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.SexType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianPostalAddressType;
@@ -206,6 +206,7 @@ public class SearchBatch {
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
+            ensureNull(request.getIhiNumber(), "IHI Number");
         }
 
         /**
@@ -224,6 +225,7 @@ public class SearchBatch {
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
+            ensureNull(request.getIhiNumber(), "IHI Number");
         }
 
         /**
@@ -241,6 +243,7 @@ public class SearchBatch {
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
+            ensureNull(request.getIhiNumber(), "IHI Number");
         }
 
         /**
@@ -320,6 +323,7 @@ public class SearchBatch {
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
             ensureNull(request.getAustralianPostalAddress(), "Australian Postal Address");
             ensureNull(request.getHistory(), "History");
+            ensureNull(request.getIhiNumber(), "IHI Number");
         }
 
 
@@ -334,6 +338,7 @@ public class SearchBatch {
             ensureNull(request.getDvaFileNumber(), "DVA File Name");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
+            ensureNull(request.getIhiNumber(), "IHI Number");
         }
 
         /**

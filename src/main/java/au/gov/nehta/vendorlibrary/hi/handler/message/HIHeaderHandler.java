@@ -25,13 +25,8 @@ public class HIHeaderHandler implements SOAPHandler<SOAPMessageContext> {
     public static final String HPIO_CSP_HEADER_ELEMENT_NAME = "hpio";
 
     /**
-     * FaultTo header name. Medicare cannot handle
-     *
-     * <pre>
-     * <wsa:FaultTo>Anything</wsa:FaultTo>
-     * </pre>
-     * <p>
-     * so we strip it from the outbound messages before signing.
+     * FaultTo header name. Medicare cannot handle a {@code wsa:FaultTo} element in the outbound
+     * message, so it is stripped before signing.
      */
     public static final String FAULT_TO_HEADER_ELEMENT_NAME = "FaultTo";
 

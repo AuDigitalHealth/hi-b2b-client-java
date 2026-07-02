@@ -12,7 +12,6 @@ import au.net.electronichealth.ns.hi.svc.providersearchforproviderorganisation._
 import au.net.electronichealth.ns.hi.svc.providersearchforproviderorganisation._5_0.StandardErrorMsg;
 import au.net.electronichealth.ns.hi.xsd.common.addresscore._5_0.SearchAustralianAddressType;
 import au.net.electronichealth.ns.hi.xsd.common.addresscore._5_0.SearchInternationalAddressType;
-import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.CountryType;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.SexType;
 import au.net.electronichealth.ns.hi.xsd.common.commoncoreelements._3.ProductType;
 import au.net.electronichealth.ns.hi.xsd.common.qualifiedidentifier._3.QualifiedId;
@@ -141,7 +140,7 @@ public class ProviderSearchClientTest {
         r.setSearchAustralianAddress(oz);
 
         SearchInternationalAddressType intl = new SearchInternationalAddressType();
-        intl.setCountry(CountryType.VALUE_101);
+        intl.setCountry("101");
         r.setSearchInternationalAddress(intl);
         r.setFamilyName("123456789012345678901234567890123456789"); //41 chars
         tc.demographicSearch(r);

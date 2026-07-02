@@ -115,7 +115,7 @@
                 <include name="${build.properties.file}"/>
             </zipfileset>
 
-            <!--Include src and java files and metro.xml-->
+            <!--Include src and java files and tooling metadata-->
             <zipfileset dir="${binding.dir}" prefix="binding">
                 <include name="**/*.xml"/>
             </zipfileset>

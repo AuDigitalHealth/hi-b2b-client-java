@@ -29,7 +29,7 @@ import au.net.electronichealth.ns.hi.xsd.providermessages.searchorganisation._3_
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import au.gov.nehta.vendorlibrary.hi.test.utils.ReflectionFieldSetter;
 
 import static au.gov.nehta.vendorlibrary.hi.test.utils.HPIOHPIITestConstants.*;
 import static au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants.setSystemVariablesForTest;
@@ -46,7 +46,7 @@ public class ProviderSearchHIProviderDirectoryForOrganisationClientTest {
                         getSigningCertificateKeyForMedicare(),
                         getSslSocketFactoryForMedicare());
 
-        ReflectionTestUtils.setField(testClient, "loggingHandler", null);
+        ReflectionFieldSetter.setField(testClient, "loggingHandler", null);
 
         String lastSoapRequest = testClient.getLastSoapRequest();
         assertEquals(lastSoapRequest, LoggingHandler.EMPTY);

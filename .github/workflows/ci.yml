@@ -1,0 +1,25 @@
+# Runs default unit tests + Javadoc/sources attach (verify), then compiles sample sources.
+name: CI
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+# Plain mvn keeps contributor ~/.m2/settings.xml behaviour; this line does not require a project settings.xml.
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 8
+          cache: maven
+      - name: Maven verify
+        run: mvn -B -Dgpg.skip=true clean verify
+      - name: Compile sample sources (sample profile)
+        run: mvn -B -Psample -Dgpg.skip=true -DskipTests=true clean compile

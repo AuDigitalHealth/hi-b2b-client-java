@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Optional Maven user settings: profile hi-wsdl-tree sets hi.wsdl.tree.root for wsimport;
+  commented Sonatype Central Portal block for maintainers who run mvn deploy.
+
+  Default build: install WSDL/XSD under wsdls/xml, then mvn clean verify (no -s required).
+
+  Prefer -Dhi.wsdl.tree.root=... or HI_WSDL_TREE_ROOT for one-off overrides.
+  To use this file persistently, merge the profile into your Maven user settings file,
+  or copy to settings.xml at the repository root and set MVN_SETTINGS to that path for build scripts.
+  mvn -s settings.xml uses only that file for the run (does not merge with other settings).
+
+  Server id "central" must match distributionManagement in pom.xml.
+  Generate a user token at https://central.sonatype.com/
+
+  See CONTRIBUTING.md and MAINTAINERS.md.
+
+  Copyright 2021-2026 ADHA. SPDX-License-Identifier: Apache-2.0.
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 https://maven.apache.org/xsd/settings-1.2.0.xsd">
+    <!--
+    <servers>
+        <server>
+            <id>central</id>
+            <username>YOUR_SONATYPE_TOKEN_USERNAME</username>
+            <password>YOUR_SONATYPE_TOKEN_PASSWORD</password>
+        </server>
+    </servers>
+    -->
+    <profiles>
+        <profile>
+            <id>hi-wsdl-tree</id>
+            <properties>
+                <hi.wsdl.tree.root>./wsdls/xml</hi.wsdl.tree.root>
+            </properties>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>hi-wsdl-tree</activeProfile>
+    </activeProfiles>
+</settings>

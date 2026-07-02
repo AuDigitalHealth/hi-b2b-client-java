@@ -1,0 +1,50 @@
+---
+description: Documentation and build scripts — implementor-first, Maven Central default, no secrets
+alwaysApply: true
+---
+
+# Documentation and build scripts
+
+Applies when writing or editing **README**, **CONTRIBUTING**, integrator guides, **SECURITY**, release notes, **build.*** / **build.xml** header comments, **settings.xml.example**, **local.properties.example**, and similar tracked material.
+
+## Priority: implementors
+
+- Primary audience: developers **consuming** published Maven artifacts.
+- Contributor/maintainer workflow lives in **CONTRIBUTING.md**, **MAINTAINERS.md**, or labelled subsections — not mixed into the integrator main flow.
+- Do not duplicate agent workflow in README or CONTRIBUTING (**AGENTS.md** → `.cursor/rules/`).
+
+## Default narrative: Maven Central
+
+- Write as if **released** coordinates are on Maven Central (no SNAPSHOT, sibling-repo checkout, or `-P…` profiles in the main integrator path).
+- Use **version numbers** in integrator docs — not Git branch names.
+- SNAPSHOT installs, optional Maven profiles, licensed WSDL for source builds, and sibling `mvn install` belong under **Local development** / **Local builds** only.
+
+## Structure
+
+| Where | What |
+| ----- | ---- |
+| README / integrator docs | Dependency, runtime config, capabilities |
+| Local development | Unpublished builds, SNAPSHOT, profiles, source-tree prerequisites |
+| By OS (when needed) | Separate **Windows**, **macOS**, **Linux** blocks (wrappers, cleanup, path notes) |
+
+## Paths
+
+- **Relative paths only** (e.g. `wsdls/xml`, `./certs/<folder>/`, `pom.xml` beside repo root).
+- **Never** hardcode machine paths (`C:\…`, `/Users/…`, `~/`, worktree folders) in tracked docs.
+- Override only when strictly required to remove ambiguity — say why.
+
+## Current state only
+
+- No migration, legacy, or branch-history commentary in user-facing docs.
+- Describe **what is true now**; omit "removed", "used to", and repo archaeology in integrator material.
+- **CHANGELOG** entries: current release capabilities; avoid branch names and migration essays in new notes.
+
+## Secrets — MUST NOT
+
+- **Never** put real or plausible **passwords**, **tokens**, **API keys**, **private keys**, or **keystore passphrases** in tracked files (code, comments, examples, docs).
+- Use placeholders (`<pkcs12-password>`), empty values in `.example` files, or "from your registration pack".
+- See **SECURITY.md**.
+
+## Override
+
+These rules may be overridden **only when necessary** to clear ambiguity (e.g. maintainer branch mapping in **MAINTAINERS.md** or `.cursor/rules/`, clearly labelled maintainer-only).

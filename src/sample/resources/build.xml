@@ -272,7 +272,7 @@
                 <include name="${build.properties.file}"/>
             </zipfileset>
 
-            <!--Include src and java files and metro.xml-->
+            <!-- Include Java sources and companion XML under src -->
             <zipfileset dir="${src.dir}" prefix="src/main/java">
                 <include name="**/*.java"/>
                 <include name="**/*.xml"/>
