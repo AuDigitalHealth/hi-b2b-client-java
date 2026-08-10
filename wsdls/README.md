@@ -6,6 +6,8 @@ https://healthsoftware.humanservices.gov.au/claiming/ext-vnd/
 
 Extract the bundle to a directory whose immediate children are lowercase **`wsdl/`** and **`schema/`**. Some hosts are case-sensitive, so the casing matters.
 
+For Consumer Search IHI (Messages schema **`SearchIHIMessages.xsd`**), request XML must place **`electronicCommunication`** immediately after identity fields and **before** **`dateOfBirth`**. If a vendor pack places that element after demographics or addresses, move it before regenerating types with **`wsimport`**; otherwise batch and related mobile/email search requests can fail schema validation (`badlyFormedMsg`).
+
 Optional JAX-WS / JAXB binding fragments that this repository ships live under **`wsdls/xml/binding/`**.
 
 ---

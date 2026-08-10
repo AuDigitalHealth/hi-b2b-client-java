@@ -15,11 +15,11 @@ pom.xml).
 | ------- | ---- | ---- | ----------------- |
 | **1.6.3** | 8 | **`javax.xml.ws`**, **`javax.xml.bind`** | **14** (standard HI B2B) |
 | **1.6.5** | 11 | **Jakarta** XML WS / Bind | **14** (standard HI B2B) |
-| **1.7.0** | 11 | **Jakarta** XML WS / Bind | **26** (full MCA) |
+| **1.7.1** | 11 | **Jakarta** XML WS / Bind | **26** (full MCA) |
 
 **Git branch mapping (maintainers only — not for integrator docs):** see **`CONTRIBUTING.md`** / release process in your organisation.
 
-**This line:** **`1.7.0`**, Java 11, Jakarta, **26** facades, in-repo **`wsimport`**.
+**This line:** **`1.7.1`**, Java 11, Jakarta, **26** facades, in-repo **`wsimport`**.
 
 ---
 
@@ -56,7 +56,7 @@ WSDL tree (see section 6).
 | settings.xml.example | Optional Maven settings: **hi-wsdl-tree** profile and commented Central Portal deploy credentials |
 | build.ps1, build.sh, build.bat | Thin wrappers around mvn clean verify |
 
-Branch model: **`1.7.0`**, full MCA, in-repo **`wsimport`**. JDK 11, Jakarta XML Web Services (**`jaxws-rt` 4.x**).
+Branch model: **`1.7.1`**, full MCA, in-repo **`wsimport`**. JDK 11, Jakarta XML Web Services (**`jaxws-rt` 4.x**).
 
 ---
 
@@ -338,7 +338,7 @@ Publishing uses **`central-publishing-maven-plugin`** (Sonatype Central Portal).
 | ------ | ---- | ------------------------ | ------- |
 | **`java-8-javax`** → **`master`** | 8 / javax | **1.6.3** | 14 |
 | **`java-11-jakarta`** | 11 / Jakarta | **1.6.5** | 14 |
-| **`java-11-jakarta-full-wsdl`** | 11 / Jakarta | **1.7.0** | 26 |
+| **`java-11-jakarta-full-wsdl`** | 11 / Jakarta | **1.7.1** | 26 |
 
 Release **`hi-wsdl`** and **`hi-b2b-client`** at the **same GA version** on the matching branch pair before integrators upgrade.
 
@@ -348,14 +348,14 @@ Release **`hi-wsdl`** and **`hi-b2b-client`** at the **same GA version** on the 
 2. **`mvn -B "-Prelease" clean verify`**
 3. **`mvn -B "-Prelease" deploy`**
 
-Git/SCM settings for **`maven-release-plugin`** live in **`pom.xml`** properties (**`scm.repo.url`**, **`release.*`**). Tags default to **`{artifactId}-{version}`** (e.g. **`hi-b2b-client-1.7.0`**).
+Git/SCM settings for **`maven-release-plugin`** live in **`pom.xml`** properties (**`scm.repo.url`**, **`release.*`**). Tags default to **`{artifactId}-{version}`** (e.g. **`hi-b2b-client-1.7.1`**).
 
 ### Automated GA (`maven-release-plugin`)
 
 Run on the **target branch** with a **clean** working tree. The plugin commits version bumps, creates the release tag, deploys from the tag checkout, bumps to the next **`-SNAPSHOT`**, and **pushes branch + tag** (**`pushChanges`** / **`remoteTagging`** in **`pom.xml`**). Git remote credentials (SSH or HTTPS) must work non-interactively.
 
 ```text
-mvn -B "-Prelease" release:prepare release:perform -DreleaseVersion=1.7.0 -DdevelopmentVersion=1.7.1-SNAPSHOT -Dtag=hi-b2b-client-1.7.0
+mvn -B "-Prelease" release:prepare release:perform -DreleaseVersion=1.7.1 -DdevelopmentVersion=1.7.2-SNAPSHOT -Dtag=hi-b2b-client-1.7.1
 ```
 
 Replace versions and **`-Dtag`** for the branch you are on (**`hi-wsdl-1.6.5`**, **`hi-b2b-client-1.6.3`**, etc.). Omit **`-D…`** only if you accept interactive prompts.

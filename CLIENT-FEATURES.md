@@ -2,7 +2,7 @@
 
 Broad list of what you can do with **`au.gov.nehta:hi-b2b-client`**: typed Java facades over Australia’s **Healthcare Identifiers (HI) Service** (SOAP/JAX-WS). Operation details and field rules are in ADHA specs and Javadoc; this document maps **library surface → capability**.
 
-**Audience:** integrators choosing APIs for **`1.7.0`** (**26** facade classes). Setup (Maven Central dependency, keystores, endpoints) is in **`README.md`**.
+**Audience:** integrators choosing APIs for **`1.7.1`** (**26** facade classes). Setup (Maven Central dependency, keystores, endpoints) is in **`README.md`**.
 
 Smaller release lines (**`1.6.3`**, **`1.6.5`**) expose **14** standard HI B2B facades only — see **`README.md`** release table before assuming a class exists in your version.
 
@@ -185,7 +185,7 @@ Service faults surface as generated **`StandardErrorMsg`** (and related) types f
 
 ---
 
-## Quick index — all facade classes (`1.7.0`)
+## Quick index — all facade classes (`1.7.1`)
 
 | # | Class |
 | - | ----- |

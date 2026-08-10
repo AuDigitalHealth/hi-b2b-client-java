@@ -9,7 +9,7 @@ Cross-repo reference for **Healthcare Identifiers (HI)** and **My Health Record 
 | **Identifiers handled** | IHI, HPI-I, HPI-O | Individual myHR record (IHI as context in headers, not managed here) |
 | **Typical use** | Look up / validate / manage healthcare identifiers | Access record, register consumer, upload/retrieve documents, read views |
 | **Service WSDLs codegen’d** | **26** (+ paired `*Interface` WSDLs in licensed bundle) | **12** `B2B_*` services |
-| **Facade classes** | **26** in **`1.7.0`**; **14** in **`1.6.3`** / **`1.6.5`** |
+| **Facade classes** | **26** in **`1.7.1`**; **14** in **`1.6.3`** / **`1.6.5`** |
 | **Maven artifact** | `au.gov.nehta:hi-b2b-client` | `au.gov.nehta:mhr-b2b-client` |
 
 Apps needing both depend on **two libraries**. HI-only detail: **`CLIENT-FEATURES.md`** in this repo. MHR third-party scope: **`ADHA-THIRD-PARTY-SCOPE.md`** in `mhr-b2b-client-java`. Three-client matrix: **`WSDL-CLIENT-PURPOSES.md`** in `myhr-b2b-client-java`.
@@ -52,7 +52,7 @@ Grouped by **client purpose**. WSDL filenames in the licensed bundle include ver
 **Notes**
 
 - Each service WSDL has a paired `*Interface` WSDL in the licensed bundle; facades bind to the service WSDL.
-- **`1.7.0`** exposes all **26** rows above. **`1.6.3`** and **`1.6.5`** expose the rows marked **Yes** in the last column only.
+- **`1.7.1`** exposes all **26** rows above. **`1.6.3`** and **`1.6.5`** expose the rows marked **Yes** in the last column only.
 
 ---
 

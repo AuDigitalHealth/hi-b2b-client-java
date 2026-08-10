@@ -21,7 +21,7 @@ From the repository root (directory containing **`pom.xml`**):
 mvn -B "-Dgpg.skip=true" clean verify
 ```
 
-This line (**`1.7.0`**) runs **26** **`wsimport`** executions against the licensed WSDL tree. Install the ADHA bundle under **`wsdls/xml/`** so **`wsdls/xml/wsdl/`** and **`wsdls/xml/schema/`** exist. See **`wsdls/README.md`**.
+This line (**`1.7.1`**) runs **26** **`wsimport`** executions against the licensed WSDL tree. Install the ADHA bundle under **`wsdls/xml/`** so **`wsdls/xml/wsdl/`** and **`wsdls/xml/schema/`** exist. See **`wsdls/README.md`**.
 
 **Build-time WSDL root:** property **`hi.wsdl.tree.root`** (default **`wsdls/xml`**). Overrides: **`-Dhi.wsdl.tree.root=...`**, environment **`HI_WSDL_TREE_ROOT`**, or the profile in **`settings.xml.example`**. **`HI_WSDL_ARTIFACT_ROOT`** is runtime-only and is **not** read by Maven. Details: **`MAINTAINERS.md`**.
 

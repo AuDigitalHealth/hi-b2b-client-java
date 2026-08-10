@@ -1,5 +1,9 @@
 # Change Log/Revision History
 
+= 1.7.1 =
+======
+- **`HiRequestElementOrderParityTest`**: asserts JAXB `propOrder` for Messages/Interface `searchIHI`, batch `SearchIHIRequestType`, and TDS search `providerIndividual`. Licensed `SearchIHIMessages.xsd` must place `electronicCommunication` before `dateOfBirth` (see `wsdls/README.md`).
+
 = 1.7.0 =
 ======
 - Java **11**, Jakarta XML Web Services / JAXB (**`jaxws-rt` 4.x**). **26** full MCA facade clients over licensed **`HI_*`** WSDLs.

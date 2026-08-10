@@ -31,11 +31,11 @@ Add the artifact from [Maven Central](https://central.sonatype.com/). Use a **`<
 <dependency>
   <groupId>au.gov.nehta</groupId>
   <artifactId>hi-b2b-client</artifactId>
-  <version>1.7.0</version>
+  <version>1.7.1</version>
 </dependency>
 ```
 
-**This line (`1.7.0`):** Java **11**, Jakarta XML Web Services / JAXB, **26** full MCA facade clients. Transitive runtime includes **`com.sun.xml.ws:jaxws-rt`** (Jakarta). No separate JDK SOAP install is required.
+**This line (`1.7.1`):** Java **11**, Jakarta XML Web Services / JAXB, **26** full MCA facade clients. Transitive runtime includes **`com.sun.xml.ws:jaxws-rt`** (Jakarta). No separate JDK SOAP install is required.
 
 SOAP application code uses **`jakarta.xml.ws`**, **`jakarta.xml.bind`**, and related Jakarta APIs. Java SE types such as **`javax.net.ssl`** and **`javax.xml.datatype.XMLGregorianCalendar`** are unchanged.
 
@@ -45,9 +45,9 @@ SOAP application code uses **`jakarta.xml.ws`**, **`jakarta.xml.bind`**, and rel
 
 | Version | Java | APIs | Facade clients |
 | ------- | ---- | ---- | -------------- |
-| **1.6.3** | 8 | **`javax.xml.ws`**, **`javax.xml.bind`** | **14** (standard HI B2B) |
-| **1.6.5** | 11 | **Jakarta** XML WS / Bind | **14** (standard HI B2B) |
-| **1.7.0** | 11 | **Jakarta** XML WS / Bind | **26** (full MCA) |
+| **1.6.4** | 8 | **`javax.xml.ws`**, **`javax.xml.bind`** | **14** (standard HI B2B) |
+| **1.6.6** | 11 | **Jakarta** XML WS / Bind | **14** (standard HI B2B) |
+| **1.7.1** | 11 | **Jakarta** XML WS / Bind | **26** (full MCA) |
 
 All published versions are on **[Maven Central](https://central.sonatype.com/)**.
 
@@ -110,7 +110,7 @@ Your production application may use environment variables or a secrets store ins
 
 ## Client classes
 
-Package base: **`au.gov.nehta.vendorlibrary.hi`**. Version **1.7.0** exposes **26** facade classes:
+Package base: **`au.gov.nehta.vendorlibrary.hi`**. Version **1.7.1** exposes **26** facade classes:
 
 | Area | Classes |
 | ---- | ------- |
