@@ -2,7 +2,8 @@
 
 = 1.7.1 =
 ======
-- **`HiRequestElementOrderParityTest`**: asserts JAXB `propOrder` for Messages/Interface `searchIHI`, batch `SearchIHIRequestType`, and TDS search `providerIndividual`. Licensed `SearchIHIMessages.xsd` must place `electronicCommunication` before `dateOfBirth` (see `wsdls/README.md`).
+- Consumer Search IHI batch request XML: Messages/Interface `searchIHI` place `electronicCommunication` after identity fields and **before** `dateOfBirth`. For in-repo `wsimport`, keep that particle order in licensed `SearchIHIMessages.xsd` (see `wsdls/README.md`). With `-Phi-wsdl-artifact`, use matching **`au.gov.nehta:hi-wsdl`** **1.7.1**.
+- **`HiRequestElementOrderParityTest`**: asserts JAXB `propOrder` for Messages/Interface `searchIHI`, batch `SearchIHIRequestType`, and TDS search `providerIndividual`.
 
 = 1.7.0 =
 ======
