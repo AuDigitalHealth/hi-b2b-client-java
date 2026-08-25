@@ -1,9 +1,11 @@
 /*
- * Copyright 2015 NEHTA
+ * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -212,14 +214,14 @@ public final class ProviderReadProviderOrganisationClientSample {
 
 
          WR15.1. A qualified identifier must be provided for every request made to
-         read a Provider or Administrative individual�s record.
+         read a Provider or Administrative individual's record.
 
          WR15.2. Each request received will be validated to ensure that all required elements are provided and that
          elements are consistent with their length and type restrictions.
 
          WR15.3. An individual who only holds a HPI-I role may only read the details of their own record
 
-         WR15.4. An OMO may read their own details and the details of another individuals� record which is
+         WR15.4. An OMO may read their own details and the details of another individual's record which is
          linked to the same organisation or an organisation below them in their hierarchy.
 
          WR15.5. An RO can read their own details and the details of any individual linked to the Seed organisation.

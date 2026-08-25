@@ -1,9 +1,22 @@
+/*
+ * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 package au.gov.nehta.vendorlibrary.hi.hpio;
 
-import au.gov.nehta.vendorlibrary.hi.client.ClientBase;
 import au.gov.nehta.vendorlibrary.hi.test.utils.HPIOHPIITestConstants;
 import au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants;
-import au.net.electronichealth.ns.hi.svc.providerreadprovideradministrativeindividual._3_2.ProviderReadProviderAdministrativeIndividualPortType;
 import au.net.electronichealth.ns.hi.svc.providerreadprovideradministrativeindividual._3_2.ReadProviderAdministrativeIndividual;
 import au.net.electronichealth.ns.hi.svc.providerreadprovideradministrativeindividual._3_2.ReadProviderAdministrativeIndividualResponse;
 import au.net.electronichealth.ns.hi.svc.providerreadprovideradministrativeindividual._3_2.StandardErrorMsg;
@@ -35,8 +48,7 @@ public class ProviderReadAdminIndiviualClientTest {
         ReadProviderAdministrativeIndividual request = new ReadProviderAdministrativeIndividual();
         request.setQualifiedIdentifier(HPIOHPIITestConstants.MCA_HPIO);
         ReadProviderAdministrativeIndividualResponse response = tc.readProviderAdministrativeIndividual(request);
-
-        System.out.println(response.getReadProviderAdministrativeIndividualResult().getStatus());
+        Assert.assertNotNull(response.getReadProviderAdministrativeIndividualResult());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -67,8 +79,7 @@ public class ProviderReadAdminIndiviualClientTest {
 
 
         ReadProviderAdministrativeIndividualResponse identifierSearch = tic.readProviderAdministrativeIndividual(request);
-
-        System.out.println(identifierSearch.getReadProviderAdministrativeIndividualResult().getStatus());
+        Assert.assertNotNull(identifierSearch.getReadProviderAdministrativeIndividualResult());
     }
 
     private ProviderReadAdministrativeIndividualClient getMCATestClient() throws GeneralSecurityException, IOException {
@@ -83,17 +94,6 @@ public class ProviderReadAdminIndiviualClientTest {
 
     private ProviderReadAdministrativeIndividualClient getMCATestIClient() throws GeneralSecurityException, IOException {
         ProviderReadAdministrativeIndividualClient testClient = new ProviderReadAdministrativeIndividualClient(MEDICARE_ENDPOINT_URL,
-                getUserQualifiedId(),
-                getProductHeader(),
-                getSigningPrivateKeyForMedicare(),
-                getSigningCertificateKeyForMedicare(),
-                getSslSocketFactoryForMedicare());
-        return testClient;
-    }
-
-    private ClientBase<ProviderReadProviderAdministrativeIndividualPortType> getGenericMCATestIClient() throws GeneralSecurityException, IOException {
-
-        ClientBase<ProviderReadProviderAdministrativeIndividualPortType> testClient = new ProviderReadAdministrativeIndividualClient(MEDICARE_ENDPOINT_URL,
                 getUserQualifiedId(),
                 getProductHeader(),
                 getSigningPrivateKeyForMedicare(),

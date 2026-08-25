@@ -13,7 +13,7 @@ Follow **`documentation-standards.mdc`** (implementor-first, Maven Central defau
 
 | Doc | Audience | Use |
 | --- | -------- | --- |
-| **README**, integrator guides | Implementors | **Maven version** (`1.7.0`), Central coordinates, runtime config |
+| **README**, integrator guides | Implementors | **Maven version** (`11.0.0`), Central coordinates, runtime config |
 | **CONTRIBUTING** | Contributors | Build from source, **Local builds**, OS-specific steps |
 | **MAINTAINERS**, **`.cursor/rules/`** | Maintainers | POM/wsimport internals; **branch mapping** only when labelled maintainer-only |
 
@@ -21,13 +21,13 @@ Integrator docs: **version numbers**, not Git branch names. Local/SNAPSHOT/profi
 
 ## Do not put in tracked docs
 
-- Hardcoded worktree or machine paths (`wt/`, `C:\…`, `/Users/…`, `~/`, `this worktree`, `primary clone`)
+- Hardcoded worktree or machine paths (`wt/`, `C:\...`, `/Users/...`, `~/`, `this worktree`, `primary clone`)
 - References to **`wt/README.md`** or other local-only layout files
-- “Open folder X to switch branches” — IDE/local workflow, not repo documentation
+- "Open folder X to switch branches" - IDE/local workflow, not repo documentation
 
 ## Allowed (maintainer-only, when labelled)
 
-- **Git branch mapping** table (version → branch) in **MAINTAINERS.md** or agent rules
+- **Git branch mapping** table (version -> branch) in **MAINTAINERS.md** or agent rules
 - Generic worktree example only: `git worktree add <path> <branch>` (placeholder **`<path>`**, never a committed example)
 - Optional **untracked** local notes outside the repo
 
