@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Build from source: mvn clean verify from repository root. Override WSDL tree with
-# HI_WSDL_TREE_ROOT or -Dhi.wsdl.tree.root=... (see CONTRIBUTING.md). Optional: MVN_SETTINGS for -s.
+# Build from source: mvn clean verify from repository root.
+# WSDL tree override: HI_WSDL_TREE_ROOT or -Dhi.wsdl.tree.root=... (see CONTRIBUTING.md).
+# Optional: MVN_SETTINGS=path/to/settings.xml
 set -euo pipefail
 cd "$(dirname "$0")"
 extra=()

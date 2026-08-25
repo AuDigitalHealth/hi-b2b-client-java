@@ -17,15 +17,18 @@ package au.gov.nehta.vendorlibrary.ws;
 
 import au.gov.nehta.vendorlibrary.hi.wsdl.HiWsdlArtifactRoot;
 
-import javax.net.SocketFactory;
 import javax.xml.namespace.QName;
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Service;
-import javax.xml.ws.WebServiceClient;
-import javax.xml.ws.WebServiceException;
-import javax.xml.ws.handler.Handler;
-import javax.xml.ws.soap.AddressingFeature;
+import jakarta.xml.ws.BindingProvider;
+import jakarta.xml.ws.Service;
+import jakarta.xml.ws.WebServiceClient;
+import jakarta.xml.ws.handler.Handler;
+import jakarta.xml.ws.soap.AddressingFeature;
 
+import javax.net.SocketFactory;
+
+import jakarta.xml.ws.WebServiceException;
+
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -40,12 +43,11 @@ public final class WebServiceClientUtil {
     private WebServiceClientUtil() {
     }
 
-    public static <T> T getPort(
-            Class<T> serviceInterface,
-            Class<? extends Service> serviceClass,
-            SocketFactory sslSocketFactory,
-            String endpoint,
-            List<Handler> handlerChain) {
+    public static <T> T getPort(java.lang.Class<T> serviceInterface,
+                                java.lang.Class<? extends Service> serviceClass,
+                                SocketFactory sslSocketFactory,
+                                String endpoint,
+                                List<Handler> handlerChain) {
 
         T port = getPort(serviceInterface, serviceClass, sslSocketFactory, endpoint);
         addHandlerChain(port, handlerChain);
@@ -53,14 +55,13 @@ public final class WebServiceClientUtil {
         return port;
     }
 
-    public static <T> T getPort(
-            Class<T> serviceInterface,
-            Class<? extends Service> serviceClass,
-            SocketFactory sslSocketFactory,
-            String endpoint) {
+    public static <T> T getPort(java.lang.Class<T> serviceInterface,
+                                java.lang.Class<? extends Service> serviceClass,
+                                SocketFactory sslSocketFactory,
+                                String endpoint) {
         WebServiceClient annotation = serviceClass.getAnnotation(WebServiceClient.class);
         String wsdlFileLoc = annotation.wsdlLocation();
-        Service service = getService(annotation, wsdlFileLoc);
+        Service service = createGeneratedService(serviceClass, annotation, wsdlFileLoc);
         T port = service.getPort(serviceInterface);
         configurePortWithEndpoint(port, endpoint);
         configurePortWithSslSocketFactory(port, sslSocketFactory);
@@ -68,16 +69,15 @@ public final class WebServiceClientUtil {
         return port;
     }
 
-    public static <T> T getPort(
-            Class<T> serviceInterface,
-            Class<? extends Service> serviceClass,
-            SocketFactory sslSocketFactory,
-            String endpoint,
-            List<Handler> handlerChain,
-            boolean addressingFeature) {
+    public static <T> T getPort(java.lang.Class<T> serviceInterface,
+                                java.lang.Class<? extends Service> serviceClass,
+                                SocketFactory sslSocketFactory,
+                                String endpoint,
+                                List<Handler> handlerChain,
+                                boolean addressingFeature) {
         WebServiceClient annotation = serviceClass.getAnnotation(WebServiceClient.class);
         String wsdlFileLoc = annotation.wsdlLocation();
-        Service service = getService(annotation, wsdlFileLoc);
+        Service service = createGeneratedService(serviceClass, annotation, wsdlFileLoc);
         T port = service.getPort(serviceInterface, new AddressingFeature(addressingFeature));
         configurePortWithEndpoint(port, endpoint);
         configurePortWithSslSocketFactory(port, sslSocketFactory);
@@ -86,11 +86,10 @@ public final class WebServiceClientUtil {
         return port;
     }
 
-    public static <T> T getPort(
-            Class<T> serviceInterface,
-            Class<? extends Service> serviceClass,
-            SocketFactory sslSocketFactory,
-            List<Handler> handlerChain) {
+    public static <T> T getPort(java.lang.Class<T> serviceInterface,
+                                java.lang.Class<? extends Service> serviceClass,
+                                SocketFactory sslSocketFactory,
+                                List<Handler> handlerChain) {
 
         T port = getPort(serviceInterface, serviceClass, sslSocketFactory);
         addHandlerChain(port, handlerChain);
@@ -98,30 +97,44 @@ public final class WebServiceClientUtil {
         return port;
     }
 
-    public static <T> T getPort(
-            Class<T> serviceInterface,
-            Class<? extends Service> serviceClass,
-            SocketFactory sslSocketFactory) {
+    public static <T> T getPort(java.lang.Class<T> serviceInterface,
+                                java.lang.Class<? extends Service> serviceClass,
+                                SocketFactory sslSocketFactory) {
         WebServiceClient annotation = serviceClass.getAnnotation(WebServiceClient.class);
         String wsdlFileLoc = annotation.wsdlLocation();
-        Service service = getService(annotation, wsdlFileLoc);
+        Service service = createGeneratedService(serviceClass, annotation, wsdlFileLoc);
         T port = service.getPort(serviceInterface);
         configurePortWithSslSocketFactory(port, sslSocketFactory);
 
         return port;
     }
 
-    private static Service getService(WebServiceClient annotation, String wsdlFileLoc) {
+    /**
+     * Uses the {@code wsimport}-generated {@link Service} subclass so WSDL metadata (ports, bindings) is available to
+     * the runtime; {@link Service#create(URL, QName)} alone does not attach that metadata.
+     */
+    private static Service createGeneratedService(
+            Class<? extends Service> serviceClass,
+            WebServiceClient annotation,
+            String wsdlFileLoc) {
+
         final URL wsdlURL = retrieveWsdlUrl(wsdlFileLoc);
         if (wsdlURL == null) {
             throw new WebServiceException(
-                    "WSDL not found: " + wsdlFileLoc + ". Set " + HiWsdlArtifactRoot.HI_WSDL_ARTIFACT_ROOT
+                    "WSDL not found: " + wsdlFileLoc + " (for " + serviceClass.getName() + "). "
+                            + "Set " + HiWsdlArtifactRoot.HI_WSDL_ARTIFACT_ROOT
                             + " (environment, local.properties in the working directory, or JVM system property) "
-                            + "to the directory containing wsdl/ and schema/, call " + HiWsdlArtifactRoot.class.getName()
-                            + ".setRoot(Path), or place the WSDL on the classpath; see README.md.");
+                            + "to the directory containing wsdl/ and schema/, call "
+                            + HiWsdlArtifactRoot.class.getName() + ".setRoot(Path), or place the WSDL on the classpath; "
+                            + "see README.md.");
         }
         final QName serviceQName = new QName(annotation.targetNamespace(), annotation.name());
-        return Service.create(wsdlURL, serviceQName);
+        try {
+            Constructor<? extends Service> ctor = serviceClass.getConstructor(URL.class, QName.class);
+            return ctor.newInstance(wsdlURL, serviceQName);
+        } catch (ReflectiveOperationException e) {
+            throw new WebServiceException("Cannot instantiate generated service " + serviceClass.getName(), e);
+        }
     }
 
     private static URL retrieveWsdlUrl(String filePath) {
@@ -141,7 +154,8 @@ public final class WebServiceClientUtil {
         return result;
     }
 
-    private static void configurePortWithSslSocketFactory(final Object servicePort, final SocketFactory sslSocketFactory) {
+    private static void configurePortWithSslSocketFactory(final Object servicePort,
+                                                          final SocketFactory sslSocketFactory) {
         final BindingProvider bindingProvider = (BindingProvider) servicePort;
 
         final Map<String, Object> requestContext = bindingProvider.getRequestContext();
@@ -149,7 +163,8 @@ public final class WebServiceClientUtil {
         requestContext.put(INTERNAL_REQUEST_CONTEXT_SSL_SOCKET_FACTORY_PROPERTY_NAME, sslSocketFactory);
     }
 
-    private static void configurePortWithEndpoint(final Object servicePort, final String endpoint) {
+    private static void configurePortWithEndpoint(final Object servicePort,
+                                                  final String endpoint) {
         final BindingProvider bindingProvider = (BindingProvider) servicePort;
 
         final Map<String, Object> requestContext = bindingProvider.getRequestContext();

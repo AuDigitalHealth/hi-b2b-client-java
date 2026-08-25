@@ -1,3 +1,18 @@
+/*
+ * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 package au.gov.nehta.vendorlibrary.hi.client;
 
 import au.gov.nehta.common.utils.ArgumentUtils;
@@ -11,8 +26,8 @@ import au.net.electronichealth.ns.hi.xsd.common.commoncoreelements._3.TimestampT
 import au.net.electronichealth.ns.hi.xsd.common.qualifiedidentifier._3.QualifiedId;
 
 import javax.net.ssl.SSLSocketFactory;
-import javax.xml.ws.Service;
-import javax.xml.ws.handler.Handler;
+import jakarta.xml.ws.Service;
+import jakarta.xml.ws.handler.Handler;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -20,27 +35,21 @@ import java.util.List;
 
 
 /**
- * A Base implementation of the client wrapper that allows access to the
- * WS Port for the XXXXX._3 series of classes
+ * Base client wrapper for HI SOAP ports whose generated types live in the {@code _3}
+ * package namespace (Common Core Elements 3.0 and related WSDL bindings).
  *
  * @author NeHTA
  */
 public class BaseClient_3<T> extends ClientBase<T> {
 
 
-    /**
-     * The user Qualified ID associated with this use of the ProviderSearchHIProviderDirectoryForOrganisation service
-     */
+    /** Qualified identifier for the individual (user) on whose behalf requests are made. */
     protected final QualifiedId individualQualifiedId;
 
-    /**
-     * The organisation Qualified ID associated with this use of the ProviderSearchHIProviderDirectoryForOrganisation service
-     */
+    /** Optional organisation qualified identifier when the call is scoped to an organisation. */
     protected final QualifiedId organisationQualifiedId;
 
-    /**
-     * The Product details associated with this use of the ProviderSearchHIProviderDirectoryForIndividual service
-     */
+    /** Product and version metadata sent on each HI request. */
     protected final ProductType productHeader;
 
     public BaseClient_3(
@@ -62,7 +71,7 @@ public class BaseClient_3<T> extends ClientBase<T> {
         ArgumentUtils.checkNotNull(individualQualifiedId, "individualQualifiedId");
         ArgumentUtils.checkNotNull(productHeader, "productHeader");
         ArgumentUtils.checkNotNull(signingPrivateKey, "signingPrivateKey");
-        ArgumentUtils.checkNotNull(signingCertificate, "signingPrivateKey");
+        ArgumentUtils.checkNotNull(signingCertificate, "signingCertificate");
         ArgumentUtils.checkNotNull(sslSocketFactory, "sslSocketFactory");
 
         // supply an optional certificate Validator
@@ -114,7 +123,7 @@ public class BaseClient_3<T> extends ClientBase<T> {
         ArgumentUtils.checkNotNullNorBlank(serviceEndpoint, "serviceEndpoint");
         ArgumentUtils.checkNotNull(productHeader, "productHeader");
         ArgumentUtils.checkNotNull(signingPrivateKey, "signingPrivateKey");
-        ArgumentUtils.checkNotNull(signingCertificate, "signingPrivateKey");
+        ArgumentUtils.checkNotNull(signingCertificate, "signingCertificate");
         ArgumentUtils.checkNotNull(sslSocketFactory, "sslSocketFactory");
 
 
@@ -176,6 +185,7 @@ public class BaseClient_3<T> extends ClientBase<T> {
         return organisationQualifiedId == null;
     }
 
+    /** Ensures {@link #individualQualifiedId} was supplied; used by operations that require a user qualified ID. */
     protected void checkUserID() {
         if (this.individualQualifiedId == null) throw new IllegalArgumentException(QUALIFIED_ID_MISSING);
     }

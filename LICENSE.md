@@ -1,4 +1,4 @@
-# HI B2B Client Java — licensing
+# HI B2B Client Java - licensing
 
 Copyright 2011 National E-Health Transition Authority Ltd (NEHTA).  
 Copyright 2021-2026 Australian Digital Health Agency (ADHA) and contributors.
@@ -219,7 +219,7 @@ limitations under the License.
 
 ---
 
-## Additional terms — Australian Digital Health Agency Production Disclaimer
+## Additional terms - Australian Digital Health Agency Production Disclaimer
 
 The Australian Digital Health Agency (as Licensor) grants You a licence to this Product subject to the terms of the Apache Licence (version 2.0), a copy of which is available at <https://www.apache.org/licenses/LICENSE-2.0>, and the following terms.
 

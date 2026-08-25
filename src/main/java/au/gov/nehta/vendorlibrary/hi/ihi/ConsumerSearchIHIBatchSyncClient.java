@@ -1,9 +1,11 @@
 /*
  * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -13,6 +15,7 @@
  */
 package au.gov.nehta.vendorlibrary.hi.ihi;
 
+import au.gov.nehta.common.utils.ArgumentUtils;
 import au.gov.nehta.vendorlibrary.hi.client.BaseClient_3;
 import au.gov.nehta.xsp.CertificateValidator;
 import au.net.electronichealth.ns.hi.svc.consumersearchihibatchsyncrequest._3.ConsumerSearchIHIBatchSyncPortType;
@@ -25,7 +28,7 @@ import au.net.electronichealth.ns.hi.xsd.common.commoncoreelements._3.TimestampT
 import au.net.electronichealth.ns.hi.xsd.common.qualifiedidentifier._3.QualifiedId;
 
 import javax.net.ssl.SSLSocketFactory;
-import javax.xml.ws.Holder;
+import jakarta.xml.ws.Holder;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
@@ -198,6 +201,7 @@ public class ConsumerSearchIHIBatchSyncClient extends BaseClient_3<ConsumerSearc
      * @throws StandardErrorMsg if the Web Service call fails.
      */
     public final SearchIHIBatchResponse batchSearch(SearchBatch request) throws StandardErrorMsg {
+        ArgumentUtils.checkNotNull(request, "request");
         checkUserID();
         TimestampType timestampHeader = getTimestampHeader();
         Holder<SignatureContainerType> signatureHeader = null;
@@ -222,7 +226,8 @@ public class ConsumerSearchIHIBatchSyncClient extends BaseClient_3<ConsumerSearc
      */
     public final SearchIHIBatchResponse batchSearch(SearchBatch request,
                                                     au.gov.nehta.vendorlibrary.hi.client.wrapped.QualifiedId individualId) throws StandardErrorMsg {
-
+        ArgumentUtils.checkNotNull(request, "request");
+        ArgumentUtils.checkNotNull(individualId, "individualId");
         TimestampType timestampHeader = getTimestampHeader();
         Holder<SignatureContainerType> signatureHeader = null;
         Holder<ProductType> productHolder = new Holder<>(productHeader);
