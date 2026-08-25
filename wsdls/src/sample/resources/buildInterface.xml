@@ -88,7 +88,7 @@
       </javac>
     </sequential>
   </macrodef>
-  <!--   Macro for generating artefact with custom binding -->
+  <!--   Macro for generating artifact with custom binding -->
   <macrodef name="generateWSDLArtifacts">
     <attribute name="service" />
     <attribute name="jarFilename" />

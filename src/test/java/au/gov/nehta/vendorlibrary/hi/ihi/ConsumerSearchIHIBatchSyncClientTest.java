@@ -1,9 +1,11 @@
 /*
  * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -29,7 +31,7 @@ import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihibatch._3.Sear
 import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihibatch._3.SearchIHIResultType;
 import org.junit.Assert;
 import org.junit.Test;
-import au.gov.nehta.vendorlibrary.hi.test.utils.ReflectionFieldSetter;
+import au.gov.nehta.vendorlibrary.hi.test.utils.TestReflect;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
@@ -38,6 +40,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants.*;
+import static au.gov.nehta.vendorlibrary.hi.test.utils.TestConstants.getWrappedProductHeader;
+import static au.gov.nehta.vendorlibrary.hi.test.utils.TestConstants.getWrappedUserQualifiedId;
 
 public class ConsumerSearchIHIBatchSyncClientTest {
 
@@ -54,13 +58,28 @@ public class ConsumerSearchIHIBatchSyncClientTest {
         setSystemVariablesForTest();
         ConsumerSearchIHIBatchSyncClient testClient = getMedicareTestClient();
 
-        ReflectionFieldSetter.setField(testClient, "loggingHandler", null);
+        TestReflect.setField(testClient, "loggingHandler", null);
 
         String lastSoapRequest = testClient.getLastSoapRequest();
         Assert.assertEquals(lastSoapRequest, LoggingHandler.EMPTY);
 
         String lastSoapResponse = testClient.getLastSoapResponse();
         Assert.assertEquals(lastSoapResponse, LoggingHandler.EMPTY);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void batchSearch_nullRequest_clientUser() throws Exception {
+        getMedicareTestClient().batchSearch(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void batchSearch_nullRequest_perRequestUser() throws Exception {
+        getMedicarePerRequestUserClient().batchSearch(null, getWrappedUserQualifiedId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void batchSearch_nullIndividualId_perRequestUser() throws Exception {
+        getMedicarePerRequestUserClient().batchSearch(new SearchBatch(), null);
     }
 
     @Test
@@ -316,6 +335,15 @@ public class ConsumerSearchIHIBatchSyncClientTest {
     private ConsumerSearchIHIBatchSyncClient getMedicareTestClient() throws GeneralSecurityException, IOException {
         return new ConsumerSearchIHIBatchSyncClient(MEDICARE_ENDPOINT_URL, getUserQualifiedId(), getProductHeader(), getSigningPrivateKeyForMedicare(),
                 getSigningCertificateKeyForMedicare(), getSslSocketFactoryForMedicare());
+    }
+
+    private ConsumerSearchIHIBatchSyncClient getMedicarePerRequestUserClient() throws GeneralSecurityException, IOException {
+        return new ConsumerSearchIHIBatchSyncClient(
+                MEDICARE_ENDPOINT_URL,
+                getWrappedProductHeader(),
+                getSigningPrivateKeyForMedicare(),
+                getSigningCertificateKeyForMedicare(),
+                getSslSocketFactoryForMedicare());
     }
 
     private SearchIHI getBasicSearchForMedicare() {
