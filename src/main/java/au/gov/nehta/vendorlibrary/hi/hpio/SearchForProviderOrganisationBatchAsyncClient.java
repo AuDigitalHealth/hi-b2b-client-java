@@ -1,9 +1,11 @@
 /*
  * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -23,7 +25,7 @@ import au.net.electronichealth.ns.hi.xsd.common.commoncoreelements._3.SignatureC
 import au.net.electronichealth.ns.hi.xsd.common.qualifiedidentifier._3.QualifiedId;
 
 import javax.net.ssl.SSLSocketFactory;
-import javax.xml.ws.Holder;
+import jakarta.xml.ws.Holder;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
@@ -138,6 +140,7 @@ public class SearchForProviderOrganisationBatchAsyncClient extends BaseClient_3<
      */
     public SubmitSearchForProviderOrganisationResponse submitSearch(ProviderOrganisationBatchSearch request)
             throws au.net.electronichealth.ns.hi.svc.providerbatchasyncsearchforproviderorganisation._5_1.StandardErrorMsg {
+        ArgumentUtils.checkNotNull(request, "request");
         checkUserID();
         submitSearchCheck(request.getSearchRequest());
         Holder<SignatureContainerType> signatureHeader = null;
@@ -163,7 +166,8 @@ public class SearchForProviderOrganisationBatchAsyncClient extends BaseClient_3<
     public SubmitSearchForProviderOrganisationResponse submitSearch(ProviderOrganisationBatchSearch request,
                                                                     au.gov.nehta.vendorlibrary.hi.client.wrapped.QualifiedId individualId)
             throws StandardErrorMsg {
-
+        ArgumentUtils.checkNotNull(request, "request");
+        ArgumentUtils.checkNotNull(individualId, "individualId");
         submitSearchCheck(request.getSearchRequest());
         Holder<SignatureContainerType> signatureHeader = null;
         Holder<ProductType> productHolder = new Holder<>(productHeader);
@@ -188,6 +192,8 @@ public class SearchForProviderOrganisationBatchAsyncClient extends BaseClient_3<
     public RetrieveSearchForProviderOrganisationResponse retrieveSearch(RetrieveSearchForProviderOrganisation request,
                                                                         au.gov.nehta.vendorlibrary.hi.client.wrapped.QualifiedId individualId
     ) throws StandardErrorMsg {
+        ArgumentUtils.checkNotNull(request, "request");
+        ArgumentUtils.checkNotNull(individualId, "individualId");
         retrieveSearchCheck(request);
         Holder<SignatureContainerType> signatureHeader = null;
         Holder<ProductType> productHolder = new Holder<>(productHeader);
@@ -209,6 +215,7 @@ public class SearchForProviderOrganisationBatchAsyncClient extends BaseClient_3<
      * @throws StandardErrorMsg if the Web Service call fails.
      */
     public RetrieveSearchForProviderOrganisationResponse retrieveSearch(RetrieveSearchForProviderOrganisation request) throws StandardErrorMsg {
+        ArgumentUtils.checkNotNull(request, "request");
         checkUserID();
         retrieveSearchCheck(request);
         Holder<SignatureContainerType> signatureHeader = null;

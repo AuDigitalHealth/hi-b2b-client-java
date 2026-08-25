@@ -1,9 +1,11 @@
 /*
- * Copyright 2015 NEHTA
+ * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -210,7 +212,7 @@ public final class ProviderReadAdministrativeIndividualClientSample {
         /*
          The rules that govern processing of requests received through this service are as follows:
 
-         WR16.1. A HPI-O must be provided for every request made to read an organisation�s record.
+         WR16.1. A HPI-O must be provided for every request made to read an organisation's record.
 
          WR16.2. Each request received will be validated to ensure that all required elements are provided
          and that elements are consistent with their length and type restrictions.

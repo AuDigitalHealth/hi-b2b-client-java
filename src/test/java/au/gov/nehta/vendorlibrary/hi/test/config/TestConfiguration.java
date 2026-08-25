@@ -31,6 +31,9 @@ import java.util.Properties;
  * {@code local.properties}, then the default supplied by the caller. Environment variables override
  * the property file when both define a value.
  * <p>
+ * The library reads {@code HI_WSDL_ARTIFACT_ROOT} from the same {@code local.properties} path (see
+ * {@link au.gov.nehta.vendorlibrary.hi.wsdl.HiWsdlArtifactRoot}).
+ * <p>
  * This follows common Java practice: deployment-specific values (passwords, endpoints, registered
  * identifiers) should be supplied externally rather than edited into source and committed.
  */
@@ -68,8 +71,6 @@ public final class TestConfiguration {
     public static final String HI_PRODUCT_NAME = "HI_PRODUCT_NAME";
     public static final String HI_PRODUCT_VERSION = "HI_PRODUCT_VERSION";
     public static final String HI_PRODUCT_PLATFORM = "HI_PRODUCT_PLATFORM";
-    /** Same key as {@link au.gov.nehta.vendorlibrary.hi.wsdl.HiWsdlArtifactRoot#HI_WSDL_ARTIFACT_ROOT}. */
-    public static final String HI_WSDL_ARTIFACT_ROOT = "HI_WSDL_ARTIFACT_ROOT";
 
     private static final Properties LOCAL = new Properties();
 

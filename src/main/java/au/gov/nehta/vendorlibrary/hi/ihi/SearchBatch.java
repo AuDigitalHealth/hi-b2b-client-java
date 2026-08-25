@@ -1,3 +1,18 @@
+/*
+ * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 package au.gov.nehta.vendorlibrary.hi.ihi;
 
 import au.gov.nehta.common.utils.ArgumentUtils;
@@ -6,6 +21,7 @@ import au.net.electronichealth.ns.hi.svc.consumersearchihibatchsyncrequest._3.Se
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.SexType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianPostalAddressType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianStreetAddressType;
+import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianUnstructuredStreetAddressType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.InternationalAddressType;
 import au.net.electronichealth.ns.hi.xsd.consumermessages.searchihibatch._3.SearchIHIRequestType;
 
@@ -126,6 +142,22 @@ public class SearchBatch {
     }
 
     /**
+     * Validates an Australian Unstructured Street Address search and adds it to the batch if
+     * successful.
+     *
+     * @param search the search object containing the following mandatory fields:
+     *               Family Name Date of Birth Sex Australian Unstructured Street Address:
+     *               Suburb Australian Unstructured Street Address: State Australian Unstructured
+     *               Street Address: Post Code and the following optional fields Given Name
+     *               Address Line One Address Line Two
+     */
+    public final void addAustralianUnstructuredStreetAddressSearch(SearchIHIRequestType search) {
+        this.argumentValidator.australianUnstructuredStreetAddressSearchCheck(search.getSearchIHI());
+        this.validateRequestIdentifier(search.getRequestIdentifier());
+        this.searches.add(search);
+    }
+
+    /**
      * Validates a Australian Street Address search and adds it to the batch if
      * successful.
      *
@@ -185,6 +217,7 @@ public class SearchBatch {
             ensureNull(request.getAustralianPostalAddress(), "Australian Postal Address");
             ensureNull(request.getDvaFileNumber(), "DVA File Number");
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
+            ensureNull(request.getAustralianUnstructuredStreetAddress(), "Australian Unstructured Street Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
             ensureNull(request.getMedicareCardNumber(), "Medicare Card Number");
@@ -204,6 +237,7 @@ public class SearchBatch {
             ensureNull(request.getAustralianPostalAddress(), "Australian Postal Address");
             ensureNull(request.getDvaFileNumber(), "DVA File Number");
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
+            ensureNull(request.getAustralianUnstructuredStreetAddress(), "Australian Unstructured Street Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
             ensureNull(request.getIhiNumber(), "IHI Number");
@@ -223,6 +257,7 @@ public class SearchBatch {
             ensureNull(request.getMedicareCardNumber(), "Medicare Card Number");
             ensureNull(request.getMedicareIRN(), "Medicare IRN");
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
+            ensureNull(request.getAustralianUnstructuredStreetAddress(), "Australian Unstructured Street Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
             ensureNull(request.getIhiNumber(), "IHI Number");
@@ -241,6 +276,7 @@ public class SearchBatch {
             ensureNull(request.getMedicareIRN(), "Medicare IRN");
             ensureNull(request.getDvaFileNumber(), "DVA File Name");
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
+            ensureNull(request.getAustralianUnstructuredStreetAddress(), "Australian Unstructured Street Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
             ensureNull(request.getIhiNumber(), "IHI Number");
@@ -270,6 +306,7 @@ public class SearchBatch {
             ArgumentUtils.checkNotNullNorBlank(australianPostalAddress.getSuburb(), "Suburb");
 
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
+            ensureNull(request.getAustralianUnstructuredStreetAddress(), "Australian Unstructured Street Address");
 
             australianAddressNullChecks(request);
         }
@@ -298,8 +335,32 @@ public class SearchBatch {
                 ArgumentUtils.checkNotNull(request.getAustralianStreetAddress().getLevelGroup().getLevelType(), "Level Type");
             }
 
+            if (australianStreetAddress.getStreetNumber() != null) {
+                ArgumentUtils.checkNotNull(australianStreetAddress.getStreetType(), "Street Type");
+            }
+
             ensureNull(request.getAustralianPostalAddress(), "Australian Postal Address");
             australianAddressNullChecks(request);
+        }
+
+        /**
+         * Checks that only the correct parameters for an Australian Unstructured Street address search are set.
+         *
+         * @param request the search request object containing the parameters to be checked.
+         */
+        public final void australianUnstructuredStreetAddressSearchCheck(final SearchIHI request) {
+            checkCommonMandatoryParameters(request);
+
+            AustralianUnstructuredStreetAddressType unstructuredAddress = request.getAustralianUnstructuredStreetAddress();
+            ArgumentUtils.checkNotNull(unstructuredAddress, "Australian Unstructured Street Address");
+            ArgumentUtils.checkNotNullNorBlank(unstructuredAddress.getSuburb(), "Suburb");
+            ArgumentUtils.checkNotNull(unstructuredAddress.getState(), "State");
+            ArgumentUtils.checkNotNullNorBlank(unstructuredAddress.getPostcode(), "Post Code");
+            ensureExactStringLength(unstructuredAddress.getPostcode(), AUSTRALIAN_POSTCODE_LENGTH, "Post Code");
+
+            ensureNull(request.getAustralianPostalAddress(), "Australian Postal Address");
+            ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
+            searchCriteriaNullChecks(request);
         }
 
         /**
@@ -321,6 +382,7 @@ public class SearchBatch {
             ensureNull(request.getMedicareIRN(), "Medicare IRN");
             ensureNull(request.getDvaFileNumber(), "DVA File Name");
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
+            ensureNull(request.getAustralianUnstructuredStreetAddress(), "Australian Unstructured Street Address");
             ensureNull(request.getAustralianPostalAddress(), "Australian Postal Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getIhiNumber(), "IHI Number");
@@ -328,17 +390,27 @@ public class SearchBatch {
 
 
         /**
-         * Verifies that various non-Australian Address fields are null.
+         * Verifies that identifier and non-address search fields are null.
          *
          * @param request the search request object containing the parameters to be checked.
          */
-        private void australianAddressNullChecks(SearchIHI request) {
+        private void searchCriteriaNullChecks(SearchIHI request) {
             ensureNull(request.getMedicareCardNumber(), "Medicare Card Number");
             ensureNull(request.getMedicareIRN(), "Medicare IRN");
             ensureNull(request.getDvaFileNumber(), "DVA File Name");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
             ensureNull(request.getIhiNumber(), "IHI Number");
+        }
+
+        /**
+         * Verifies that various non-Australian Address fields are null for structured address searches.
+         *
+         * @param request the search request object containing the parameters to be checked.
+         */
+        private void australianAddressNullChecks(SearchIHI request) {
+            searchCriteriaNullChecks(request);
+            ensureNull(request.getAustralianUnstructuredStreetAddress(), "Australian Unstructured Street Address");
         }
 
         /**

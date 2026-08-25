@@ -46,7 +46,7 @@
 	<!-- The WSDL relative path is set because the WSDL requires the schema file/s
                   relative path to understand import statements -->
 
-	<!-- Ant target to generate ConsumerIHISearch java artifacts  -->
+	<!-- Ant target to generate ConsumerIHISearch java artefacts  -->
 	<target name="--IhiSearchConsumerTLS">
 		<wsimport wsdl="${ihi30.wsdl.file}" wsdllocation="${ihi30.wsdl}" extension="true" destdir="${classes}" keep="true" debug="true" sourcedestdir="${generated.src}">
 			<binding dir="${binding.dir}" includes="ConsumerJaxb.xml,xmldsig-override.xml" />
@@ -197,7 +197,7 @@
 		</copy>
 	</target>
 
-	<!-- Ant target for generating interface artefact files -->
+	<!-- Ant target for generating interface artifact files -->
 	<target name="compile-wsdl" depends="cleanLib, createLib, prepare" description="Generates java bindings for all wsdls">
 
 		<antcall target="--IhiSearchConsumerTLS" />

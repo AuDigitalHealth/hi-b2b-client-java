@@ -1,5 +1,5 @@
 ---
-description: Documentation and build scripts — implementor-first, Maven Central default, no secrets
+description: Documentation and build scripts - implementor-first, Maven Central default, no secrets
 alwaysApply: true
 ---
 
@@ -10,13 +10,13 @@ Applies when writing or editing **README**, **CONTRIBUTING**, integrator guides,
 ## Priority: implementors
 
 - Primary audience: developers **consuming** published Maven artifacts.
-- Contributor/maintainer workflow lives in **CONTRIBUTING.md**, **MAINTAINERS.md**, or labelled subsections — not mixed into the integrator main flow.
-- Do not duplicate agent workflow in README or CONTRIBUTING (**AGENTS.md** → `.cursor/rules/`).
+- Contributor/maintainer workflow lives in **CONTRIBUTING.md**, **MAINTAINERS.md**, or labelled subsections - not mixed into the integrator main flow.
+- Do not duplicate agent workflow in README or CONTRIBUTING (**AGENTS.md** -> `.cursor/rules/`).
 
 ## Default narrative: Maven Central
 
-- Write as if **released** coordinates are on Maven Central (no SNAPSHOT, sibling-repo checkout, or `-P…` profiles in the main integrator path).
-- Use **version numbers** in integrator docs — not Git branch names.
+- Write as if **released** coordinates are on Maven Central (no SNAPSHOT, sibling-repo checkout, or `-P...` profiles in the main integrator path).
+- Use **version numbers** in integrator docs - not Git branch names.
 - SNAPSHOT installs, optional Maven profiles, licensed WSDL for source builds, and sibling `mvn install` belong under **Local development** / **Local builds** only.
 
 ## Structure
@@ -30,8 +30,8 @@ Applies when writing or editing **README**, **CONTRIBUTING**, integrator guides,
 ## Paths
 
 - **Relative paths only** (e.g. `wsdls/xml`, `./certs/<folder>/`, `pom.xml` beside repo root).
-- **Never** hardcode machine paths (`C:\…`, `/Users/…`, `~/`, worktree folders) in tracked docs.
-- Override only when strictly required to remove ambiguity — say why.
+- **Never** hardcode machine paths (`C:\...`, `/Users/...`, `~/`, worktree folders) in tracked docs.
+- Override only when strictly required to remove ambiguity - say why.
 
 ## Current state only
 
@@ -39,11 +39,15 @@ Applies when writing or editing **README**, **CONTRIBUTING**, integrator guides,
 - Describe **what is true now**; omit "removed", "used to", and repo archaeology in integrator material.
 - **CHANGELOG** entries: current release capabilities; avoid branch names and migration essays in new notes.
 
-## Secrets — MUST NOT
+## Secrets - MUST NOT
 
 - **Never** put real or plausible **passwords**, **tokens**, **API keys**, **private keys**, or **keystore passphrases** in tracked files (code, comments, examples, docs).
 - Use placeholders (`<pkcs12-password>`), empty values in `.example` files, or "from your registration pack".
 - See **SECURITY.md**.
+
+## ASCII source
+
+All tracked files you add or change must be **ASCII only**. See **`ascii-source.mdc`**.
 
 ## Override
 

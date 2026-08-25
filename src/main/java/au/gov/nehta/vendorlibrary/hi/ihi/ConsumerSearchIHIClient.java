@@ -1,9 +1,11 @@
 /*
  * Copyright 2011 NEHTA
+ * Copyright 2021-2026 ADHA (Australian Digital Health Agency)
  *
- * Licensed under the NEHTA Open Source (Apache) License; you may not use this
- * file except in compliance with the License. A copy of the License is in the
- * 'license.txt' file, which should be provided with this work.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -23,11 +25,12 @@ import au.net.electronichealth.ns.hi.xsd.common.commoncoreelements._3.SignatureC
 import au.net.electronichealth.ns.hi.xsd.common.qualifiedidentifier._3.QualifiedId;
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianPostalAddressType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianStreetAddressType;
+import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianUnstructuredStreetAddressType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.InternationalAddressType;
 
 import javax.net.ssl.SSLSocketFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.ws.Holder;
+import jakarta.xml.ws.Holder;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
@@ -344,6 +347,38 @@ public class ConsumerSearchIHIClient extends BaseClient_3<ConsumerSearchIHIPortT
     }
 
     /**
+     * Executes an Australian Unstructured Street Address ConsumerSearchIHI search.
+     *
+     * @param request the SearchIHI request object containing the following mandatory fields:
+     *                Family Name
+     *                Date of Birth
+     *                Sex
+     *                Australian Unstructured Street Address: Suburb
+     *                Australian Unstructured Street Address: State
+     *                Australian Unstructured Street Address: Post Code
+     *                and the following optional fields
+     *                Given Name
+     *                Address Line One
+     *                Address Line Two
+     * @return the response from the ConsumerSearchIHI service
+     * @throws StandardErrorMsg if the Web Service call fails.
+     */
+    public final SearchIHIResponse australianUnstructuredStreetAddressSearch(SearchIHI request) throws StandardErrorMsg {
+        checkUserID();
+        argumentValidator.australianUnstructuredStreetAddressSearchCheck(request);
+        Holder<SignatureContainerType> signatureHeader = null;
+        Holder<ProductType> productHolder = new Holder<>(productHeader);
+        return getPort().searchIHI(
+                request,
+                productHolder,
+                getTimestampHeader(),
+                signatureHeader,
+                this.individualQualifiedId,
+                this.organisationQualifiedId
+        );
+    }
+
+    /**
      * Executes an International Address ConsumerSearchIHI search.
      *
      * @param request the SearchIHI request object containing the following mandatory fields:
@@ -561,6 +596,41 @@ public class ConsumerSearchIHIClient extends BaseClient_3<ConsumerSearchIHIPortT
     }
 
     /**
+     * Executes an Australian Unstructured Street Address ConsumerSearchIHI search.
+     *
+     * @param request      the SearchIHI request object containing the following mandatory fields:
+     *                     Family Name
+     *                     Date of Birth
+     *                     Sex
+     *                     Australian Unstructured Street Address: Suburb
+     *                     Australian Unstructured Street Address: State
+     *                     Australian Unstructured Street Address: Post Code
+     *                     and the following optional fields
+     *                     Given Name
+     *                     Address Line One
+     *                     Address Line Two
+     * @param individualId the qualified user id of the user making the request
+     * @return the response from the ConsumerSearchIHI service
+     * @throws StandardErrorMsg if the Web Service call fails.
+     */
+    public final SearchIHIResponse australianUnstructuredStreetAddressSearch(SearchIHI request,
+                                                                             au.gov.nehta.vendorlibrary.hi.client.wrapped.QualifiedId individualId)
+            throws StandardErrorMsg {
+
+        argumentValidator.australianUnstructuredStreetAddressSearchCheck(request);
+        Holder<SignatureContainerType> signatureHeader = null;
+        Holder<ProductType> productHolder = new Holder<>(productHeader);
+        return getPort().searchIHI(
+                request,
+                productHolder,
+                getTimestampHeader(),
+                signatureHeader,
+                individualId.as3Type(),
+                this.organisationQualifiedId
+        );
+    }
+
+    /**
      * Executes an International Address ConsumerSearchIHI search.
      *
      * @param request      the SearchIHI request object containing the following mandatory fields:
@@ -622,6 +692,7 @@ public class ConsumerSearchIHIClient extends BaseClient_3<ConsumerSearchIHIPortT
             ensureNull(request.getAustralianPostalAddress(), "Australian Postal Address");
             ensureNull(request.getDvaFileNumber(), "DVA File Number");
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
+            ensureNull(request.getAustralianUnstructuredStreetAddress(), "Australian Unstructured Street Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
             ensureNull(request.getMedicareCardNumber(), "Medicare Card Number");
@@ -641,6 +712,7 @@ public class ConsumerSearchIHIClient extends BaseClient_3<ConsumerSearchIHIPortT
             ensureNull(request.getAustralianPostalAddress(), "Australian Postal Address");
             ensureNull(request.getDvaFileNumber(), "DVA File Number");
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
+            ensureNull(request.getAustralianUnstructuredStreetAddress(), "Australian Unstructured Street Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
             ensureNull(request.getIhiNumber(), "IHI Number");
@@ -660,6 +732,7 @@ public class ConsumerSearchIHIClient extends BaseClient_3<ConsumerSearchIHIPortT
             ensureNull(request.getMedicareCardNumber(), "Medicare Card Number");
             ensureNull(request.getMedicareIRN(), "Medicare IRN");
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
+            ensureNull(request.getAustralianUnstructuredStreetAddress(), "Australian Unstructured Street Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
             ensureNull(request.getIhiNumber(), "IHI Number");
@@ -678,6 +751,7 @@ public class ConsumerSearchIHIClient extends BaseClient_3<ConsumerSearchIHIPortT
             ensureNull(request.getMedicareIRN(), "Medicare IRN");
             ensureNull(request.getDvaFileNumber(), "DVA File Name");
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
+            ensureNull(request.getAustralianUnstructuredStreetAddress(), "Australian Unstructured Street Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
             ensureNull(request.getIhiNumber(), "IHI Number");
@@ -707,6 +781,7 @@ public class ConsumerSearchIHIClient extends BaseClient_3<ConsumerSearchIHIPortT
             ArgumentUtils.checkNotNullNorBlank(australianPostalAddress.getSuburb(), "Suburb");
 
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
+            ensureNull(request.getAustralianUnstructuredStreetAddress(), "Australian Unstructured Street Address");
 
             australianAddressNullChecks(request);
         }
@@ -735,8 +810,32 @@ public class ConsumerSearchIHIClient extends BaseClient_3<ConsumerSearchIHIPortT
                 ArgumentUtils.checkNotNull(request.getAustralianStreetAddress().getLevelGroup().getLevelType(), "Level Type");
             }
 
+            if (australianStreetAddress.getStreetNumber() != null) {
+                ArgumentUtils.checkNotNull(australianStreetAddress.getStreetType(), "Street Type");
+            }
+
             ensureNull(request.getAustralianPostalAddress(), "Australian Postal Address");
             australianAddressNullChecks(request);
+        }
+
+        /**
+         * Checks that only the correct parameters for an Australian Unstructured Street address search are set.
+         *
+         * @param request the search request object containing the parameters to be checked.
+         */
+        public final void australianUnstructuredStreetAddressSearchCheck(final SearchIHI request) {
+            checkCommonMandatoryParameters(request);
+
+            AustralianUnstructuredStreetAddressType unstructuredAddress = request.getAustralianUnstructuredStreetAddress();
+            ArgumentUtils.checkNotNull(unstructuredAddress, "Australian Unstructured Street Address");
+            ArgumentUtils.checkNotNullNorBlank(unstructuredAddress.getSuburb(), "Suburb");
+            ArgumentUtils.checkNotNull(unstructuredAddress.getState(), "State");
+            ArgumentUtils.checkNotNullNorBlank(unstructuredAddress.getPostcode(), "Post Code");
+            ensureExactStringLength(unstructuredAddress.getPostcode(), AUSTRALIAN_POSTCODE_LENGTH, "Post Code");
+
+            ensureNull(request.getAustralianPostalAddress(), "Australian Postal Address");
+            ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
+            searchCriteriaNullChecks(request);
         }
 
         /**
@@ -758,23 +857,34 @@ public class ConsumerSearchIHIClient extends BaseClient_3<ConsumerSearchIHIPortT
             ensureNull(request.getMedicareIRN(), "Medicare IRN");
             ensureNull(request.getDvaFileNumber(), "DVA File Name");
             ensureNull(request.getAustralianStreetAddress(), "Australian Street Address");
+            ensureNull(request.getAustralianUnstructuredStreetAddress(), "Australian Unstructured Street Address");
             ensureNull(request.getAustralianPostalAddress(), "Australian Postal Address");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getIhiNumber(), "IHI Number");
         }
 
         /**
-         * Verifies that various non-Australian Address fields are null.
+         * Verifies that identifier and non-address search fields are null.
          *
          * @param request the search request object containing the parameters to be checked.
          */
-        private void australianAddressNullChecks(SearchIHI request) {
+        private void searchCriteriaNullChecks(SearchIHI request) {
             ensureNull(request.getMedicareCardNumber(), "Medicare Card Number");
             ensureNull(request.getMedicareIRN(), "Medicare IRN");
             ensureNull(request.getDvaFileNumber(), "DVA File Name");
             ensureNull(request.getHistory(), "History");
             ensureNull(request.getInternationalAddress(), "International Address");
             ensureNull(request.getIhiNumber(), "IHI Number");
+        }
+
+        /**
+         * Verifies that various non-Australian Address fields are null for structured address searches.
+         *
+         * @param request the search request object containing the parameters to be checked.
+         */
+        private void australianAddressNullChecks(SearchIHI request) {
+            searchCriteriaNullChecks(request);
+            ensureNull(request.getAustralianUnstructuredStreetAddress(), "Australian Unstructured Street Address");
         }
 
         /**

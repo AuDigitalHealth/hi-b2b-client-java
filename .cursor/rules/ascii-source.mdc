@@ -1,0 +1,22 @@
+---
+description: Tracked source and docs must be ASCII only
+alwaysApply: true
+---
+
+# ASCII source
+
+Every file you **add or edit** must be **ASCII only** (bytes 0x00-0x7F). Scan touched paths before finishing.
+
+Replace:
+
+| Non-ASCII          | ASCII       |
+| ------------------ | ----------- |
+| em/en dash, minus  | `-`         |
+| ellipsis           | `...`       |
+| curly quotes       | `'` / `"`   |
+| arrows             | `->` / `<-` |
+| non-breaking space | space       |
+
+Do not introduce Unicode symbols, emoji, or locale punctuation in code, comments, XML, or docs.
+
+WSDL/XSD copied from the licensed toolkit may contain non-ASCII. Do not add more. Prefer ASCII in files you author.

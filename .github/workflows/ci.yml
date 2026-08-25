@@ -1,25 +1,33 @@
-# Runs default unit tests + Javadoc/sources attach (verify), then compiles sample sources.
+# Default unit tests + Javadoc/sources (verify), then sample profile compile.
+# Full wsimport verify when licensed HI WSDL is present under wsdls/xml/.
+# Without licensed tree: validate only (public CI) or -Phi-wsdl-artifact locally (see CONTRIBUTING.md).
 name: CI
+
 on:
   push:
+    branches: [ java-17 ]
   pull_request:
+    branches: [ java-17 ]
 
 permissions:
   contents: read
-
-# Plain mvn keeps contributor ~/.m2/settings.xml behaviour; this line does not require a project settings.xml.
 
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 8
+          java-version: "17"
           cache: maven
-      - name: Maven verify
-        run: mvn -B -Dgpg.skip=true clean verify
-      - name: Compile sample sources (sample profile)
-        run: mvn -B -Psample -Dgpg.skip=true -DskipTests=true clean compile
+      - name: Maven verify (when licensed WSDL present)
+        run: |
+          if [ -f wsdls/xml/wsdl/consumer/20100731/HI_ConsumerSearchIHI-3.0.wsdl ]; then
+            mvn -B -Dgpg.skip=true clean verify
+            mvn -B -Psample -Dgpg.skip=true -DskipTests=true clean compile
+          else
+            echo "Licensed HI WSDL not in tree; running validate only (expected on public GitHub CI)."
+            mvn -B -Dgpg.skip=true validate
+          fi

@@ -10,6 +10,7 @@ import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.PostalDel
 import au.net.electronichealth.ns.hi.xsd.common.commoncoredatatypes._3.SexType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianPostalAddressType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianStreetAddressType;
+import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.AustralianUnstructuredStreetAddressType;
 import au.net.electronichealth.ns.hi.xsd.consumercore.address._3.InternationalAddressType;
 import org.junit.Test;
 
@@ -127,6 +128,35 @@ public class ConsumerSearchIHIClientArgumentValidatorTest {
         validator.australianStreetAddressSearchCheck(request);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void australianStreetAddressSearchCheck_rejectsConcurrentUnstructuredAddress() {
+        SearchIHI request = australianStreetAddressSearchRequest();
+        request.setAustralianUnstructuredStreetAddress(australianUnstructuredStreetAddressSuburbOnly());
+        validator.australianStreetAddressSearchCheck(request);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void australianStreetAddressSearchCheck_rejectsStreetNumberWithoutStreetType() {
+        SearchIHI request = australianStreetAddressSearchRequest();
+        request.getAustralianStreetAddress().setStreetType(null);
+        validator.australianStreetAddressSearchCheck(request);
+    }
+
+    @Test
+    public void australianUnstructuredStreetAddressSearchCheck_acceptsSuburbOnly() {
+        SearchIHI request = demographicsOnlyRequest();
+        request.setAustralianUnstructuredStreetAddress(australianUnstructuredStreetAddressSuburbOnly());
+        validator.australianUnstructuredStreetAddressSearchCheck(request);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void australianUnstructuredStreetAddressSearchCheck_rejectsConcurrentStructuredAddress() {
+        SearchIHI request = demographicsOnlyRequest();
+        request.setAustralianUnstructuredStreetAddress(australianUnstructuredStreetAddressSuburbOnly());
+        request.setAustralianStreetAddress(australianStreetAddressSearchRequest().getAustralianStreetAddress());
+        validator.australianUnstructuredStreetAddressSearchCheck(request);
+    }
+
     @Test
     public void internationalAddressSearchCheck_acceptsMedicareTestPayload() {
         validator.internationalAddressSearchCheck(internationalAddressSearchRequest());
@@ -212,6 +242,14 @@ public class ConsumerSearchIHIClientArgumentValidatorTest {
         address.setPostcode(MEDICARE_GENERIC_TEST_INDIVIDUAL_AUSTRALIAN_STREET_ADDRESS_POST_CODE);
         searchIHI.setAustralianStreetAddress(address);
         return searchIHI;
+    }
+
+    private static AustralianUnstructuredStreetAddressType australianUnstructuredStreetAddressSuburbOnly() {
+        AustralianUnstructuredStreetAddressType address = new AustralianUnstructuredStreetAddressType();
+        address.setSuburb(MEDICARE_GENERIC_TEST_INDIVIDUAL_AUSTRALIAN_STREET_ADDRESS_SUBURB);
+        address.setState(MEDICARE_GENERIC_TEST_INDIVIDUAL_AUSTRALIAN_STREET_ADDRESS_STATE);
+        address.setPostcode(MEDICARE_GENERIC_TEST_INDIVIDUAL_AUSTRALIAN_STREET_ADDRESS_POST_CODE);
+        return address;
     }
 
     private static SearchIHI internationalAddressSearchRequest() {
