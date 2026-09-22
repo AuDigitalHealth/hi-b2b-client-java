@@ -11,6 +11,10 @@
 
 Dependencies resolve from **[Maven Central](https://central.sonatype.com/)** unless you are doing a **local build** (below).
 
+## Versioning
+
+The **first number** of the Maven version is the **Java SE** version that line targets. **`hi-b2b-client`** and **`hi-wsdl`** always share the **same** version (**8.0.0** with **8.0.0** on this line). **11.0.0.1** and later use **Jakarta** and **26** facades; **8.0.0** uses **`javax`** and **14** facades. See **`README.md`**.
+
 ---
 
 ## Build from source
@@ -21,7 +25,7 @@ From the repository root (directory containing **`pom.xml`**):
 mvn -B "-Dgpg.skip=true" clean verify
 ```
 
-This line (**`1.6.3`**) compiles against **`au.gov.nehta:hi-wsdl`** — it does **not** run **`wsimport`**.
+This line (**`8.0.0`**) compiles against **`au.gov.nehta:hi-wsdl`** **`8.0.0`** - it does **not** run **`wsimport`**. The first number of both Maven versions is the targeted Java SE version (**8**).
 
 Optional faster local **`verify`** without the Javadoc JAR: **`mvn -B -Pdev-javadoc-off -Dgpg.skip=true clean verify`**.
 
@@ -47,13 +51,19 @@ Set environment variable **`MVN_SETTINGS`** to pass **`-s`** to Maven (path to y
 
 ## Local builds (unpublished artifacts)
 
-When co-developing with **`hi-wsdl-java`**, install matching **`au.gov.nehta:hi-wsdl`** at **`${project.version}`** before **`verify`** here:
+Install matching siblings at **`${project.version}`** (**8.0.0** / **`8.0.0-SNAPSHOT`**) before **`verify`** here:
 
 ```text
-# hi-wsdl (same SNAPSHOT or GA as this pom.xml)
+# hi-wsdl-java
 mvn -B "-Dgpg.skip=true" clean install
 
-# hi-b2b-client (this repository)
+# smi-xsp-java
+mvn -B "-Dgpg.skip=true" clean install
+
+# common-library-java (needs smi-xsp)
+mvn -B "-Dgpg.skip=true" clean install
+
+# hi-b2b-client-java (this repository)
 mvn -B "-Dgpg.skip=true" clean verify
 ```
 

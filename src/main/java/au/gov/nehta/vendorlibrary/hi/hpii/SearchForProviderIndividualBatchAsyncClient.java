@@ -139,6 +139,7 @@ public class SearchForProviderIndividualBatchAsyncClient extends BaseClient_3<Se
      */
     public SubmitSearchForProviderIndividualResponse submitSearch(ProviderIndividualBatchSearch request)
             throws StandardErrorMsg {
+        ArgumentUtils.checkNotNull(request, "request");
         checkUserID();
         submitSearchCheck(request.getSearchRequest());
         Holder<SignatureContainerType> signatureHeader = null;
@@ -164,7 +165,8 @@ public class SearchForProviderIndividualBatchAsyncClient extends BaseClient_3<Se
     public SubmitSearchForProviderIndividualResponse submitSearch(ProviderIndividualBatchSearch request,
                                                                   au.gov.nehta.vendorlibrary.hi.client.wrapped.QualifiedId individualId)
             throws StandardErrorMsg {
-
+        ArgumentUtils.checkNotNull(request, "request");
+        ArgumentUtils.checkNotNull(individualId, "individualId");
         submitSearchCheck(request.getSearchRequest());
         Holder<SignatureContainerType> signatureHeader = null;
         Holder<ProductType> productHolder = new Holder<>(productHeader);
@@ -189,6 +191,8 @@ public class SearchForProviderIndividualBatchAsyncClient extends BaseClient_3<Se
     public RetrieveSearchForProviderIndividualResponse retrieveSearch(RetrieveSearchForProviderIndividual request,
                                                                       au.gov.nehta.vendorlibrary.hi.client.wrapped.QualifiedId individualId
     ) throws StandardErrorMsg {
+        ArgumentUtils.checkNotNull(request, "request");
+        ArgumentUtils.checkNotNull(individualId, "individualId");
         retrieveSearchCheck(request);
         Holder<SignatureContainerType> signatureHeader = null;
         Holder<ProductType> productHolder = new Holder<>(productHeader);
@@ -210,6 +214,7 @@ public class SearchForProviderIndividualBatchAsyncClient extends BaseClient_3<Se
      * @throws StandardErrorMsg if the Web Service call fails.
      */
     public RetrieveSearchForProviderIndividualResponse retrieveSearch(RetrieveSearchForProviderIndividual request) throws StandardErrorMsg {
+        ArgumentUtils.checkNotNull(request, "request");
         checkUserID();
         retrieveSearchCheck(request);
         Holder<SignatureContainerType> signatureHeader = null;

@@ -9,7 +9,7 @@
 
     <groupId>au.gov.nehta</groupId>
     <artifactId>hi-b2b-client</artifactId>
-    <version>1.6.5-SNAPSHOT</version>
+    <version>8.0.0-SNAPSHOT</version>
     <name>HI B2B client</name>
     <description>Example client implementations of Healthcare Identifiers (HI) service</description>
     <url>https://github.com/AuDigitalHealth/hi-b2b-client-java</url>
@@ -99,10 +99,10 @@
         <jacoco.version>0.8.14</jacoco.version>
         <maven.shade.plugin.version>3.6.2</maven.shade.plugin.version>
 
-        <!-- Same version as this artifact (SNAPSHOT during dev; GA at release). See README local development. -->
+        <!-- Same Maven version as this artifact and sibling au.gov.nehta libs (first number = Java SE). SNAPSHOT during dev; GA at release. -->
         <hi.wsdl.version>${project.version}</hi.wsdl.version>
-        <nehta.lib.version>1.2.2</nehta.lib.version>
-		<nehta.xsp.lib.version>1.2.1</nehta.xsp.lib.version>
+        <nehta.lib.version>${project.version}</nehta.lib.version>
+        <nehta.xsp.lib.version>${project.version}</nehta.xsp.lib.version>
 
         <plugin.jar.version>3.5.0</plugin.jar.version>
         <plugin.enforcer.version>3.6.2</plugin.enforcer.version>
@@ -263,6 +263,7 @@
                         <include>**/TestConfigurationTest.java</include>
                         <include>**/HiWsdlArtifactRootTest.java</include>
                         <include>**/ConsumerSearchIHIClientArgumentValidatorTest.java</include>
+                        <include>**/HiRequestElementOrderParityTest.java</include>
                     </includes>
                 </configuration>
             </plugin>

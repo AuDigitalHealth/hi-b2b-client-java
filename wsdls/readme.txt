@@ -8,8 +8,18 @@ are NOT shipped in this Git repository. Download them from:
   https://healthsoftware.humanservices.gov.au/claiming/ext-vnd/
 
 Extract the bundle to a directory whose immediate children are lowercase wsdl/ and schema/. Some
-hosts and CI runners are case-sensitive, so the casing matters. Optional JAX-WS / JAXB binding
-fragments that this repository does ship live under wsdls/xml/binding/.
+hosts and CI runners are case-sensitive, so the casing matters.
+
+For Consumer Search IHI (Messages schema SearchIHIMessages.xsd), request XML must place
+electronicCommunication immediately after identity fields and before dateOfBirth. If a vendor
+pack places that element after demographics or addresses, move it before regenerating types
+(or before shipping matching hi-wsdl types); otherwise batch and related mobile/email search
+requests can fail schema validation (badlyFormedMsg). On this Java 8 line (Maven **8.0.0**),
+SOAP types come from au.gov.nehta:hi-wsdl at the same version (this artifact does not run
+wsimport). The first number of both Maven versions is the targeted Java SE version.
+
+Optional JAX-WS / JAXB binding fragments that this repository does ship live under
+wsdls/xml/binding/.
 
 See "Configuring the location" below to tell the build and/or the library where you put the tree.
 See CONTRIBUTING.md for building this repository and README.md for runtime use of the library.

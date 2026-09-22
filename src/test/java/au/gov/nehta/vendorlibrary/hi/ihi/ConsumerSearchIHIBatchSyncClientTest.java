@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static au.gov.nehta.vendorlibrary.hi.test.utils.IHITestConstants.*;
+import static au.gov.nehta.vendorlibrary.hi.test.utils.TestConstants.getWrappedProductHeader;
+import static au.gov.nehta.vendorlibrary.hi.test.utils.TestConstants.getWrappedUserQualifiedId;
 
 public class ConsumerSearchIHIBatchSyncClientTest {
 
@@ -61,6 +63,21 @@ public class ConsumerSearchIHIBatchSyncClientTest {
 
         String lastSoapResponse = testClient.getLastSoapResponse();
         Assert.assertEquals(lastSoapResponse, LoggingHandler.EMPTY);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void batchSearch_nullRequest_clientUser() throws Exception {
+        getMedicareTestClient().batchSearch(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void batchSearch_nullRequest_perRequestUser() throws Exception {
+        getMedicarePerRequestUserClient().batchSearch(null, getWrappedUserQualifiedId());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void batchSearch_nullIndividualId_perRequestUser() throws Exception {
+        getMedicarePerRequestUserClient().batchSearch(new SearchBatch(), null);
     }
 
     @Test
@@ -316,6 +333,15 @@ public class ConsumerSearchIHIBatchSyncClientTest {
     private ConsumerSearchIHIBatchSyncClient getMedicareTestClient() throws GeneralSecurityException, IOException {
         return new ConsumerSearchIHIBatchSyncClient(MEDICARE_ENDPOINT_URL, getUserQualifiedId(), getProductHeader(), getSigningPrivateKeyForMedicare(),
                 getSigningCertificateKeyForMedicare(), getSslSocketFactoryForMedicare());
+    }
+
+    private ConsumerSearchIHIBatchSyncClient getMedicarePerRequestUserClient() throws GeneralSecurityException, IOException {
+        return new ConsumerSearchIHIBatchSyncClient(
+                MEDICARE_ENDPOINT_URL,
+                getWrappedProductHeader(),
+                getSigningPrivateKeyForMedicare(),
+                getSigningCertificateKeyForMedicare(),
+                getSslSocketFactoryForMedicare());
     }
 
     private SearchIHI getBasicSearchForMedicare() {

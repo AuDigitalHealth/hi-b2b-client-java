@@ -62,7 +62,7 @@ public class BaseClient_3<T> extends ClientBase<T> {
         ArgumentUtils.checkNotNull(individualQualifiedId, "individualQualifiedId");
         ArgumentUtils.checkNotNull(productHeader, "productHeader");
         ArgumentUtils.checkNotNull(signingPrivateKey, "signingPrivateKey");
-        ArgumentUtils.checkNotNull(signingCertificate, "signingPrivateKey");
+        ArgumentUtils.checkNotNull(signingCertificate, "signingCertificate");
         ArgumentUtils.checkNotNull(sslSocketFactory, "sslSocketFactory");
 
         // supply an optional certificate Validator
@@ -114,7 +114,7 @@ public class BaseClient_3<T> extends ClientBase<T> {
         ArgumentUtils.checkNotNullNorBlank(serviceEndpoint, "serviceEndpoint");
         ArgumentUtils.checkNotNull(productHeader, "productHeader");
         ArgumentUtils.checkNotNull(signingPrivateKey, "signingPrivateKey");
-        ArgumentUtils.checkNotNull(signingCertificate, "signingPrivateKey");
+        ArgumentUtils.checkNotNull(signingCertificate, "signingCertificate");
         ArgumentUtils.checkNotNull(sslSocketFactory, "sslSocketFactory");
 
 

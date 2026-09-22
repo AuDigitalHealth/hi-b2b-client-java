@@ -138,6 +138,7 @@ public class SearchForProviderOrganisationBatchAsyncClient extends BaseClient_3<
      */
     public SubmitSearchForProviderOrganisationResponse submitSearch(ProviderOrganisationBatchSearch request)
             throws au.net.electronichealth.ns.hi.svc.providerbatchasyncsearchforproviderorganisation._5_1.StandardErrorMsg {
+        ArgumentUtils.checkNotNull(request, "request");
         checkUserID();
         submitSearchCheck(request.getSearchRequest());
         Holder<SignatureContainerType> signatureHeader = null;
@@ -163,7 +164,8 @@ public class SearchForProviderOrganisationBatchAsyncClient extends BaseClient_3<
     public SubmitSearchForProviderOrganisationResponse submitSearch(ProviderOrganisationBatchSearch request,
                                                                     au.gov.nehta.vendorlibrary.hi.client.wrapped.QualifiedId individualId)
             throws StandardErrorMsg {
-
+        ArgumentUtils.checkNotNull(request, "request");
+        ArgumentUtils.checkNotNull(individualId, "individualId");
         submitSearchCheck(request.getSearchRequest());
         Holder<SignatureContainerType> signatureHeader = null;
         Holder<ProductType> productHolder = new Holder<>(productHeader);
@@ -188,6 +190,8 @@ public class SearchForProviderOrganisationBatchAsyncClient extends BaseClient_3<
     public RetrieveSearchForProviderOrganisationResponse retrieveSearch(RetrieveSearchForProviderOrganisation request,
                                                                         au.gov.nehta.vendorlibrary.hi.client.wrapped.QualifiedId individualId
     ) throws StandardErrorMsg {
+        ArgumentUtils.checkNotNull(request, "request");
+        ArgumentUtils.checkNotNull(individualId, "individualId");
         retrieveSearchCheck(request);
         Holder<SignatureContainerType> signatureHeader = null;
         Holder<ProductType> productHolder = new Holder<>(productHeader);
@@ -209,6 +213,7 @@ public class SearchForProviderOrganisationBatchAsyncClient extends BaseClient_3<
      * @throws StandardErrorMsg if the Web Service call fails.
      */
     public RetrieveSearchForProviderOrganisationResponse retrieveSearch(RetrieveSearchForProviderOrganisation request) throws StandardErrorMsg {
+        ArgumentUtils.checkNotNull(request, "request");
         checkUserID();
         retrieveSearchCheck(request);
         Holder<SignatureContainerType> signatureHeader = null;

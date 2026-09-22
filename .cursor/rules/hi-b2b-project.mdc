@@ -5,32 +5,61 @@ alwaysApply: true
 
 # hi-b2b-client-java
 
-Healthcare Identifiers (HI) B2B facade client — **not** MHR/PCEHR.
+Healthcare Identifiers (HI) B2B facade client - **not** MHR/PCEHR.
 
-## Release lines (integrator docs use Maven Central versions only)
+## Documentation
+
+Follow **`documentation-standards.mdc`**. Integrator docs use **version numbers** - not Git branch names.
+
+The **first number** of the Maven version is the **Java SE** target. **`hi-b2b-client`** and **`hi-wsdl`** always share the **same** version.
 
 | Version | Java | APIs | Facades |
 | ------- | ---- | ---- | ------- |
-| **1.6.3** | 8 | javax | **14** |
-| **1.6.5** | 11 | Jakarta | **14** |
-| **1.7.0** | 11 | Jakarta | **26** (full MCA) |
+| **8.0.0** | 8 | **javax** | **14** (standard HI B2B) |
+| **11.0.0.1** | 11 | **Jakarta** | **26** (full MCA) |
+| **17.0.0.1** | 17 | **Jakarta** | **26** (full MCA) |
+| **21.0.0.1** | 21 | **Jakarta** | **26** (full MCA) |
+| **24.0.0.1** | 24 | **Jakarta** | **26** (full MCA) |
 
-**This checkout:** **`1.6.3-SNAPSHOT`** — **`au.gov.nehta:hi-wsdl`** from Maven Central (or matching **`mvn install`** for SNAPSHOT), Java **8** / **`javax.*`**.
+**Git branch mapping (maintainers only - never in integrator docs):**
+
+| Version | Official Git branch |
+| ------- | ------------------- |
+| **8.0.0** | `java-8` |
+| **11.0.0.1** | `java-11` |
+| **17.0.0.1** | `java-17` |
+| **21.0.0.1** | `java-21` |
+| **24.0.0.1** | `java-24` |
+
+## This 8.0.0 line
+
+**`8.0.0-SNAPSHOT`**: Java **8**, **`javax`**, **14** facades, types from **`au.gov.nehta:hi-wsdl`** at **`${project.version}`** (no in-repo **`wsimport`**). See **MAINTAINERS.md**.
 
 ## Build from source
 
-- JDK **8**: `mvn -B "-Dgpg.skip=true" clean verify`
-- **Local / unpublished:** install **`hi-wsdl`** at **`${project.version}`** then **`verify`** — see **`CONTRIBUTING.md`**
+- JDK **8**: `mvn -B "-Dgpg.skip=true" clean verify` (quote `-D` on PowerShell).
+- **Local / unpublished:** install matching **`hi-wsdl`** then **`verify`** - see **`CONTRIBUTING.md`**
 - **`jaxws-rt` 2.3.7**
 - Default Surefire: offline tests; **`-Pintegration`** for mutual-TLS
 
 ## Consumer Search IHI
 
 - `basicSearch` requires **IHI number**; demographics-only = `detailedSearch`.
+- Messages `searchIHI`: `electronicCommunication` before `dateOfBirth`.
+- Interface `searchIHI`: optional `electronicCommunication` before `dateOfBirth`; unstructured address before international.
+
+## vs hi-wsdl-java
+
+| | **hi-wsdl-java** | **hi-b2b-client-java** |
+|---|---|---|
+| Delivers | WSDL on classpath + generated types | Facade clients, TLS, signing |
+| Artifact | `hi-wsdl` | `hi-b2b-client` |
+
+Align **`hi-wsdl`** and **`hi-b2b-client`** at the **same version** per release line (**8.0.0** with **8.0.0**, **11.0.0.1** with **11.0.0.1**, and so on).
 
 ## Doc split
 
 - **`documentation-standards.mdc`**: implementor-first, Maven Central default, local/OS sections, relative paths, no secrets
-- **`README.md`**: integrators (Maven Central default)
+- **`README.md`**, **`CLIENT-FEATURES.md`**: integrators (Maven Central default)
 - **`CONTRIBUTING.md`**: build from source, local SNAPSHOT, OS wrappers
 - **`MAINTAINERS.md`**: POM / dependency internals

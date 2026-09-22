@@ -1,8 +1,17 @@
 # Change Log/Revision History
 
-= 1.6.3-SNAPSHOT =
-======
-Changes not yet assigned to a numbered release; **`pom.xml`** **`<version>`** is **`1.6.3-SNAPSHOT`** until release **1.6.3** is tagged.
+= 8.0.0 =
+=======
+- Maven **`au.gov.nehta:hi-b2b-client`** **8.0.0** (Java **8** / **`javax`**, **14** facade clients). Pair with **`hi-wsdl`** **8.0.0**. The first number of both Maven versions is the targeted Java SE version.
+- **`common-library`** **8.0.0** (`nehta.lib.version` = **`${project.version}`**). **`smi-xsp`** **8.0.0** (`nehta.xsp.lib.version` = **`${project.version}`**).
+- **`HiRequestElementOrderParityTest`**: asserts JAXB `propOrder` for Messages `searchIHI` (`electronicCommunication` before `dateOfBirth`), Interface inquiry `searchIHI`, and batch `SearchIHIRequestType`. See **`wsdls/readme.txt`**.
+- IHI sync batch and HPI batch-async facades reject a null request (and a null per-request user id) with **`IllegalArgumentException`**.
+- **`BaseClient_3`** constructor names the signing-certificate argument **`signingCertificate`**.
+- README: IHI **sync** batch (`SearchBatch.ArgumentValidator`) uses the same search-field rules as `ConsumerSearchIHIClient`.
+
+= 1.6.3 =
+=========
+Historical past release (superseded by **8.0.0** on this line).
 
 - Root license file renamed to **`LICENSE.md`** (Apache 2.0 canonical text plus ADHA production disclaimer); references updated from **`LICENSE.txt`**.
 - **`hi-wsdl`** at **`hi.wsdl.version`** = **`${project.version}`** (SNAPSHOT locally; GA **`1.6.3`** pair on Maven Central); **`javax.*`** / Java **8** bytecode in generated types; default lifecycle does not run **`wsimport`**. Batch Search IHI types use **`au.net.electronichealth.ns.hi.xsd.consumermessages.*`** packages from **`hi-wsdl`**; tests use **`String`** country codes (no **`CountryType`** enum on this stub line).

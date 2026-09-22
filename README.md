@@ -25,31 +25,39 @@ Registration: https://implementer.digitalhealth.gov.au/resources/hi-service-regi
 
 ## Dependency
 
-Add the artifact from [Maven Central](https://central.sonatype.com/). Use a **`<version>`** that matches your JDK and API stack (see **Release lines**).
+Add the artifact from [Maven Central](https://central.sonatype.com/). Use a **`<version>`** that matches your JDK (see **Versioning**).
 
 ```xml
 <dependency>
   <groupId>au.gov.nehta</groupId>
   <artifactId>hi-b2b-client</artifactId>
-  <version>1.6.3</version>
+  <version>8.0.0</version>
 </dependency>
 ```
 
-**This line (`1.6.3`):** Java **8**, **`javax.xml.ws`** / **`javax.xml.bind`**, **14** standard HI B2B facade clients. Add **`com.sun.xml.ws:jaxws-rt`** **2.3.7** at runtime in your application.
+**This line (`8.0.0`):** Java **8**, **`javax.xml.ws`** / **`javax.xml.bind`**, **14** standard HI B2B facade clients. Add **`com.sun.xml.ws:jaxws-rt`** **2.3.7** at runtime in your application. Pair with **`au.gov.nehta:hi-wsdl`** **`8.0.0`**.
 
 ---
 
-## Release lines
+## Versioning
 
-| Version | Java | APIs | Facade clients |
-| ------- | ---- | ---- | -------------- |
-| **1.6.3** | 8 | **`javax.xml.ws`**, **`javax.xml.bind`** | **14** (standard HI B2B) |
-| **1.6.5** | 11 | **Jakarta** XML WS / Bind | **14** (standard HI B2B) |
-| **1.7.0** | 11 | **Jakarta** XML WS / Bind | **26** (full MCA) |
+The **first number** of the Maven version is the **Java SE** version that line targets. **`hi-b2b-client`** and **`hi-wsdl`** always use the **same** version on a given line (same SNAPSHOT or GA).
 
-All published versions are on **[Maven Central](https://central.sonatype.com/)**.
+| Maven version | Java SE | APIs | Facade clients |
+| ------------- | ------- | ---- | -------------- |
+| **8.0.0** | **8** | **`javax.xml.ws`**, **`javax.xml.bind`** | **14** (standard HI B2B) |
+| **11.0.0.1** | **11** | **Jakarta** XML WS / Bind | **26** (full MCA) |
+| **17.0.0.1** | **17** | **Jakarta** XML WS / Bind | **26** (full MCA) |
+| **21.0.0.1** | **21** | **Jakarta** XML WS / Bind | **26** (full MCA) |
+| **24.0.0.1** | **24** | **Jakarta** XML WS / Bind | **26** (full MCA) |
 
-SOAP application code on **`1.6.3`** uses **`javax.xml.ws`**, **`javax.xml.bind`**, and related **`javax`** APIs. SOAP types come from **`au.gov.nehta:hi-wsdl`** at the same version when both artifacts are on the classpath.
+Pick the coordinate that matches your JDK. Do not mix **`hi-b2b-client`** and **`hi-wsdl`** versions. All published versions are on **[Maven Central](https://central.sonatype.com/)**.
+
+---
+
+## Note
+
+The **8.0.0** release does not support the full WSDL specification (**14** facades, **`javax`**). **11.0.0.1** and later lines use **Jakarta** and expose all **26** facades.
 
 ---
 
@@ -110,7 +118,7 @@ Copy **`local.properties.example`** to **`local.properties`**, fill in values, a
 
 ## Client classes
 
-Package base: **`au.gov.nehta.vendorlibrary.hi`**. This artifact line (**1.6.3**) exposes **14** standard HI B2B facade classes. Full MCA coverage (**26** stubs) is version **1.7.0**.
+Package base: **`au.gov.nehta.vendorlibrary.hi`**. This artifact line (**8.0.0**) exposes **14** standard HI B2B facade classes. Full MCA coverage (**26** facades, **Jakarta** XML WS / Bind) is available from **11.0.0.1** onward - see **`CLIENT-FEATURES.md`** and **`WSDL-CLIENT-PURPOSES.md`**.
 
 | Area | Classes |
 | ---- | ------- |
@@ -136,7 +144,7 @@ Samples under **`src/sample/java`** (`...hi.sample`) are not on the default clas
 
 Address searches (`australianPostalAddressSearch`, `australianStreetAddressSearch`, `internationalAddressSearch`) also require **`ihiNumber`** to be unset. Use **`detailedSearch`** for demographics-only lookup, not **`basicSearch`**.
 
-Batch sync/async clients apply the same rules in **`SearchBatch.ArgumentValidator`**.
+IHI **sync** batch (`ConsumerSearchIHIBatchSyncClient` / `SearchBatch`) applies the same field rules in **`SearchBatch.ArgumentValidator`**.
 
 ---
 
@@ -144,6 +152,8 @@ Batch sync/async clients apply the same rules in **`SearchBatch.ArgumentValidato
 
 | Document | Content |
 | -------- | ------- |
+| **`CLIENT-FEATURES.md`** | Capability overview by facade class |
+| **`WSDL-CLIENT-PURPOSES.md`** | WSDL service to facade mapping (**14** vs **26** lines) |
 | **`wsdls/readme.txt`** | WSDL download, layout, runtime property names |
 | **`SECURITY.md`** | Secrets and reporting |
 | **`CONTRIBUTING.md`** | Building or changing this repository from source |
